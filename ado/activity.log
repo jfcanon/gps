@@ -1,0 +1,32 @@
+## 2026-06-12
+
+### Completed
+- [x] Rebuilt user_stories_combined.md — 160 stories (118 combined v2+v3, 42 pure v2) across 12 domains
+- [x] Rebuilt ado_import_user_stories.csv — 160 rows, flat under Feature parent, combined title format
+- [x] Deleted user_stories_v2_native.md (superseded by user_stories_combined.md)
+- [x] Deleted user_stories_v3_resources.md (superseded by user_stories_combined.md)
+- [x] Initialized git repo, pushed to jfcanon/ptmsgp.git — 21 files, anon identity (jfcanon / jangofett@gmail.com)
+- [x] Saved PA original feature template to memory/pa_feature_template.md
+- [x] Created memory/MEMORY.md index
+- [x] features.md — Feature 3 (PA) rewritten with assessment-tone template
+- [x] Phase 10: Feature 3 (PA) controls list format simplified [v2]/[ResourceName] + success measures enriched with 2 assessment sentences per AC-N
+- [x] Phase 11: Feature 1 (NS) rewritten with PA-approved assessment template
+
+- [x] Phase 12: Features 2,4–12 plan prompt drafted — approved template confirmed on PA+NS
+- [x] Phase 12: Feature 2 (IM) rewritten with PA-approved assessment template
+- [x] Phase 12: Feature 4 (DP) rewritten with PA-approved assessment template
+- [x] Phase 12: Feature 5 (AM) rewritten with PA-approved assessment template
+- [x] Phase 12: Feature 6 (LT) rewritten with PA-approved assessment template
+- [x] Phase 12: Feature 7 (IR) rewritten with PA-approved assessment template
+- [x] Phase 12: Feature 8 (PV) rewritten with PA-approved assessment template
+- [x] Phase 12: Feature 9 (ES) rewritten with PA-approved assessment template
+- [x] Phase 12: Feature 10 (BR) rewritten with PA-approved assessment template
+- [x] Phase 12: Feature 11 (DS) rewritten with PA-approved assessment template
+- [x] Phase 12: Feature 12 (GS) rewritten with PA-approved assessment template — Phase 12 COMPLETE
+
+### Notes
+- features.md description tone was enforcement-framing ("enforces", "eliminates", "mandates") — user requires assessment-framing ("audit and identify WHERE deviates from stated standards")
+- PA template confirmed sections: Title (Baselines not Baseline Enforcement), 3-sentence description, Intended Business Outcome TBC, AC-N Theme (controls) TBC, Release Notes N/A, Architectural and Technical Outcomes (Azure Policy JSON sync + Defender JSON sync)
+- BDD Acceptance Criteria section removed from all features (not in template)
+- One-feature-at-a-time approval gate in effect — do not proceed to next feature without explicit "green light"
+- Token cost discipline: read before edit, no speculative large writes, wait for approval
