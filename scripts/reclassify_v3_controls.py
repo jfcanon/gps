@@ -206,14 +206,22 @@ def step_b_propagate(reviewed_path: str, judgments: list[dict], out_path: str) -
 
         if cid in j_map:
             j = j_map[cid]
-            row["applicability"]              = j["applicability_2025"]
+            orig_appl = row["applicability_original"]
+            # Keep per-service applicability from Excel — it is accurate at service level.
+            # Qwen3 judges the control in general; Microsoft's xlsx judges per-service.
+            # Only update automation_class (how to script) from Qwen3.
+            # newly_applicable: True only when Excel said N/A but Qwen3 says now feasible.
             row["automation_class"]           = j["automation_class"]
-            row["newly_applicable"]           = str(j["newly_applicable"])
+            if orig_appl == "not_applicable" and j["newly_applicable"]:
+                row["newly_applicable"]       = "True"
+                row["applicability"]          = "customer"  # flip only N/A → newly applicable
+                newly_flipped += 1
+            else:
+                row["newly_applicable"]       = "False"
+                # applicability stays as per Excel (unchanged)
             row["reclassification_confidence"] = j["confidence"]
             row["reclassification_rationale"] = j["rationale"]
             matched += 1
-            if j["newly_applicable"]:
-                newly_flipped += 1
         else:
             row["reclassification_confidence"] = "none"
             row["reclassification_rationale"]  = "no_judgment"
