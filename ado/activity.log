@@ -24,9 +24,45 @@
 - [x] Phase 12: Feature 11 (DS) rewritten with PA-approved assessment template
 - [x] Phase 12: Feature 12 (GS) rewritten with PA-approved assessment template — Phase 12 COMPLETE
 
+## 2026-06-13
+
+### Completed
+- [x] Phase 13: ado/user_stories/ns.md created — 52 NS stories with expanded Description (3–4 sentences) + Acceptance Criteria (3–4 ACs). Assessment tone. 703 lines. Validation: 52 AC blocks, 0 enforcement verbs, 0 BDD.
+- [x] Phase 14: ns.md reformatted — ADO user story format (SEC-1 IDs, Security tag, As a/I want/so that, no AC blocks, Task Source metadata). 443 lines. Validation: all 7 grep checks pass.
+- [x] Phase 15: ns.md final polish — removed Task Source field, added policy sentence to all 52 descriptions, added Option C AC block (config/policy/gap) to all 52 stories. 651 lines. Confirmed policies from fetched pages (VNet, DDoS); training data with ⚠️ flags for 20 uncertain resources. Validation: 52 AC blocks, 0 enforcement verbs, 0 BDD, 0 story-level Task Source fields.
+
 ### Notes
 - features.md description tone was enforcement-framing ("enforces", "eliminates", "mandates") — user requires assessment-framing ("audit and identify WHERE deviates from stated standards")
 - PA template confirmed sections: Title (Baselines not Baseline Enforcement), 3-sentence description, Intended Business Outcome TBC, AC-N Theme (controls) TBC, Release Notes N/A, Architectural and Technical Outcomes (Azure Policy JSON sync + Defender JSON sync)
 - BDD Acceptance Criteria section removed from all features (not in template)
 - One-feature-at-a-time approval gate in effect — do not proceed to next feature without explicit "green light"
 - Token cost discipline: read before edit, no speculative large writes, wait for approval
+
+## 2026-06-14
+
+### Completed
+- [x] Phase 16: ado/user_stories/im.md created — 10 IM stories (7 combined + 3 pure v2), ADO format, policy hyperlinks added. 143 lines. Validation: 10 AC blocks, 0 enforcement verbs, 0 BDD, Task Source in header only.
+- [x] Phase 17: ado/user_stories/pa.md created — 8 PA stories (4 combined + 4 pure v2), ADO format, policy hyperlinks. 119 lines. Validation: 8 AC blocks, 0 enforcement verbs, 0 BDD. Note: 5/8 stories have no Azure Policy built-ins (PA is PIM/Entra ID Governance heavy); ⚠️ flags applied.
+- [x] Phase 18: ado/user_stories/dp.md created — 29 DP stories (28 combined + 1 pure v2), ADO format, policy hyperlinks. 371 lines. Validation: 29 AC blocks, 0 enforcement verbs, 0 Task Source fields. Note: 6 "When" grep matches are false positives from MCSB control title "Use Customer-Managed Key When Required" — not BDD.
+- [x] Phase 19: ado/user_stories/am.md created — 7 AM stories (6 combined + 1 pure v2), ADO format, policy hyperlinks. 101 lines. Validation: 7 AC blocks, 0 enforcement verbs, 0 BDD, Task Source in header only. Note: AM-1 (Resource Graph, Migrate) and AM-3 Resource Mover have no confirmed Azure Policy built-ins; ⚠️ flags applied.
+- [x] Phase 20: ado/user_stories/lt.md created — 8 LT stories (3 combined + 5 pure v2), ADO format, policy hyperlinks. 117 lines. Validation: 8 AC blocks, 0 enforcement verbs, 0 BDD, 0 SEC-LT- stray IDs. Drafted by Qwen3 local (orchestrator pattern), patched by Claude. Note: LT-2, LT-6, LT-7 have no confirmed built-ins; ⚠️ flags applied. LT-1 DevOps plan policy flagged ⚠️.
+- [x] Phase 21: ado/user_stories/ir.md created — 4 IR stories (4 pure v2), ADO format, policy hyperlinks. 63 lines. Validation: 4 AC blocks, 0 enforcement verbs, 0 BDD. Drafted by Qwen3, patched by Claude. IR-2 confirmed policies: email notification built-ins. IR-1, IR-3, IR-4 no built-ins; ⚠️ flags applied.
+- [x] Phase 22: ado/user_stories/pv.md created — 7 PV stories (2 combined + 5 pure v2), ADO format, policy hyperlinks. 105 lines. Validation: 7 AC blocks, 0 enforcement verbs, 0 BDD, 0 stray IDs. Drafted by Qwen3, enriched by Claude. PV-1 confirmed policies: vulnerability assessment built-ins. PV-3/4/5/6/7 no built-ins; ⚠️ flags applied.
+- [x] Phase 23: ado/user_stories/es.md created — 15 ES stories (14 combined + 1 pure v2), ADO format, policy hyperlinks. 193 lines. Validation: 15 AC blocks, 0 enforcement verbs, 0 BDD, 0 stray IDs. ES-3×9 drafted by Qwen3 (parallel call), ES-1×5 and ES-2 written by Claude. Confirmed policies: endpoint protection built-ins (ES-1/2), container vulnerability built-ins (ES-3 ACR/AKS). IoT/HCI/ARO/Sphere/ACI: ⚠️ flags applied.
+- [x] Phase 24: ado/user_stories/br.md created — 4 BR stories (2 combined + 2 pure v2), ADO format, policy hyperlinks. Validation: 4 AC blocks, 0 enforcement verbs, 0 BDD. Drafted by Qwen3, patched by Claude. BR-1 confirmed: Azure Backup VM built-in. BR-2/3/4 no built-ins; ⚠️ flags applied.
+- [x] Phase 25: ado/user_stories/ds.md created — 6 DS stories (6 pure v2), ADO format. Validation: 6 AC blocks, 0 enforcement verbs, 0 BDD. Drafted by Qwen3, reformatted/enriched by Claude. All DS controls process-based; ⚠️ flags applied throughout.
+- [x] Phase 26: ado/user_stories/gs.md created — 10 GS stories (3 combined + 7 pure v2), ADO format. Validation: 10 AC blocks, 0 enforcement verbs, 0 BDD. Drafted by Qwen3, enriched by Claude. GS-5 MCSB initiative policy flagged ⚠️. All other GS controls process/strategy — ⚠️ flags applied. ALL 12 DOMAIN USER STORY FILES COMPLETE.
+
+## 2026-06-15
+
+### Completed
+- [x] Phase 27: ADO import scripts created — scripts/parse_stories.py (md→CSV parser), scripts/import_to_ado.py (ADO REST API two-pass import), scripts/ado_config.py (org/project/PAT config), scripts/ado_import_README.md (Copilot handover guide). Two-pass flow: create 12 Features → create ~160 User Stories with parent links. PAT via ADO_PAT env var. Dry-run mode included. Idempotent Feature creation via title search.
+- [x] Phase 28: Code review via Qwen3 — scripts/code-review.md created. 3 fixes applied to import_to_ado.py: WIQL injection escape for ADO_PROJECT, CSV existence check with actionable message, HTTP 429 retry with Retry-After header. 2 false positives noted (AC separator, unused vars). Parser validated 160/160 stories.
+- [x] Phase 29: Policy coverage audit — scripts/audit_policy_coverage.py created. ado_stories.csv updated with policy_status. Results: confirmed=22(14%), uncertain=48(30%), none=90(56%). data/outputs/policy_coverage_summary.csv written.
+- [x] Phase 30: v3 control relevance review — downloaded azure-security-benchmark-v3.0.xlsx from MicrosoftDocs/SecurityBenchmarks. 85 controls loaded: 74 active, 11 deprecated. data/outputs/v3_controls.csv written. scripts/analyze_v3_controls.py created.
+- [x] Phase 31: Automation feasibility — 45 script_simple (Policy GUIDs), 40 script_complex (mapping only), 0 manual_only in v3. data/outputs/automation_classes.csv written.
+- [x] Phase 32: Effort estimates — revised to industry-calibrated formula (3-7h/story). Total: 581h / 72.6 days. NS highest (186h). data/outputs/effort_estimates.csv + effort_summary.csv.
+- [x] Phase 33: Industry benchmark via Qwen3 — docs/assessment_benchmark.md. Key findings: industry norm 4-6h/control, 600-1000h total, our initial 152h was 4-6x too low. Revised to 581h (within range). Top priority: automate 45 script_simple controls first (saves 300+ hours).
+- [x] Phase 34: Downloaded + parsed 118 v3 per-service xlsx files from MicrosoftDocs/SecurityBenchmarks/Azure Offer Security Baselines/3.0. scripts/download_v3_baselines.py created. 4,157 rows from 118 services → data/outputs/v3_service_controls_raw.csv. Cached to data/inputs/v3_baselines/. NOTE: Phases 30-31 outputs (v3_controls.csv, automation_classes.csv) superseded — used wrong source (85-row benchmark definition vs 118 per-service files).
+- [x] Phase 35: Applicability + automation classification per row — scripts/review_v3_controls.py created. Results: 905 customer rows (877 script_medium, 21 manual_only, 4 script_simple), 2,861 not_applicable, 367 microsoft_managed, 24 shared. 0 newly_applicable controls found (no N/A→supported transitions). data/outputs/v3_service_controls_reviewed.csv written.
+- [x] Phase 36: Revised effort estimates (v3-focused) — scripts/estimate_effort_v3.py created. 152 stories processed: 119 v3-matched (rapidfuzz threshold 60), 33 Phase-32 fallback. Total: 696h / 87 days. NS highest (212h/26.5d), DP second (110h/13.8d). data/outputs/effort_estimates_v3.csv written. Supersedes effort_estimates.csv for v3-combined stories.

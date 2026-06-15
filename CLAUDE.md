@@ -61,4 +61,30 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 - Phase 11: Feature 1 (NS) — first application
 - Phase 12: Features 2, 4–12 — all remaining features rewritten
 
-**Next scope**: ADO import and task generation from v3 Excel rows (~3,000 Tasks from 118 xlsx files) — deferred
+**Phase 16**: IM user stories — `ado/user_stories/im.md` — COMPLETE (2026-06-14)
+**Phase 17**: PA user stories — `ado/user_stories/pa.md` — COMPLETE (2026-06-14)
+**Phase 18**: DP user stories — `ado/user_stories/dp.md` — COMPLETE (2026-06-14)
+**Phase 19**: AM user stories — `ado/user_stories/am.md` — COMPLETE (2026-06-14)
+**Phase 20**: LT user stories — `ado/user_stories/lt.md` — COMPLETE (2026-06-14)
+**Phase 21**: IR user stories — `ado/user_stories/ir.md` — COMPLETE (2026-06-14)
+**Phase 22**: PV user stories — `ado/user_stories/pv.md` — COMPLETE (2026-06-15)
+**Phase 23**: ES user stories — `ado/user_stories/es.md` — COMPLETE (2026-06-15)
+**Phase 24**: BR user stories — `ado/user_stories/br.md` — COMPLETE (2026-06-15)
+**Phase 25**: DS user stories — `ado/user_stories/ds.md` — COMPLETE (2026-06-15)
+**Phase 26**: GS user stories — `ado/user_stories/gs.md` — COMPLETE (2026-06-15)
+
+**ALL 12 DOMAIN USER STORY FILES COMPLETE** — Phases 13–26 done.
+**Phase 27**: ADO import scripts — `scripts/parse_stories.py`, `scripts/import_to_ado.py`, `scripts/ado_config.py`, `scripts/ado_import_README.md` — COMPLETE (2026-06-15)
+**Phase 28**: Code review via Qwen3 — `scripts/code-review.md` — COMPLETE (2026-06-15). 3 fixes applied: WIQL injection, CSV existence check, 429 retry.
+
+**Phase 29**: Policy coverage audit — `scripts/audit_policy_coverage.py` — COMPLETE (2026-06-15). confirmed=22, uncertain=48, none=90.
+**Phase 30**: v3 relevance — `data/outputs/v3_controls.csv` — SUPERSEDED. Used wrong source (85-row benchmark definition). Replaced by Phase 34.
+**Phase 31**: Automation feasibility — `data/outputs/automation_classes.csv` — SUPERSEDED. Used wrong source. Replaced by Phase 35.
+**Phase 32**: Effort estimates — `data/outputs/effort_estimates.csv` + `effort_summary.csv` — COMPLETE (2026-06-15). 581h / 72.6 days. Baseline only — superseded for v3-combined stories by Phase 36.
+**Phase 33**: Industry benchmark — `docs/assessment_benchmark.md` — COMPLETE (2026-06-15). Industry norm: 600-1,000h. Our revised estimate: 581h (in range).
+**Phase 34**: Download 118 v3 per-service xlsx — `scripts/download_v3_baselines.py` — COMPLETE (2026-06-15). 4,157 rows, 118 services → `data/outputs/v3_service_controls_raw.csv`. Cache: `data/inputs/v3_baselines/` (gitignored).
+**Phase 35**: Applicability + automation review — `scripts/review_v3_controls.py` — COMPLETE (2026-06-15). 905 customer rows (877 script_medium, 21 manual_only, 4 script_simple). 0 newly_applicable. → `data/outputs/v3_service_controls_reviewed.csv`.
+**Phase 36**: Revised effort estimates (v3) — `scripts/estimate_effort_v3.py` — COMPLETE (2026-06-15). 152 stories, 119 v3-matched, 33 fallback. **Total: 696h / 87 days**. NS=212h, DP=110h. → `data/outputs/effort_estimates_v3.csv`.
+
+**Deferred**: ADO import execution (configure ado_config.py + export ADO_PAT, then run scripts).
+**Deferred**: Task generation from v3 Excel rows (~4,157 rows across 118 xlsx files now downloaded to cache).
