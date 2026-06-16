@@ -92,6 +92,8 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 40**: Scope reduction — IR + DS features CLOSED (out of infra scope). Updated total: **485h / 60.6 days** (10 domains). ado/wiki/delivery-approach.md updated with new estimate, scope table, and mermaid Gantt (Sprint 2 Jun 18 start, projected completion mid-Sep 2026, 1 FTE sequential assumption). (2026-06-16)
 
+**Phase 43 Part 0**: Assessment script infrastructure — COMPLETE (2026-06-16). `scripts/extract_service_controls.py` (CSV→JSON, raw+reclassified join). `scripts/assessment/redis/` folder + README + runner skeleton. `data/outputs/redis_na_research.json` template. Validation: 35 rows → `data/inputs/assessment_data/azure-cache-for-redis_controls.json`.
+
 **ADO import**: Managed by separate AI agent on Azure-connected VM. Not in this project's scope.
 **Deferred**: Task generation from v3 Excel rows (~4,157 rows now reclassified in v3_service_controls_reclassified.csv).
 **Deferred**: Infra-filter pass for remaining 9 domains (DP, GS, ES, PV, LT, PA, IM, BR, AM) — confirm excluded services per domain, re-run estimate_effort_ns_filtered.py pattern per domain. Each pass expected to reduce total estimate further.
