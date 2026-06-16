@@ -88,5 +88,8 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 **Phase 37**: Qwen3 reclassification — `scripts/extract_unique_controls.py` + `scripts/reclassify_v3_controls.py` — COMPLETE (2026-06-15). 34 unique control IDs → Qwen3 (local, qwen3:30b-a3b). 1,398 newly_applicable flips. Automation: script_simple=1,148 / script_medium=1,154 / manual_only=1. **Revised effort: 609h / 76.1 days**. → `data/outputs/v3_control_judgments.json`, `v3_service_controls_reclassified.csv`, `effort_estimates_v3_revised.csv`.
 **Phase 38**: ADO wiki — `ado/wiki/delivery-approach.md` — COMPLETE (2026-06-15). 318 lines, 10 sections, mermaid diagram, stakeholder-ready ADO markdown. Covers full approach: scope, hierarchy, mapping, estimates, delivery phases.
 
+**Phase 39**: NS re-estimation (filtered infra) — `scripts/estimate_effort_ns_filtered.py` — COMPLETE (2026-06-16). 15 services excluded (Batch, Communication Services, Communications Gateway, Container Apps, Digital Twins, HPC Cache, Machine Learning Service, Managed Lustre, Nutanix on Azure, Remote Rendering, SignalR Service, Spring Apps, Stack Edge, VMware Solution, Web PubSub) + azure-netapp-files from CSV pool. 37 active stories (52 total). **Revised NS: 124h / 15.5 days** (↓63h from 187h). → `data/outputs/effort_estimates_ns_filtered.csv`.
+
 **Deferred**: ADO import execution (configure ado_config.py + export ADO_PAT, then run scripts).
 **Deferred**: Task generation from v3 Excel rows (~4,157 rows now reclassified in v3_service_controls_reclassified.csv).
+**Deferred**: Apply same infra-filter exclusion logic to remaining 11 domains (DP, GS, ES, etc.) once excluded service list is confirmed per domain.
