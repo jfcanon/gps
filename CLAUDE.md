@@ -90,6 +90,8 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 39**: NS re-estimation (filtered infra) — `scripts/estimate_effort_ns_filtered.py` — COMPLETE (2026-06-16). 15 services excluded (Batch, Communication Services, Communications Gateway, Container Apps, Digital Twins, HPC Cache, Machine Learning Service, Managed Lustre, Nutanix on Azure, Remote Rendering, SignalR Service, Spring Apps, Stack Edge, VMware Solution, Web PubSub) + azure-netapp-files from CSV pool. 37 active stories (52 total). **Revised NS: 124h / 15.5 days** (↓63h from 187h). → `data/outputs/effort_estimates_ns_filtered.csv`.
 
-**Deferred**: ADO import execution (configure ado_config.py + export ADO_PAT, then run scripts).
+**Phase 40**: Scope reduction — IR + DS features CLOSED (out of infra scope). Updated total: **485h / 60.6 days** (10 domains). ado/wiki/delivery-approach.md updated with new estimate, scope table, and mermaid Gantt (Sprint 2 Jun 18 start, projected completion mid-Sep 2026, 1 FTE sequential assumption). (2026-06-16)
+
+**Deferred**: ADO import execution (configure ado_config.py + export ADO_PAT, then run scripts). IR + DS features already closed in ADO — import only 10 active domains.
 **Deferred**: Task generation from v3 Excel rows (~4,157 rows now reclassified in v3_service_controls_reclassified.csv).
-**Deferred**: Apply same infra-filter exclusion logic to remaining 11 domains (DP, GS, ES, etc.) once excluded service list is confirmed per domain.
+**Deferred**: Infra-filter pass for remaining 9 domains (DP, GS, ES, PV, LT, PA, IM, BR, AM) — confirm excluded services per domain, re-run estimate_effort_ns_filtered.py pattern per domain. Each pass expected to reduce total estimate further.
