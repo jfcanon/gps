@@ -336,7 +336,7 @@ Structure: Executive Summary → per-domain gap table → remediation priority m
 
 ---
 
-## PHASE 44 — Azure Key Vault Assessment Scripts
+## PHASE 43 PART 2 — Azure Key Vault Assessment Scripts
 
 **Same two-part pattern as Phase 43. Read this section cold.**
 
@@ -421,7 +421,7 @@ vaults = list(client.vaults.list())  # returns paged VaultListResult
 | PA-1 | Local Admin Accounts | False | now_applicable — check enable_rbac_authorization |
 | IM-1 | Local Authentication Methods | False | now_applicable — check enable_rbac_authorization |
 
-### Phase 44 Part 0 — Infrastructure scaffolding
+### Phase 43 Part 2, Part 0 — Infrastructure scaffolding
 
 ```
 PREREQUISITE: Phase 43 complete.
