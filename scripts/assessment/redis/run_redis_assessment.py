@@ -11,6 +11,18 @@ import logging
 import os
 import sys
 from datetime import datetime, timezone
+from typing import Callable
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ns_redis
+import dp_redis
+import im_redis
+import lt_redis
+import br_redis
+import am_redis
+import pa_redis
+import es_redis
+import pv_redis
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 log = logging.getLogger(__name__)
@@ -23,40 +35,58 @@ log = logging.getLogger(__name__)
 # Return dict keys: resource, control_id, feature, status, actual_value,
 #                   expected_value, evidence_url
 # ---------------------------------------------------------------------------
-CHECK_REGISTRY: dict[str, callable] = {
-    # NS domain — ns_redis.py
-    # "NS-1:nsg_support": ns_redis.check_ns1_nsg,
-    # "NS-1:vnet_integration": ns_redis.check_ns1_vnet,
-    # "NS-2:private_link": ns_redis.check_ns2_private_link,
-    # "NS-2:disable_public_access": ns_redis.check_ns2_public_access,
+CHECK_REGISTRY: dict[str, Callable] = {
+    # NS — Network Security
+    "NS-1:nsg_support":          ns_redis.check_ns1_nsg,
+    "NS-1:vnet_integration":     ns_redis.check_ns1_vnet,
+    "NS-2:private_link":         ns_redis.check_ns2_private_link,
+    "NS-2:disable_public_access": ns_redis.check_ns2_disable_public_access,
 
-    # DP domain — dp_redis.py
-    # "DP-2:dlp": dp_redis.check_dp2_dlp,
-    # "DP-3:transit_encryption": dp_redis.check_dp3_tls,
-    # "DP-4:platform_keys": dp_redis.check_dp4_platform_keys,
-    # "DP-5:cmk": dp_redis.check_dp5_cmk,
+    # DP — Data Protection
+    "DP-2:dlp":                  dp_redis.check_dp2_dlp,
+    "DP-3:tls_transit":          dp_redis.check_dp3_tls_transit,
+    "DP-4:platform_keys":        dp_redis.check_dp4_platform_keys,
+    "DP-5:cmk":                  dp_redis.check_dp5_cmk,
+    "DP-6:key_mgmt_kv":          dp_redis.check_dp6_key_management_kv,
+    "DP-7:cert_kv":              dp_redis.check_dp7_cert_kv,
 
-    # IM domain — im_redis.py
-    # "IM-1:local_auth": im_redis.check_im1_local_auth,
-    # "IM-8:keyvault": im_redis.check_im8_keyvault,
+    # IM — Identity Management
+    "IM-1:local_auth_methods":   im_redis.check_im1_local_auth_methods,
+    "IM-1:aad_auth_required":    im_redis.check_im1_aad_auth_required,
+    "IM-3:managed_identities":   im_redis.check_im3_managed_identities,
+    "IM-3:service_principals":   im_redis.check_im3_service_principals,
+    "IM-7:conditional_access":   im_redis.check_im7_conditional_access,
+    "IM-8:keyvault_secrets":     im_redis.check_im8_keyvault_secrets,
 
-    # LT domain — lt_redis.py
-    # "LT-4:resource_logs": lt_redis.check_lt4_resource_logs,
+    # LT — Logging and Threat Detection
+    "LT-1:defender":             lt_redis.check_lt1_defender,
+    "LT-4:resource_logs":        lt_redis.check_lt4_resource_logs,
 
-    # PA domain — pa_redis.py
-    # "PA-1:local_admin": pa_redis.check_pa1_local_admin,
+    # BR — Backup and Recovery
+    "BR-1:azure_backup":         br_redis.check_br1_azure_backup,
+    "BR-1:native_backup":        br_redis.check_br1_native_backup,
 
-    # AM domain — am_redis.py
-    # "AM-2:policy_support": am_redis.check_am2_policy,
+    # AM — Asset Management
+    "AM-2:policy_support":       am_redis.check_am2_policy,
+    "AM-5:defender_aac":         am_redis.check_am5_defender_aac,
 
-    # BR domain — br_redis.py
-    # "BR-1:backup": br_redis.check_br1_backup,
+    # PA — Privileged Access
+    "PA-1:local_admin":          pa_redis.check_pa1_local_admin,
+    "PA-7:rbac_data_plane":      pa_redis.check_pa7_rbac_data_plane,
+    "PA-8:customer_lockbox":     pa_redis.check_pa8_customer_lockbox,
 
-    # ES domain — es_redis.py
-    # (ES controls are not_applicable for Redis — see es_redis.py for rationale)
+    # ES — Endpoint Security (PaaS — all UNKNOWN)
+    "ES-1:edr":                  es_redis.check_es1_edr,
+    "ES-2:antimalware":          es_redis.check_es2_antimalware,
+    "ES-3:antimalware_health":   es_redis.check_es3_antimalware_health,
 
-    # PV domain — pv_redis.py
-    # (PV controls are not_applicable for Redis PaaS — see pv_redis.py)
+    # PV — Posture and Vulnerability (PaaS — all UNKNOWN)
+    "PV-3:automation_state":     pv_redis.check_pv3_automation_state_config,
+    "PV-3:guest_config":         pv_redis.check_pv3_guest_config_agent,
+    "PV-3:container_images":     pv_redis.check_pv3_custom_container_images,
+    "PV-3:vm_images":            pv_redis.check_pv3_custom_vm_images,
+    "PV-5:defender_va":          pv_redis.check_pv5_defender_va,
+    "PV-6:update_management":    pv_redis.check_pv6_update_management,
 }
 
 

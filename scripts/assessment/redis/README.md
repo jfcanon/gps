@@ -21,7 +21,7 @@ Each check returns a JSON dict:
 }
 ```
 
-Results written to `data/outputs/assessment_results/redis_{subscription_id}.json`.
+Results written to `data/outputs/assessment_results/redis_{subscription_id}_{timestamp}.json`.
 
 ## Run
 
@@ -35,7 +35,7 @@ python3 run_redis_assessment.py --subscription-id <SUB_ID> [--resource-group <RG
 
 ## Zero Side Effects
 
-No ARM writes. All checks use `redis_client.get()` only. Safe to run in production.
+No ARM writes. All checks use ARM GET operations only via `azure-mgmt-redis`. Safe to run in production.
 
 ## Script Files
 

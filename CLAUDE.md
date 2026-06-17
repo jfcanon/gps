@@ -94,6 +94,8 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 43 Part 0**: Assessment script infrastructure — COMPLETE (2026-06-16). `scripts/extract_service_controls.py` (CSV→JSON, raw+reclassified join). `scripts/assessment/redis/` folder + README + runner skeleton. `data/outputs/redis_na_research.json` template. Validation: 35 rows → `data/inputs/assessment_data/azure-cache-for-redis_controls.json`.
 
+**Phase 43 Part 1**: Azure Cache for Redis assessment scripts — COMPLETE (2026-06-16). PATH B: 14 N/A rows researched → 4 now_applicable_native (IM-1 AAD, IM-3 MI, IM-3 SP, PA-7 RBAC — all via Entra GA Nov 2024), 7 still_not_applicable, 3 conditional. PATH A: 9 domain files (ns/dp/im/lt/br/am/pa/es/pv_redis.py), 34 check functions, all registered in CHECK_REGISTRY. 34/34 AST-validated. Output: `data/outputs/redis_rechecked_controls.csv` (35 rows: 14 implemented, 4 upgraded, 3 conditional, 14 N/A).
+
 **ADO import**: Managed by separate AI agent on Azure-connected VM. Not in this project's scope.
 **Deferred**: Task generation from v3 Excel rows (~4,157 rows now reclassified in v3_service_controls_reclassified.csv).
 **Deferred**: Infra-filter pass for remaining 9 domains (DP, GS, ES, PV, LT, PA, IM, BR, AM) — confirm excluded services per domain, re-run estimate_effort_ns_filtered.py pattern per domain. Each pass expected to reduce total estimate further.
