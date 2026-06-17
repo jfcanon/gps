@@ -324,3 +324,165 @@ Structure: Executive Summary → per-domain gap table → remediation priority m
 | 5 | 43 Part 2 | All-domain script generation | Redis MVP done |
 | 6 | 44 | Path B at scale (2,861 N/A rows) | Redis Path B done |
 | 7 | 45 | Gap report template | Assessment scripts in place |
+
+---
+
+## PHASE 43 STATUS: COMPLETE (2026-06-16)
+
+- Part 0: infra scaffolding — DONE (commit `86550af`)
+- Part 1: Redis 34 checks, 9 domain files, PATH B research — DONE (commit `704ad68`)
+- Output: `data/outputs/redis_rechecked_controls.csv` (35 rows)
+- Remote push FAILED — `jfcanon/gps.git` not found. User must fix remote before next push.
+
+---
+
+## PHASE 44 — Azure Key Vault Assessment Scripts
+
+**Same two-part pattern as Phase 43. Read this section cold.**
+
+### Quick facts
+
+| | |
+|---|---|
+| Service name in CSV | `key-vault` |
+| SDK | `azure-mgmt-keyvault` |
+| Client class | `KeyVaultManagementClient` |
+| Scope params | `resource_group`, `vault_name` |
+| Total rows | 36 |
+| feature_supported=True (PATH A) | 20 |
+| feature_supported=False (PATH B) | 3 |
+| feature_supported=Not Applicable (PATH B) | 13 |
+
+### ARM client pattern
+
+```python
+from azure.mgmt.keyvault import KeyVaultManagementClient
+client = KeyVaultManagementClient(credential, subscription_id)
+
+# Single vault
+vault = client.vaults.get(resource_group, vault_name)
+
+# By resource group
+vaults = list(client.vaults.list_by_resource_group(resource_group))
+
+# By subscription
+vaults = list(client.vaults.list())  # returns paged VaultListResult
+```
+
+### Key properties (all on `vault.properties`)
+
+| Property | Type | What to check |
+|---|---|---|
+| `network_acls.default_action` | str | `'Deny'` = network restricted |
+| `network_acls.virtual_network_rules` | list | VNet integration |
+| `public_network_access` | str | `'Disabled'` = PASS for NS-2 |
+| `private_endpoint_connections` | list | embedded on vault object |
+| `enable_rbac_authorization` | bool | `True` = RBAC, `False` = legacy access policies |
+| `minimum_tls_version` | str | `'1.2'` or `'1.3'` for DP-3 |
+| `enable_soft_delete` | bool | BR-1 native backup proxy |
+| `enable_purge_protection` | bool | BR-1 native backup proxy |
+| `sku.name` | str | `'standard'` or `'premium'` |
+| `sku.family` | str | `'A'` |
+| `tags` | dict | AM-2 proxy |
+
+### KV-specific logic notes
+
+- **DP-6 Key Management in KV**: KV IS the key management service → automatic PASS
+- **DP-7 Certificate Management in KV**: KV IS the cert management service → automatic PASS
+- **IM-1 AAD Auth**: KV legacy "access policies" = local auth. `enable_rbac_authorization == True` → PASS (Entra RBAC enforced, access policies disabled)
+- **PA-1 Local Admin**: Same check — `enable_rbac_authorization`. `False` = local access policies active = FAIL
+- **PA-7 RBAC**: `enable_rbac_authorization == True` AND at least one RBAC role assignment exists (check via azure-mgmt-authorization, or proxy: just check the flag)
+- **LT-1 Defender**: Defender for Key Vault EXISTS (unlike Redis). Check via `azure-mgmt-security`, `SecurityCenter.pricings.get('KeyVaults')`, pricing_tier == 'Standard' → PASS
+- **DP-5 CMK**: KV Premium SKU uses HSM-backed keys for keys it stores. But KV itself doesn't support CMK for its own data — Microsoft-managed HSMs only. Return UNKNOWN with explanation.
+- **BR-1 Native Backup**: `enable_soft_delete == True` AND `enable_purge_protection == True` → PASS
+- **NS-1 NSG/VNet**: `network_acls.virtual_network_rules` not empty → PASS
+- **NS-2 Private Link**: `private_endpoint_connections` not empty and any Approved → PASS
+- **NS-2 Disable Public**: `public_network_access == 'Disabled'` OR `network_acls.default_action == 'Deny'` → PASS
+- **IM-7 Conditional Access**: Same as Redis — not checkable via ARM → UNKNOWN
+
+### PATH B research rows (16 total — Claude researches, NOT Qwen3)
+
+| asb_control_id | feature_name | original | expected verdict |
+|---|---|---|---|
+| AM-5 | Defender AAC | Not Applicable | still_not_applicable (PaaS) |
+| ES-1 | EDR Solution | Not Applicable | still_not_applicable (PaaS) |
+| ES-2 | Anti-Malware | Not Applicable | still_not_applicable (PaaS) |
+| ES-3 | Anti-Malware Health | Not Applicable | still_not_applicable (PaaS) |
+| PV-3 | Automation State Config | Not Applicable | still_not_applicable (PaaS) |
+| PV-3 | Guest Config Agent | Not Applicable | still_not_applicable (PaaS) |
+| PV-3 | Custom Containers | Not Applicable | still_not_applicable (PaaS) |
+| PV-3 | Custom VM Images | Not Applicable | still_not_applicable (PaaS) |
+| PV-6 | Update Management | Not Applicable | still_not_applicable (PaaS) |
+| PV-5 | Defender VA | Not Applicable | still_not_applicable (PaaS) |
+| DP-2 | DLP | Not Applicable | research needed — KV has network ACLs, may flip |
+| DP-1 | Sensitive Data Discovery | Not Applicable | still_not_applicable (KV secrets not Purview-scannable) |
+| PA-8 | Customer Lockbox | Not Applicable | research needed — KV was added to Lockbox list? |
+| BR-1 | Azure Backup | False | conditional — native backup CLI exists but limited |
+| PA-1 | Local Admin Accounts | False | now_applicable — check enable_rbac_authorization |
+| IM-1 | Local Authentication Methods | False | now_applicable — check enable_rbac_authorization |
+
+### Phase 44 Part 0 — Infrastructure scaffolding
+
+```
+PREREQUISITE: Phase 43 complete.
+
+TASKS:
+1. Run extract_service_controls.py for key-vault:
+   python3 scripts/extract_service_controls.py --service key-vault \
+     --reclassified-csv data/outputs/v3_service_controls_reclassified.csv \
+     --raw-csv data/outputs/v3_service_controls_raw.csv \
+     --output-dir data/inputs/assessment_data/
+   → data/inputs/assessment_data/key-vault_controls.json (36 rows)
+
+2. Create scripts/assessment/keyvault/ folder:
+   - README.md (same pattern as redis/README.md — replace redis/Redis with keyvault/Key Vault)
+   - run_keyvault_assessment.py (copy run_redis_assessment.py pattern, update service name, empty CHECK_REGISTRY)
+   - data/outputs/keyvault_na_research.json (empty array)
+
+3. Validate: 36 rows in key-vault_controls.json
+
+Dependencies: azure-mgmt-keyvault, azure-mgmt-monitor, azure-mgmt-security, azure-identity
+```
+
+### Phase 44 Part 1 — Scripts + N/A research
+
+```
+PATH B — N/A Research (Claude does this, NOT Qwen3):
+  For each of 16 PATH B rows:
+  1. Most PV-3/ES/AM-5 rows → copy Redis verdicts (same PaaS rationale)
+  2. Research: PA-8 Customer Lockbox for Key Vault (likely now supported — check 2024 docs)
+  3. Research: DP-2 DLP for Key Vault (network ACLs exist → likely now_applicable_native)
+  4. Research: PA-1 / IM-1 (enable_rbac_authorization → now_applicable_native confirmed)
+  5. Write data/outputs/keyvault_na_research.json
+
+PATH A — Script Generation (Qwen3 drafts, Claude validates):
+  Same domain file grouping as Redis:
+  - ns_keyvault.py: check_ns1_nsg, check_ns1_vnet, check_ns2_private_link, check_ns2_disable_public_access
+  - dp_keyvault.py: check_dp3_tls_transit, check_dp4_platform_keys, check_dp5_cmk, check_dp6_key_mgmt, check_dp7_cert_kv
+  - im_keyvault.py: check_im1_local_auth, check_im1_aad_auth, check_im3_mi, check_im3_sp, check_im7_ca, check_im8_kv
+  - lt_keyvault.py: check_lt1_defender, check_lt4_resource_logs
+  - br_keyvault.py: check_br1_azure_backup, check_br1_native_backup
+  - am_keyvault.py: check_am2_policy, check_am5_defender_aac
+  - pa_keyvault.py: check_pa1_local_admin, check_pa7_rbac, check_pa8_lockbox
+  - es_keyvault.py: check_es1_edr, check_es2_antimalware, check_es3_antimalware_health
+  - pv_keyvault.py: check_pv3_*, check_pv5_defender_va, check_pv6_update_management
+
+  Qwen3 prompt inject pattern (same as Redis — see /tmp/qwen_*.txt examples):
+    File: /tmp/qwen_kv_ns_dp.txt, /tmp/qwen_kv_im_lt.txt, /tmp/qwen_kv_br_am_pa.txt
+
+  Validation: AST-check all functions, register in CHECK_REGISTRY
+  Output: data/outputs/keyvault_rechecked_controls.csv
+```
+
+### Updated backlog priority (post Phase 43)
+
+| Priority | Phase | What | Blocker |
+|---|---|---|---|
+| 0 | — | Fix git remote (jfcanon/gps.git not found) | User provides new remote |
+| 1 | 44 Part 0 | KV scaffolding + extract controls JSON | None |
+| 2 | 44 Part 1 | KV scripts + N/A research | Part 0 done |
+| 3 | 41 | Infra filter remaining 9 domains | User provides excluded service lists |
+| 4 | 42 | Resource inventory script | Other AI runs on Azure VM |
+| 5 | 43 Part 2 | All-domain script generation (scale Redis pattern) | Redis + KV MVPs done |
+| 6 | 45 | Path B at scale (2,861 N/A rows) | KV Path B done |
+| 7 | 46 | Gap report template | Assessment scripts in place |
