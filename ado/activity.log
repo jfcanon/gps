@@ -141,3 +141,10 @@
   - Key logic: DP-3/DP-4 PASS (microsoft_managed TLS+encryption); IM-1 AAD PASS (ARM enforces Entra ID); PA-7 PASS (Network Watcher Contributor RBAC); AM-2 tags live; LT-4 UNKNOWN (NW IS monitoring infra — verify NSG Flow Logs separately)
   - Outputs: data/outputs/networkwatcher_rechecked_controls.csv (35 rows), data/outputs/networkwatcher_na_research.json
   - Validation: 10/10 AST clean, 35 entries in CHECK_REGISTRY
+- [x] Phase 43 Part 9: Azure Firewall Manager assessment scripts (Session 3) —
+  - PATH B: 35 rows → 0 now_applicable_native; 2 now_implemented_microsoft_managed (DP-3/DP-4 PASS static); 1 live check (DP-7 KV cert via Premium SKU branching)
+  - PATH A: 9 domain files (ns/dp/im/lt/br/am/pa/es/pv_firewallmanager.py)
+  - 35 check functions registered in run_firewallmanager_assessment.py (--policy-name arg). Output: firewallmanager_{sub}_{ts}.json
+  - Key logic: DP-3/DP-4 PASS static (microsoft_managed); DP-7 LIVE (Premium SKU + transport_security.certificate_authority.key_vault_secret_id → PASS; Premium no cert → FAIL; Standard/Basic → UNKNOWN); AM-2 tags live; LT-4 UNKNOWN (logs on Firewall instances, not policy resource)
+  - Outputs: data/outputs/firewallmanager_rechecked_controls.csv (35 rows), data/outputs/firewallmanager_na_research.json
+  - Validation: 10/10 AST clean, 35 entries in CHECK_REGISTRY
