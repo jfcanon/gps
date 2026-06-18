@@ -127,3 +127,10 @@
   - Key logic: NS-1 sku.name Standard/Basic; NS-1 ip_configuration attachment (orphaned=FAIL); LT-4 DiagnosticSettings (DDoSProtectionNotifications/AllMetrics); AM-2 tags proxy; all DP/IM/BR/PA/ES/PV UNKNOWN static
   - Outputs: data/outputs/publicip_rechecked_controls.csv (36 rows), data/outputs/publicip_na_research.json
   - Validation: 10/10 AST clean, 36 entries in CHECK_REGISTRY
+- [x] Phase 43 Part 7: Azure DDoS Protection assessment scripts (Session 3) —
+  - PATH B: 35 rows reviewed → 0 now_applicable_native (all still_not_applicable — DDoS plan is control-plane grouping object; no data plane, no compute substrate)
+  - PATH A: 9 domain files (ns/dp/im/lt/br/am/pa/es/pv_ddosprotection.py)
+  - 35 check functions registered in run_ddosprotection_assessment.py (--plan-name arg). Output: ddosprotection_{sub}_{ts}.json
+  - Key logic: NS-1 virtual_networks list non-empty (empty=FAIL — paying for unused protection); LT-4 DiagnosticSettings on plan; AM-2 tags proxy; all DP/IM/BR/PA/ES/PV UNKNOWN static
+  - Outputs: data/outputs/ddosprotection_rechecked_controls.csv (35 rows), data/outputs/ddosprotection_na_research.json
+  - Validation: 10/10 AST clean, 35 entries in CHECK_REGISTRY
