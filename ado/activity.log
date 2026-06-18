@@ -87,3 +87,36 @@
   - Verification checklist passed: 36 rows, 16 Path B reviewed, headers match Redis schema, no rows excluded
 - [x] Updated traeaiprompt.md to reflect Phase 43 Part 2 completion
 - [x] Cleaned up temporary files used during execution
+
+## 2026-06-18
+
+### Completed
+- [x] Phase 43 Part 3: Azure Service Bus assessment scripts (Session 2) —
+  - PATH B: 19 rows reviewed → 2 now_applicable_native (DP-6 CMK via KV, DP-7 cert via KV), rest still_not_applicable
+  - PATH A: 9 domain files (ns/dp/im/lt/br/am/pa/es/pv_servicebus.py)
+  - 34 check functions registered in run_servicebus_assessment.py (--namespace-name arg). Output: servicebus_{sub}_{ts}.json
+  - Key logic: disable_local_auth drives IM-1×2/IM-8; Premium-only gate for DP-5/DP-6 CMK; network_rule_set separate API call for NS-1 VNet
+  - Outputs: data/outputs/servicebus_rechecked_controls.csv (35 rows), data/outputs/servicebus_na_research.json
+  - Validation: 10/10 AST clean, 34 servicebus. refs in runner
+- [x] Phase 43 Part 4A: Azure Application Gateway assessment scripts (Session 2) —
+  - PATH B: 19 rows reviewed → 3 now_applicable_native (DP-6, DP-7, PA-8), rest still_not_applicable
+  - PATH A: 9 domain files (ns/dp/im/lt/br/am/pa/es/pv_appgateway.py)
+  - 35 check functions registered in run_appgateway_assessment.py (--gateway-name arg). Output: appgateway_{sub}_{ts}.json
+  - Key logic: WAF v1/v2 dual-check (inline web_application_firewall_configuration + linked firewall_policy); ssl_policy.min_protocol_version; ssl_certificates[*].key_vault_secret_id; backend_http_settings_collection[*].protocol
+  - Outputs: data/outputs/appgateway_rechecked_controls.csv (36 rows), data/outputs/appgateway_na_research.json
+  - Validation: 10/10 AST clean, 35 appgateway. refs in runner
+- [x] Phase 43 Part 4B: ADO task import tooling (Session 2) —
+  - Code review: scripts/import_to_ado.py — H1: story duplicate check missing; H2: Feature 429 no retry; M1: cfg.validate() skipped on dry-run; M2: HTML sanitization gap; M3: CSV schema not validated pre-import; L1-L3 misc
+  - New script: scripts/import_assessment_tasks_to_ado.py — reads *_rechecked_controls.csv, creates ADO Tasks as children of User Stories via WIQL parent lookup; idempotent (task_exists() check); cfg.validate() always runs; REQUIRED_COLUMNS validated on load. CLI: --csv, --service-name, --dry-run. Verified: 34 task previews for servicebus, zero API calls in dry-run.
+- [x] Session 2 wrap-up: docs/session3_handover.md written, activity.log updated, docs/plan_prompt.md updated
+
+## 2026-06-18 (Session 3)
+
+### Completed
+- [x] Phase 43 Part 5: Azure Firewall assessment scripts (Session 3) —
+  - PATH B: 29 rows reviewed → 3 now_applicable_native (DP-6 KV cert, IM-3 MI, IM-8 KV secrets), rest still_not_applicable
+  - PATH A: 9 domain files (ns/dp/im/lt/br/am/pa/es/pv_azurefirewall.py)
+  - 35 check functions registered in run_azurefirewall_assessment.py (--firewall-name arg). Output: azurefirewall_{sub}_{ts}.json
+  - Key logic: NS-1 threat_intel_mode (Deny/Alert/Off); NS-1 IDPS Premium+idps_settings; DP-3/6/7 Premium TLS + KV cert (transport_security.certificate_authority); IM-3 MI identity check; LT-4 DiagnosticSettings (AzureFirewallApplicationRule + AzureFirewallNetworkRule); AM-2 tags proxy; all ES/PV/BR/PA static UNKNOWN (PaaS)
+  - Outputs: data/outputs/azurefirewall_rechecked_controls.csv (35 rows), data/outputs/azurefirewall_na_research.json (29 entries)
+  - Validation: 10/10 AST clean, 35 entries in CHECK_REGISTRY
