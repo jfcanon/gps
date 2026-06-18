@@ -134,3 +134,10 @@
   - Key logic: NS-1 virtual_networks list non-empty (empty=FAIL — paying for unused protection); LT-4 DiagnosticSettings on plan; AM-2 tags proxy; all DP/IM/BR/PA/ES/PV UNKNOWN static
   - Outputs: data/outputs/ddosprotection_rechecked_controls.csv (35 rows), data/outputs/ddosprotection_na_research.json
   - Validation: 10/10 AST clean, 35 entries in CHECK_REGISTRY
+- [x] Phase 43 Part 8: Azure Network Watcher assessment scripts (Session 3) —
+  - PATH B: 35 rows reviewed → 0 now_applicable_native; 4 now_implemented_microsoft_managed (DP-3, DP-4, IM-1 AAD, PA-7 — PASS static, platform-enforced)
+  - PATH A: 9 domain files (ns/dp/im/lt/br/am/pa/es/pv_networkwatcher.py)
+  - 35 check functions registered in run_networkwatcher_assessment.py (--watcher-name arg). Output: networkwatcher_{sub}_{ts}.json
+  - Key logic: DP-3/DP-4 PASS (microsoft_managed TLS+encryption); IM-1 AAD PASS (ARM enforces Entra ID); PA-7 PASS (Network Watcher Contributor RBAC); AM-2 tags live; LT-4 UNKNOWN (NW IS monitoring infra — verify NSG Flow Logs separately)
+  - Outputs: data/outputs/networkwatcher_rechecked_controls.csv (35 rows), data/outputs/networkwatcher_na_research.json
+  - Validation: 10/10 AST clean, 35 entries in CHECK_REGISTRY
