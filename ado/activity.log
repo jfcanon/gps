@@ -148,3 +148,7 @@
   - Key logic: DP-3/DP-4 PASS static (microsoft_managed); DP-7 LIVE (Premium SKU + transport_security.certificate_authority.key_vault_secret_id → PASS; Premium no cert → FAIL; Standard/Basic → UNKNOWN); AM-2 tags live; LT-4 UNKNOWN (logs on Firewall instances, not policy resource)
   - Outputs: data/outputs/firewallmanager_rechecked_controls.csv (35 rows), data/outputs/firewallmanager_na_research.json
   - Validation: 10/10 AST clean, 35 entries in CHECK_REGISTRY
+- [x] Session 3 wrap-up: docs/session4_handover.md created (2026-06-18)
+  - Parts 5-9 complete: azure-firewall, azure-public-ip, azure-ddos-protection, network-watcher, azure-firewall-manager
+  - Session4 queue: azure-dns (Part 10, next), azure-front-door, vpn-gateway, azure-web-application-firewall, azure-private-link, azure-bastion
+  - New pattern documented: LT-1 live Defender for DNS via azure-mgmt-security SecurityCenter pricings API
