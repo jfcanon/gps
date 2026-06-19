@@ -152,3 +152,17 @@
   - Parts 5-9 complete: azure-firewall, azure-public-ip, azure-ddos-protection, network-watcher, azure-firewall-manager
   - Session4 queue: azure-dns (Part 10, next), azure-front-door, vpn-gateway, azure-web-application-firewall, azure-private-link, azure-bastion
   - New pattern documented: LT-1 live Defender for DNS via azure-mgmt-security SecurityCenter pricings API
+
+## 2026-06-18 (Session 4)
+
+### Completed
+- [x] Phase 43 Part 10: Azure DNS assessment scripts (Session 4) —
+  - PATH B: 32 rows reviewed → all still_not_applicable (PaaS DNS Zone — no NSG, no DP data-plane, no IM auth, no BR product, no compute for ES/PV)
+  - PATH A live checks: LT-1 (Defender for DNS via SecurityCenter.pricings subscription-level; pricing_name='Dns'; Standard→PASS; Free→FAIL; handle ResourceNotFoundError for deprecated plan); LT-4 (DiagnosticSettings per zone.id; any enabled log→PASS; key categories: QueryVolume/VirtualNetworkLinkWithRegistration/VirtualNetworkLink); AM-2 (tags proxy live)
+  - PATH A static: PA-7 UNKNOWN (ARM RBAC on management plane; DNS query plane for Public zones is unauthenticated — no RBAC on DNS queries)
+  - 9 domain files (ns/dp/im/lt/br/am/pa/es/pv_azuredns.py) + run_azuredns_assessment.py
+  - 35 check functions registered in CHECK_REGISTRY (--zone-name arg). Output: azuredns_{sub}_{ts}.json
+  - Key DNS-specific notes: DP-3 Not Applicable (DNS protocol cleartext UDP/53; no DoH/DoT support); IM-1 Not Applicable (DNS queries unauthenticated by RFC 1035); NS-1/NS-2 all Not Applicable (PaaS anycast DNS)
+  - Outputs: data/outputs/azuredns_rechecked_controls.csv (35 rows), data/outputs/azuredns_na_research.json (32 entries)
+  - Validation: 10/10 AST clean, 35 azuredns. refs in runner
+  - Commit: b6bac18
