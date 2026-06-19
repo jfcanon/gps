@@ -201,3 +201,13 @@
   - Outputs: data/outputs/privatelink_rechecked_controls.csv (35 rows), data/outputs/privatelink_na_research.json (30 entries)
   - Validation: 10/10 AST clean, CSV=35, na_research=30, CHECK_REGISTRY=35
   - Commit: 97d95ae
+- [x] Phase 43 Part 15: Azure Bastion assessment scripts (Session 4) —
+  - PATH B: 27 rows reviewed → all still_not_applicable (PaaS managed jump host — no data plane, no data store, no compute, no Defender plan)
+  - PATH A LIVE (4): NS-1 NSG (NSG existence on AzureBastionSubnet; do NOT validate rules); NS-1 VNet (subnet_name=='AzureBastionSubnet' AND prefix<=26); LT-4 (DiagSettings→BastionAuditLogs; azure-mgmt-monitor); AM-2 (bastion.tags)
+  - PATH A LIVE→UNKNOWN (2): DP-6/IM-8 (KV SSH key usage is connection-time behavioral; no ARM property on BastionHost to inspect)
+  - PATH A PASS static (2): IM-1 AAD (microsoft_managed), DP-3 TLS (microsoft_managed)
+  - PA-7 explicitly not supported (MCSB v3 baseline note: 'Bastion does not support Azure RBAC for users access')
+  - 9 domain files + run_bastion_assessment.py; 35 CHECK_REGISTRY entries; --resource-group/--bastion-name both optional (list_all available)
+  - Outputs: data/outputs/bastion_rechecked_controls.csv (35 rows), data/outputs/bastion_na_research.json (27 entries)
+  - Validation: 10/10 AST clean, CSV=35, na_research=27, CHECK_REGISTRY=35
+  - Commit: 9858392
