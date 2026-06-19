@@ -192,3 +192,12 @@
   - Outputs: data/outputs/waf_rechecked_controls.csv (35 rows), data/outputs/waf_na_research.json (25 entries)
   - Validation: 10/10 AST clean
   - Commit: 0f41e7e
+- [x] Phase 43 Part 14: Azure Private Link assessment scripts (Session 4) —
+  - PATH B: 30 rows reviewed → all still_not_applicable (PaaS NIC — no data plane, no data store, no compute, no logs)
+  - PATH A LIVE (2): NS-1 NSG (subnet.private_endpoint_network_policies; default='Disabled' → FAIL most deployments; cross-ref via subnets.get(rg, vnet, subnet)); AM-2 tags proxy
+  - PATH A PASS static (3): NS-1 VNet (microsoft_managed), NS-2 Private Link (meta-tautology), NS-2 Disable Public (no public endpoint concept)
+  - LT-4 not_applicable: PE emits no resource logs (feature_supported=False in baseline); do NOT attempt DiagSettings on PE.id
+  - 9 domain files + run_privatelink_assessment.py; 35 CHECK_REGISTRY entries; --resource-group/--endpoint-name both optional (list_by_subscription available)
+  - Outputs: data/outputs/privatelink_rechecked_controls.csv (35 rows), data/outputs/privatelink_na_research.json (30 entries)
+  - Validation: 10/10 AST clean, CSV=35, na_research=30, CHECK_REGISTRY=35
+  - Commit: 97d95ae
