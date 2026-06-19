@@ -166,3 +166,29 @@
   - Outputs: data/outputs/azuredns_rechecked_controls.csv (35 rows), data/outputs/azuredns_na_research.json (32 entries)
   - Validation: 10/10 AST clean, 35 azuredns. refs in runner
   - Commit: b6bac18
+- [x] Phase 43 Part 11: Azure Front Door assessment scripts (Session 4) —
+  - PATH B: 23 rows reviewed → 3 now_applicable_native (IM-1 disable_local_auth, IM-8 KV secrets via MI, DP-6 KV key mgmt), rest still_not_applicable
+  - PATH A live checks: NS-1 WAF enabled (security_policy linked → PASS); NS-2 Private Link (origin.private_link_resource.id); DP-3 HTTPS-only (custom_domain.tls_settings.certificate_type); DP-7 KV cert (tls_settings.secret.id); IM-1 disable_local_auth prop; IM-3 MI (identity.type); IM-8 KV secrets (origins KV-backed); LT-1 Defender (SecurityCenter.pricings AppServices); LT-4 DiagSettings (FrontdoorAccessLog + FrontdoorHealthProbeLog + FrontdoorWebApplicationFirewallLog); AM-2 tags proxy
+  - PASS static: DP-4 (microsoft_managed TLS at-rest)
+  - 9 domain files + run_frontdoor_assessment.py; 35 CHECK_REGISTRY entries; --profile-name arg
+  - Outputs: data/outputs/frontdoor_rechecked_controls.csv (35 rows), data/outputs/frontdoor_na_research.json (23 entries)
+  - Validation: 10/10 AST clean
+  - Commit: f68b81b
+- [x] Phase 43 Part 12: Azure VPN Gateway assessment scripts (Session 4) —
+  - PATH B: 28 rows reviewed → all still_not_applicable (routing/tunneling PaaS; no customer data store, no compute, no CMK, no KV integration)
+  - PATH A live checks: IM-1 AAD (vpn_client_configuration.vpn_auth_types; None → UNKNOWN for S2S-only gateways); LT-4 DiagSettings now_applicable_native (False in baseline; VPN GW DiagSettings available: TunnelDiagnosticLog/IKEDiagnosticLog); AM-2 tags proxy
+  - PASS static: NS-1 NSG/VNet (microsoft_managed), DP-3 IPsec (microsoft_managed), PA-7 RBAC (microsoft_managed)
+  - Key constraints: --resource-group REQUIRED (no subscription-wide list()); gateway_type='Vpn' filter (excludes ExpressRoute); vpn_client_configuration None guard for S2S-only
+  - 9 domain files + run_vpngateway_assessment.py; 35 CHECK_REGISTRY entries
+  - Outputs: data/outputs/vpngateway_rechecked_controls.csv (35 rows), data/outputs/vpngateway_na_research.json (28 entries)
+  - Validation: 10/10 AST clean
+  - Commit: 3483326
+- [x] Phase 43 Part 13: Azure WAF Policy assessment scripts (Session 4) —
+  - PATH B: 25 rows reviewed → all still_not_applicable (PaaS config resource; unauthenticated data plane; no data store; no compute)
+  - PATH A live checks (9): NS-1 NSG (LIVE-INDIRECT: AG subnet NSG); NS-2 PL + Disable Public (LIVE-INDIRECT: AG private_link_configurations + frontend_ip_configurations); DP-1 log scrubbing (LIVE-DIRECT: policy_settings.log_scrubbing.state); DP-3 TLS (LIVE-INDIRECT: AG ssl_policy.min_protocol_version); DP-7 KV cert (LIVE-INDIRECT: AG ssl_certificates[].key_vault_secret_id); LT-1 Defender (LIVE-SUB: SecurityCenter AppServices); LT-4 DiagSettings (LIVE-INDIRECT: on AG.id, NOT policy.id — ApplicationGatewayFirewallLog); AM-2 tags (LIVE-DIRECT)
+  - PASS static: NS-1 VNet (microsoft_managed)
+  - Key complexity: 6 LIVE-INDIRECT checks require _get_app_gateways_for_policy() cross-reference. Classic inline WAF undetectable via policy ID. Scope: App GW WAF Policy only; AFD WAF covered in Part 11.
+  - 9 domain files + run_waf_assessment.py; 35 CHECK_REGISTRY entries; --resource-group/--policy-name both optional (list_all available)
+  - Outputs: data/outputs/waf_rechecked_controls.csv (35 rows), data/outputs/waf_na_research.json (25 entries)
+  - Validation: 10/10 AST clean
+  - Commit: 0f41e7e
