@@ -1,5 +1,6 @@
 data/inputs/
 data/outputs/
+!data/outputs/*_rechecked_controls.csv
 *.env
 __pycache__/
 *.pyc
