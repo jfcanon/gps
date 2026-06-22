@@ -221,3 +221,26 @@
 **Reason**: Session 5 approach lost coherence — CSVs missing for 24/25 Phase 45 services, method unclear. Starting over with clean baseline.
 **Restored to**: 69bda44 (docs: update activity.log with Part 15 bastion)
 **AVD action required**: git fetch origin && git reset --hard origin/master
+
+---
+
+## 2026-06-22 — Phase 45 IM Domain CSVs
+
+**Approach**: CSV-first (no scripts). Row-level MCSB v3 re-analysis per service.
+**gitignore fix**: data/outputs/* with !data/outputs/*_rechecked_controls.csv (commit e5f207b)
+**Prior-phase CSVs tracked**: 15 existing CSVs now committed (2c35123)
+
+**IM domain batch 1** (commit 2636c32):
+- addds: 35 rows — 6 LIVE/implemented, 29 still_not_applicable/not_applicable_paas
+- attestation: 35 rows — 12 implemented (inc. PA-8 Lockbox, NS-2 Private Link True/True), 23 NA
+- botservice: 35 rows — 17 implemented (inc. NS-1/NS-2, IM-3 MI, DP-5 CMK), 18 NA
+- cloudshell: 35 rows — 2 implemented (DP-3 TLS, NS-1 VNet injection), 33 NA/not_applicable_paas
+
+**IM domain batch 2** (commit 962e29c):
+- intelligentrecommendations: 38 rows (3 dupe pairs from source) — 4 implemented, 34 NA
+- spatialanchors: 36 rows (1 row with empty asb_control_id from source) — 7 implemented; service deprecated Nov 2024
+- trustedhardwareim: 35 rows — 0 implemented (all platform-managed, unauthenticated public endpoint by design)
+- universalprint: 35 rows — 6 implemented (inc. DP-5 CMK True/True, PA-7 RBAC), 29 NA
+
+**Total Phase 45**: 8 services, 292 rows, all validated (10-col schema, no empty verdicts/notes)
+**Next**: Phase 46 — BR domain (Azure Backup, Azure Site Recovery, ~70 rows)
