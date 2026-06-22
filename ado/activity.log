@@ -211,3 +211,13 @@
   - Outputs: data/outputs/bastion_rechecked_controls.csv (35 rows), data/outputs/bastion_na_research.json (27 entries)
   - Validation: 10/10 AST clean, CSV=35, na_research=27, CHECK_REGISTRY=35
   - Commit: 9858392
+
+---
+
+## 2026-06-22 — Session 5 Rollback
+
+**Action**: git reset --hard 69bda44 + git push --force origin master
+**Commits removed**: a054602, 21b36e0, d7eef2f, a151622, a010a09, ddcf96e, db8320c, efb23d2 (Phase 44 + Phase 45 LT/AM/PA/ES)
+**Reason**: Session 5 approach lost coherence — CSVs missing for 24/25 Phase 45 services, method unclear. Starting over with clean baseline.
+**Restored to**: 69bda44 (docs: update activity.log with Part 15 bastion)
+**AVD action required**: git fetch origin && git reset --hard origin/master
