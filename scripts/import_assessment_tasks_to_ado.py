@@ -210,7 +210,7 @@ def validate_csv_schema(rows: list[dict], csv_path: str) -> None:
         sys.exit(1)
 
 
-def run_import(csv_path: str, service_name: str, dry_run: bool) -> None:
+def run_import(csv_path: str, service_name: str, dry_run: bool, parent_id: int | None = None) -> None:
     # Always validate config — catch misconfig even in dry-run (fix vs import_to_ado.py which skips)
     errors = cfg.validate()
     if errors:
@@ -250,17 +250,20 @@ def run_import(csv_path: str, service_name: str, dry_run: bool) -> None:
             print(f"  [DRY-RUN] {i:3d}. Task: {title[:70]} [{verdict}]")
             continue
 
-        # Find parent User Story (cached per control_id)
-        cache_key = f"{control_id}::{service_name}"
-        if cache_key not in story_cache:
-            try:
-                story_cache[cache_key] = find_user_story(control_id, service_name)
-            except requests.HTTPError as e:
-                print(f"  {i:3d}. [ERROR] Parent lookup for {control_id}: {e}")
-                story_cache[cache_key] = None
+        # Find parent User Story — use direct ID if provided, else WIQL search
+        if parent_id is not None:
+            resolved_parent_id = parent_id
+        else:
+            cache_key = f"{control_id}::{service_name}"
+            if cache_key not in story_cache:
+                try:
+                    story_cache[cache_key] = find_user_story(control_id, service_name)
+                except requests.HTTPError as e:
+                    print(f"  {i:3d}. [ERROR] Parent lookup for {control_id}: {e}")
+                    story_cache[cache_key] = None
+            resolved_parent_id = story_cache[cache_key]
 
-        parent_id = story_cache[cache_key]
-        if parent_id is None:
+        if resolved_parent_id is None:
             print(f"  {i:3d}. [NO PARENT] {title[:60]} — no User Story found for {control_id}/{service_name}")
             no_parent += 1
             continue
@@ -278,7 +281,7 @@ def run_import(csv_path: str, service_name: str, dry_run: bool) -> None:
 
         # Create task
         try:
-            task_id = create_task(row, service_name, parent_id)
+            task_id = create_task(row, service_name or "", resolved_parent_id)
             print(f"  {i:3d}. Created #{task_id} — {title[:55]}")
             created += 1
             time.sleep(0.3)
@@ -309,8 +312,15 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--service-name",
-        required=True,
-        help="Service name tag for parent User Story lookup (e.g. service-bus, key-vault)",
+        required=False,
+        default=None,
+        help="Service name tag for parent User Story WIQL lookup (e.g. service-bus, key-vault). Not needed when --parent-id is set.",
+    )
+    parser.add_argument(
+        "--parent-id",
+        type=int,
+        default=None,
+        help="ADO User Story work item ID. When set, skips WIQL search and links all tasks directly to this story.",
     )
     parser.add_argument(
         "--dry-run",
@@ -318,4 +328,6 @@ if __name__ == "__main__":
         help="Preview task list without creating ADO items",
     )
     args = parser.parse_args()
-    run_import(args.csv, args.service_name, args.dry_run)
+    if not args.parent_id and not args.service_name:
+        parser.error("Provide --parent-id (preferred) or --service-name for parent User Story lookup")
+    run_import(args.csv, args.service_name, args.dry_run, parent_id=args.parent_id)
