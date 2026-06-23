@@ -244,3 +244,24 @@
 
 **Total Phase 45**: 8 services, 292 rows, all validated (10-col schema, no empty verdicts/notes)
 **Next**: Phase 46 — BR domain (Azure Backup, Azure Site Recovery, ~70 rows)
+
+---
+
+## 2026-06-23 — ADO Task Import tooling update
+
+**Script**: `scripts/import_assessment_tasks_to_ado.py`
+- Added `--parent-id INTEGER` flag — skip WIQL search, link all rows directly to known User Story ID
+- `--service-name` now optional (fallback when parent ID unknown)
+- Error raised if neither flag provided
+- Commit: e26ddba
+
+**Guide**: `docs/avd_task_import_guide.md`
+- Deps: `pip install -r requirements.txt` (was `pip install requests python-dotenv`)
+- area_path / iteration_path: plain-English explanation added; default both None
+- PAT: simplified — all-access PAT, no scope table
+- Run Import: `--parent-id` as preferred method, `--service-name` as fallback
+- CSV table: expanded from 9 IM-only entries to all 23 tracked CSVs
+- AVD Copilot prompt: updated to use `--parent-id <ID>` pattern with fill-in slots
+- Commit: e26ddba
+
+**Status**: Pending AVD test by user. Guide at docs/avd_task_import_guide.md.
