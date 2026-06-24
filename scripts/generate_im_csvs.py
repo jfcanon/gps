@@ -2643,7 +2643,7 @@ VALID_VERDICTS = {
 
 def write_csv(slug: str, rows: list) -> Path:
     """Write a rechecked_controls CSV for the given service slug."""
-    out_path = OUTPUT_DIR / f"{slug}_rechecked_controls.csv"
+    out_path = OUTPUT_DIR / f"{slug}_rechecked_controls_v2.csv"
     with open(out_path, "w", newline="", encoding="utf-8") as fh:
         writer = csv.writer(fh, quoting=csv.QUOTE_ALL)
         writer.writerow(HEADER)

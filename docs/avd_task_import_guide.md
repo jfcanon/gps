@@ -1,9 +1,13 @@
-# AVD Task Import Guide — rechecked_controls CSVs → ADO Tasks
+# AVD Task Import Guide — rechecked_controls_v2 CSVs → ADO Tasks
 
 ## What This Does
 
-Creates ADO Tasks (children of User Stories) from `*_rechecked_controls.csv` files.
+Creates ADO Tasks (children of User Stories) from `*_rechecked_controls_v2.csv` files.
 One Task per CSV row. Each Task links to a parent User Story.
+
+> **v2 schema (Phase 50+)**: 14 cols — original 10 + `service, severity, blast_radius, risk_rank`.
+> The import script reads headers dynamically; extra cols are ignored by ADO import logic.
+> Original v1 CSVs are archived at `data/outputs/archive/*_rechecked_controls.csv`.
 
 Script: `scripts/import_assessment_tasks_to_ado.py`
 
@@ -61,13 +65,13 @@ If you know the ADO work item ID of the parent User Story (recommended):
 cd scripts/
 # Dry run first
 python3 import_assessment_tasks_to_ado.py \
-    --csv ../data/outputs/addds_rechecked_controls.csv \
+    --csv ../data/outputs/addds_rechecked_controls_v2.csv \
     --parent-id 12345 \
     --dry-run
 
 # Live run
 python3 import_assessment_tasks_to_ado.py \
-    --csv ../data/outputs/addds_rechecked_controls.csv \
+    --csv ../data/outputs/addds_rechecked_controls_v2.csv \
     --parent-id 12345
 ```
 
@@ -79,7 +83,7 @@ If you don't have the ADO item ID, the script searches by service tag:
 
 ```bash
 python3 import_assessment_tasks_to_ado.py \
-    --csv ../data/outputs/addds_rechecked_controls.csv \
+    --csv ../data/outputs/addds_rechecked_controls_v2.csv \
     --service-name active-directory-domain-services \
     --dry-run
 ```
@@ -94,7 +98,7 @@ Open ADO → Boards → Work Items. Tasks appear as children under the parent Us
 
 ## All CSVs — Service Map
 
-23 CSVs currently tracked. Run `ls data/outputs/*_rechecked_controls.csv` for current list.
+29 CSVs currently tracked (Phase 50+). Run `ls data/outputs/*_rechecked_controls_v2.csv` for current list.
 
 | Service | CSV slug | Domain | `--service-name` value |
 |---|---|---|---|
@@ -133,7 +137,7 @@ Open ADO → Boards → Work Items. Tasks appear as children under the parent Us
 | `ADO_PAT not set` | Missing env var | `export ADO_PAT=<pat>` |
 | `ADO_ORG not configured` | Default value still in ado_config.py | Edit `scripts/ado_config.py` |
 | `401 Unauthorized` | PAT expired | Regenerate PAT |
-| `CSV schema error` | Wrong CSV format | Verify 10-col header in CSV |
+| `CSV schema error` | Wrong CSV format | Verify 14-col header in CSV (v2 schema) |
 
 ---
 
@@ -153,23 +157,23 @@ STEP 1: Pull latest
   git pull origin master
 
 STEP 2: Verify CSVs exist
-  ls data/outputs/addds_rechecked_controls.csv
-  ls data/outputs/attestation_rechecked_controls.csv
-  ls data/outputs/botservice_rechecked_controls.csv
-  ls data/outputs/cloudshell_rechecked_controls.csv
-  ls data/outputs/intelligentrecommendations_rechecked_controls.csv
-  ls data/outputs/spatialanchors_rechecked_controls.csv
-  ls data/outputs/trustedhardwareim_rechecked_controls.csv
-  ls data/outputs/universalprint_rechecked_controls.csv
+  ls data/outputs/addds_rechecked_controls_v2.csv
+  ls data/outputs/attestation_rechecked_controls_v2.csv
+  ls data/outputs/botservice_rechecked_controls_v2.csv
+  ls data/outputs/cloudshell_rechecked_controls_v2.csv
+  ls data/outputs/intelligentrecommendations_rechecked_controls_v2.csv
+  ls data/outputs/spatialanchors_rechecked_controls_v2.csv
+  ls data/outputs/trustedhardwareim_rechecked_controls_v2.csv
+  ls data/outputs/universalprint_rechecked_controls_v2.csv
   If any missing → STOP and report.
 
 STEP 3: Dry run service 1 (addds), User Story ID = <USER_STORY_ID_FOR_ADDDS>
   cd scripts/
-  python3 import_assessment_tasks_to_ado.py --csv ../data/outputs/addds_rechecked_controls.csv --parent-id <USER_STORY_ID_FOR_ADDDS> --dry-run
+  python3 import_assessment_tasks_to_ado.py --csv ../data/outputs/addds_rechecked_controls_v2.csv --parent-id <USER_STORY_ID_FOR_ADDDS> --dry-run
   Report: rows found, any errors.
 
 STEP 4: Live run addds (if dry run OK)
-  python3 import_assessment_tasks_to_ado.py --csv ../data/outputs/addds_rechecked_controls.csv --parent-id <USER_STORY_ID_FOR_ADDDS>
+  python3 import_assessment_tasks_to_ado.py --csv ../data/outputs/addds_rechecked_controls_v2.csv --parent-id <USER_STORY_ID_FOR_ADDDS>
   Report: tasks created, failures.
 
 STEP 5: Repeat STEP 3+4 for each service with its User Story ID:

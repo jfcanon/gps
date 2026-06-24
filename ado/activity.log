@@ -379,3 +379,40 @@
 
 **Total Phase 49**: 4 new output files + .gitignore updated
 **Next**: Phase 50 — Supplemental Gap Mining (ASB v2→v3 drops + post-2022 Azure additions)
+
+---
+
+## Phase 50 — Housekeeping: v2 Schema, Archive, Context (2026-06-24)
+
+**Task A — v2 CSV generation**:
+- Generated 28 `*_rechecked_controls_v2.csv` files (29 including pre-existing keyvault_v2)
+- Schema expanded: 10 col → 14 col (appended service, severity, blast_radius, risk_rank to ALL rows)
+- All rows included (applicable + not-applicable) — ADO import needs full set
+- Total rows across all v2 CSVs: 986 (28 services) + keyvault 34 = 1020
+- Scoring: NS/IM/PA/LT/IR=High(3), DP/AM/ES/BR=Medium(2), PV/GS=Low(1); Wide×2/Narrow×1 = risk_rank max 6
+- keyvault note: pre-existing v2 from prior session; no v1 source on disk — review before ADO import
+
+**Task B — context.md**:
+- Created data/outputs/context.md — inventory doc with 4 sections + proposals table
+- Documents all file sets: v2 (PRIMARY), archive v1 (SUPERSEDED), phase49 analytics (KEEP), proposals
+
+**Task C — Archive v1 CSVs**:
+- git mv 28 *_rechecked_controls.csv → data/outputs/archive/ (git history preserved via rename)
+- data/outputs/ root now has 0 bare v1 files
+
+**Task D — Archive xlsx baselines**:
+- mv 118 *.xlsx → data/inputs/v3_baselines/archive/ (gitignored, shell mv correct)
+- data/inputs/v3_baselines/ root now empty (archive/ only)
+
+**Task E — Docs + scripts updated**:
+- docs/avd_task_import_guide.md: all CSV refs → _v2, schema note added, count 23→29, troubleshooting updated
+- scripts/generate_pa_csvs.py, generate_br_csvs.py, generate_im_csvs.py: output filename → _v2
+- docs/session3_handover.md, session4_handover.md: FROZEN (historical logs — not updated)
+
+**Task F — .gitignore + commit**:
+- .gitignore updated: track *_rechecked_controls_v2.csv, archive/*_rechecked_controls.csv, context.md
+- Single commit covers all Phase 50 changes
+
+**ADO import path going forward**: use data/outputs/{service}_rechecked_controls_v2.csv
+**File inventory**: see data/outputs/context.md
+**Next**: Phase 51 (TBD)
