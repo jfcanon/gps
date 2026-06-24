@@ -281,3 +281,20 @@
 **Total Phase 46**: 2 services, 71 rows, all validated
 **Total CSVs tracked**: 25 *_rechecked_controls.csv files
 **Next**: Phase 47 — PA domain (Privileged Access)
+
+---
+
+## 2026-06-24 — Phase 47 PA Domain CSVs
+
+**Approach**: CSV-first (no scripts). Row-level MCSB v3 re-analysis per service.
+**Rule applied**: prefer now_applicable_native over still_not_applicable; baseline False but feature now exists → now_applicable_native
+
+**PA domain batch** (commit 5b3d764):
+- automation: 35 rows — 15 implemented (PA-7 RBAC True/True, IM-3 MI True/True, IM-8 KV True/True, CMK, Private Link, Resource Logs); 20 still_not_applicable; IM-3 Service Principals → still_not_applicable (Run As deprecated)
+- customerlockbox: 35 rows — 2 implemented (IM-1 AAD, PA-8 Lockbox itself); 4 now_applicable_native (AM-2 Azure Policy built-in, IM-7 CA via portal, DP-3 TLS enforced, LT-4 Activity Log events); 29 still_not_applicable
+- lighthouse: 35 rows — 3 implemented (AM-2 cross-tenant policy, DP-4 platform keys, DP-3 TLS); 1 now_applicable_native (LT-4 ManagedServices Activity Log); 31 still_not_applicable
+- Cloud Shell skipped (done Phase 45)
+
+**Total Phase 47**: 3 services, 105 rows, all validated
+**Total CSVs tracked**: 28 *_rechecked_controls.csv files
+**Next**: Phase 48 — next domain TBD
