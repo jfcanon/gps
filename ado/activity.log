@@ -457,3 +457,55 @@
 **NS services in scope**: appgateway, azuredns, azurefirewall, bastion, ddosprotection, firewallmanager, frontdoor, networkwatcher, privatelink, publicip, redis, servicebus, vpngateway, waf
 **Blocked by**: User must supply ADO parent User Story IDs for each NS service before import can run
 **NOT in scope**: IM (9 services), PA (3 services), BR (2 services) — deferred to Phase 53+
+
+---
+
+## Phase 52 — COMPLETED (2026-06-24)
+
+**Status**: COMPLETE — all 20 remaining NS domain services assessed, v2 CSVs committed
+**Commit**: a0d54c2
+**Goal**: Apply full xlsx → verdict → 14-col v2 CSV pipeline to all remaining NS domain services
+
+**Services processed** (20 total):
+| # | Service | Slug | Rows | Key verdicts |
+|---|---|---|---|---|
+| 1 | Virtual Network | virtualnetwork | 35 | 3 implemented, 32 still_not_applicable |
+| 2 | NAT Gateway | natgateway | 35 | 2 implemented, 33 still_not_applicable |
+| 3 | Virtual WAN | virtualwan | 35 | 5 implemented, 30 still_not_applicable |
+| 4 | Load Balancer | loadbalancer | 35 | 3 implemented, 32 still_not_applicable |
+| 5 | Traffic Manager | trafficmanager | 35 | 2 implemented, 33 still_not_applicable |
+| 6 | Peering Service | peeringservice | 35 | 2 implemented, 33 still_not_applicable |
+| 7 | App Service | appservice | 43 | 17 implemented, 3 now_applicable_native, 23 still_not_applicable |
+| 8 | Cognitive Search | cognitivesearch | 35 | 12 implemented, 2 now_applicable_native, 21 still_not_applicable |
+| 9 | Data Factory | datafactory | 35 | 20 implemented, 1 now_applicable_native, 14 still_not_applicable |
+| 10 | Database Migration Service | databasemigration | 35 | 6 implemented, 29 still_not_applicable |
+| 11 | Databricks | databricks | 36 | 16 implemented, 1 now_applicable_native, 19 still_not_applicable |
+| 12 | Event Grid | eventgrid | 35 | 11 implemented, 1 now_applicable_native, 23 still_not_applicable |
+| 13 | Event Hubs | eventhubs | 35 | 16 implemented, 1 now_applicable_native, 18 still_not_applicable |
+| 14 | File Sync | filesync | 35 | 6 implemented, 29 still_not_applicable |
+| 15 | Functions | functions | 35 | 20 implemented, 1 now_applicable_native, 14 still_not_applicable |
+| 16 | Logic Apps | logicapps | 35 | 17 implemented, 1 now_applicable_native, 17 still_not_applicable |
+| 17 | Notification Hubs | notificationhubs | 35 | 4 implemented, 31 still_not_applicable |
+| 18 | Cognitive Services | cognitiveservices | 35 | 15 implemented, 2 now_applicable_native, 18 still_not_applicable |
+| 19 | Virtual Desktop | virtualdesktop | 36 | 20 implemented, 2 now_applicable_native, 14 still_not_applicable |
+| 20 | CDN | azurecdn | 3 | 2 conditional, 1 still_not_applicable — no xlsx, minimal rows from ns.md |
+
+**Total**: 678 rows across 20 services
+**Schema**: 14-col v2 (asb_control_id → risk_rank)
+**Script**: scripts/generate_ns_csvs.py (807 lines, mirrors generate_pa_csvs.py)
+**Web research applied**: now_applicable_native for Private Link (App Service, Cognitive Search, Data Factory, Databricks, Event Grid, Event Hubs, Functions, Logic Apps, Cognitive Services, Virtual Desktop) and Conditional Access for data plane where Azure added AAD integration post-baseline
+
+**NS domain state after Phase 52**:
+- Previously done: 14 NS services (appgateway, azuredns, azurefirewall, bastion, ddosprotection, firewallmanager, frontdoor, networkwatcher, privatelink, publicip, redis, servicebus, vpngateway, waf)
+- Phase 52 done: 20 new services
+- Total NS CSVs: 34 services × avg 35 rows = ~1,193 rows
+- Pure v2 User Stories (NS-4 IDPS, NS-8 Insecure Protocols): skipped — no per-service baseline needed
+- Infra-excluded services: skipped per delivery-approach.md exclusion list
+
+**Next phase options (Phase 53)**:
+- A: NS-only analytics (phase49-style risk ranking, policy initiative for NS domain only)
+- B: ADO Task import — all 34 NS CSVs → User Stories (requires ADO parent IDs per service)
+- C: Both A then B
+- Decision: deferred to user
+
+**Known open item**: keyvault_rechecked_controls_v2.csv still 10-col (pre-Phase50) — resolve before ADO import
