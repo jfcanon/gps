@@ -265,3 +265,19 @@
 - Commit: e26ddba
 
 **Status**: Pending AVD test by user. Guide at docs/avd_task_import_guide.md.
+
+---
+
+## 2026-06-24 — Phase 46 BR Domain CSVs
+
+**Approach**: CSV-first (no scripts). Row-level MCSB v3 re-analysis per service.
+**Rule applied**: baseline False but feature now exists → now_applicable_native (not still_not_applicable)
+
+**BR domain batch** (commit 8a38742):
+- backup: 36 rows — 12 implemented (inc. DP-2 immutable vault, NS-2 disable public, CMK, Private Link); 1 now_applicable_native (IM-3 Managed Identities — added 2022+); 23 still_not_applicable
+- siterecovery: 35 rows — 11 implemented (inc. PA-7 RBAC, DP-5 CMK, IM-3 Service Principals SP); 24 still_not_applicable
+- Notable: backup has 2 duplicate BR-1/Azure Backup rows (preserved from source xlsx)
+
+**Total Phase 46**: 2 services, 71 rows, all validated
+**Total CSVs tracked**: 25 *_rechecked_controls.csv files
+**Next**: Phase 47 — PA domain (Privileged Access)
