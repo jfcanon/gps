@@ -1,6 +1,8 @@
 data/inputs/
 data/outputs/*
 !data/outputs/*_rechecked_controls.csv
+!data/outputs/phase49_*.csv
+!data/outputs/phase49_*.json
 *.env
 __pycache__/
 *.pyc

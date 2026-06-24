@@ -1,0 +1,465 @@
+{
+  "name": "newsecgap-mcsb-v3-phase49",
+  "type": "Microsoft.Authorization/policySetDefinitions",
+  "properties": {
+    "displayName": "NewSecGap MCSB v3 Phase 49 \u2014 Top Risk Controls Audit",
+    "description": "Audit initiative for top risk-ranked controls from NewSecGap MCSB v3 assessment (Phase 49). Contains 13 policy rules covering High/Medium severity controls across NS, IM, PA, LT domains. Effect: audit/auditIfNotExists \u2014 no enforcement in Phase 49. Deviation from plan: 20 rules targeted; actual clean ARM property paths = 13 (remaining 250-13 rows use descriptive/sub-resource property notation).",
+    "policyType": "Custom",
+    "metadata": {
+      "version": "1.0.0",
+      "category": "Security",
+      "phase": "49",
+      "generated": "2026-06-24",
+      "source": "NewSecGap MCSB v3 \u2014 phase49_risk_ranked_backlog.csv",
+      "deviation": "Plan targeted 20 policyDefinitions; 13 generated (clean ARM paths only)"
+    },
+    "parameters": {},
+    "policyDefinitions": [
+      {
+        "policyDefinitionReferenceId": "apimanagement_NS_2_01",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.ApiManagement/service"
+              },
+              {
+                "field": "Microsoft.ApiManagement/service/publicNetworkAccess",
+                "notIn": [
+                  "Disabled",
+                  "disabled"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "apimanagement",
+          "asb_control_id": "NS-2",
+          "feature_name": "Disable Public Network Access",
+          "verdict_2025": "implemented",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.ApiManagement/service/publicNetworkAccess"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "apimanagement_IM_3_02",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.ApiManagement/service"
+              },
+              {
+                "anyOf": [
+                  {
+                    "field": "Microsoft.ApiManagement/service/identity.type",
+                    "equals": "None"
+                  },
+                  {
+                    "field": "Microsoft.ApiManagement/service/identity.type",
+                    "exists": "false"
+                  }
+                ]
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "apimanagement",
+          "asb_control_id": "IM-3",
+          "feature_name": "Managed Identities",
+          "verdict_2025": "implemented",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.ApiManagement/service/identity"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "apimanagement_NS_1_03",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.ApiManagement/service"
+              },
+              {
+                "field": "Microsoft.ApiManagement/service/virtualNetworkConfiguration.subnetResourceId",
+                "exists": "false"
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "apimanagement",
+          "asb_control_id": "NS-1",
+          "feature_name": "Network Security Group Support",
+          "verdict_2025": "implemented",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.ApiManagement/service/virtualNetworkConfiguration"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "apimanagement_NS_2_04",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.ApiManagement/service"
+              },
+              {
+                "count": {
+                  "field": "Microsoft.ApiManagement/service/privateEndpointConnections[*]"
+                },
+                "equals": 0
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "apimanagement",
+          "asb_control_id": "NS-2",
+          "feature_name": "Azure Private Link",
+          "verdict_2025": "implemented",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.ApiManagement/service/privateEndpointConnections"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "apimanagement_LT_4_05",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.ApiManagement/service"
+              }
+            ]
+          },
+          "then": {
+            "effect": "auditIfNotExists"
+          },
+          "details": {
+            "type": "Microsoft.Insights/diagnosticSettings",
+            "existenceCondition": {
+              "count": {
+                "field": "Microsoft.Insights/diagnosticSettings/logs[*]",
+                "where": {
+                  "field": "Microsoft.Insights/diagnosticSettings/logs[*].enabled",
+                  "equals": "true"
+                }
+              },
+              "greaterOrEquals": 1
+            }
+          }
+        },
+        "metadata": {
+          "service": "apimanagement",
+          "asb_control_id": "LT-4",
+          "feature_name": "Azure Resource Logs",
+          "verdict_2025": "implemented",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.ApiManagement/service/diagnostics"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "azurefirewall_NS_6_06",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Network/azureFirewalls"
+              },
+              {
+                "field": "Microsoft.Network/azureFirewalls/sku.tier",
+                "notEquals": "Premium"
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "azurefirewall",
+          "asb_control_id": "NS-6",
+          "feature_name": "IDPS \u2014 Intrusion Detection and Prevention System (ASB v2 gap, no v3 equivalent)",
+          "verdict_2025": "conditional",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.Network/azureFirewalls/sku.tier"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "bastion_NS_2_07",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Network/bastionHosts"
+              },
+              {
+                "field": "Microsoft.Network/bastionHosts/sku.name",
+                "notEquals": "Premium"
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "bastion",
+          "asb_control_id": "NS-2",
+          "feature_name": "Disable Public Network Access",
+          "verdict_2025": "conditional",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.Network/bastionHosts/sku.name"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "redis_NS_1_08",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Cache/Redis"
+              },
+              {
+                "anyOf": [
+                  {
+                    "field": "Microsoft.Cache/Redis/properties/subnetId",
+                    "exists": "false"
+                  },
+                  {
+                    "field": "Microsoft.Cache/Redis/properties/subnetId",
+                    "equals": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "redis",
+          "asb_control_id": "NS-1",
+          "feature_name": "Network Security Group Support",
+          "verdict_2025": "implemented",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.Cache/Redis/properties/subnetId"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "redis_NS_2_09",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Cache/Redis"
+              },
+              {
+                "count": {
+                  "field": "Microsoft.Cache/Redis/properties/privateEndpointConnections[*]"
+                },
+                "equals": 0
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "redis",
+          "asb_control_id": "NS-2",
+          "feature_name": "Azure Private Link",
+          "verdict_2025": "implemented",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.Cache/Redis/properties/privateEndpointConnections"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "redis_LT_4_10",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Cache/Redis"
+              }
+            ]
+          },
+          "then": {
+            "effect": "auditIfNotExists"
+          },
+          "details": {
+            "type": "Microsoft.Insights/diagnosticSettings",
+            "existenceCondition": {
+              "count": {
+                "field": "Microsoft.Insights/diagnosticSettings/logs[*]",
+                "where": {
+                  "field": "Microsoft.Insights/diagnosticSettings/logs[*].enabled",
+                  "equals": "true"
+                }
+              },
+              "greaterOrEquals": 1
+            }
+          }
+        },
+        "metadata": {
+          "service": "redis",
+          "asb_control_id": "LT-4",
+          "feature_name": "Azure Resource Logs",
+          "verdict_2025": "implemented",
+          "risk_rank": 6,
+          "severity": "High",
+          "blast_radius": "Wide",
+          "azure_api_property": "Microsoft.Cache/Redis/diagnosticSettings"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "redis_NS_2_11",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Cache/Redis"
+              },
+              {
+                "field": "Microsoft.Cache/Redis/properties/publicNetworkAccess",
+                "notIn": [
+                  "Disabled",
+                  "disabled"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "redis",
+          "asb_control_id": "NS-2",
+          "feature_name": "Disable Public Network Access",
+          "verdict_2025": "implemented",
+          "risk_rank": 3,
+          "severity": "High",
+          "blast_radius": "Narrow",
+          "azure_api_property": "Microsoft.Cache/Redis/properties/publicNetworkAccess"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "vpngateway_IM_3_12",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Network/virtualNetworkGateways"
+              },
+              {
+                "anyOf": [
+                  {
+                    "field": "Microsoft.Network/virtualNetworkGateways/identity.type",
+                    "equals": "None"
+                  },
+                  {
+                    "field": "Microsoft.Network/virtualNetworkGateways/identity.type",
+                    "exists": "false"
+                  }
+                ]
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "vpngateway",
+          "asb_control_id": "IM-3",
+          "feature_name": "Managed Identities",
+          "verdict_2025": "now_applicable_native",
+          "risk_rank": 3,
+          "severity": "High",
+          "blast_radius": "Narrow",
+          "azure_api_property": "Microsoft.Network/virtualNetworkGateways/identity"
+        }
+      },
+      {
+        "policyDefinitionReferenceId": "vpngateway_IM_8_13",
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Network/virtualNetworkGateways"
+              },
+              {
+                "field": "identity.type",
+                "notIn": [
+                  "UserAssigned",
+                  "SystemAssigned"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        },
+        "metadata": {
+          "service": "vpngateway",
+          "asb_control_id": "IM-8",
+          "feature_name": "Service Credential and Secrets Support Integration in Azure Key Vault",
+          "verdict_2025": "now_applicable_native",
+          "risk_rank": 3,
+          "severity": "High",
+          "blast_radius": "Narrow",
+          "azure_api_property": "Microsoft.Network/virtualNetworkGateways/vpnClientConfiguration"
+        }
+      }
+    ]
+  }
+}

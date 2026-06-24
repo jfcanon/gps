@@ -334,3 +334,48 @@
 **Total Phase 48**: 5 files changed, 1 rewritten, 5 rows flipped, 21 legacy bad verdicts fixed
 **Total CSVs tracked**: 28 *_rechecked_controls.csv files
 **Next**: Phase 49 — CSPM secondary approach (Defender for Cloud mapping, applicable-only filter, risk-ranked remediation backlog)
+
+---
+
+## Phase 49 — CSPM Secondary Assessment Layer (2026-06-24)
+
+**Input**: 28 *_rechecked_controls.csv files (986 total rows across all services)
+
+**Task A — Filter applicable controls**:
+- Output: phase49_applicable_controls.csv — 250 rows, 14 cols
+- Keep: implemented, now_applicable_native, upgraded_implemented, conditional
+- Drop: still_not_applicable, not_applicable_paas, not_applicable_arm
+- Validation: 0 bad verdicts, all 250 rows in keep set — PASS
+
+**Task B — Risk-ranked remediation backlog**:
+- Output: phase49_risk_ranked_backlog.csv — 250 rows sorted risk_rank DESC, service ASC
+- Scoring: severity (NS/IM/PA/LT/IR=3, DP/AM/ES/BR=2, PV/GS=1) × blast_radius (Wide=2, Narrow=1) = risk_rank max 6
+- Distribution: 96@rank=6, 51@rank=4, 51@rank=3, 51@rank=2, 1@rank=1
+- Top row: risk_rank=6, addds, IM-1 Local Authentication Methods — PASS
+
+**Task C — Azure Policy initiative JSON blueprint**:
+- Output: phase49_policy_initiative.json — 13 policyDefinitions, valid JSON — PASS
+- Deviation from plan: targeted 20 policyDefinitions; only 13 unique clean ARM property paths available
+  across all 250 applicable rows (remaining azure_api_property values use descriptive/sub-resource notation)
+- Effects: audit (11 rules) + auditIfNotExists (2 diagnostic-settings rules)
+- Services covered: apimanagement (5), azurefirewall (1), bastion (1), redis (3), vpngateway (2), appgateway (1)
+
+**Task D — CSPM mapping (MDFC recommendation linkage)**:
+- Output: phase49_cspm_mapping.csv — 250 rows, 7 cols
+- Filled MDFC recommendation IDs: 27/250 (10.8%)
+- Quality gate deviation: targeted 30% fill; actual 10.8% — root cause: majority of assessed services
+  (Attestation, Spatial Anchors, Site Recovery, Lighthouse, Bot Service, Trusted Hardware IM,
+  Intelligent Recommendations, Universal Print, DDoS Protection, Firewall Manager, Network Watcher,
+  Private Link, Public IP, Customer Lockbox, Cloud Shell, AddDS) have no service-specific MDFC
+  recommendations in public reference tables — these services are outside standard Defender plan coverage.
+  Services with documented MDFC coverage are fully mapped (API Management, App Gateway, Azure DNS,
+  Automation, Azure Firewall, Bastion, Redis, Service Bus, VPN Gateway, WAF, Front Door).
+- Web search: MDFC reference pages fetched (compute, data, networking, identity, API domains)
+  Source URLs: learn.microsoft.com/en-us/azure/defender-for-cloud/recommendations-reference-*
+
+**Deviations summary**:
+- Task C: 13 policyDefinitions (plan=20) — clean ARM paths only in policy rules
+- Task D: 10.8% MDFC coverage (plan=30%) — niche services have no MDFC surface recommendations
+
+**Total Phase 49**: 4 new output files + .gitignore updated
+**Next**: Phase 50 — Supplemental Gap Mining (ASB v2→v3 drops + post-2022 Azure additions)
