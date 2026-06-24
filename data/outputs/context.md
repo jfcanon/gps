@@ -226,3 +226,43 @@ Summary for human review. Verdicts are recommendations — nothing is deleted by
 | `severity` | High/Medium/Low | Domain of asb_control_id |
 | `blast_radius` | Wide/Narrow | Wide if conditional/empty ARM prop/disabled by default |
 | `risk_rank` | int 1–6 | severity_score × blast_radius_score |
+
+---
+
+## 11. Delivery Priority — NS Domain First (Phase 52)
+
+**Decision (2026-06-24)**: Import Network Security domain services to ADO before IM/PA/BR.
+Reason: stakeholder delivery deadline on NS domain.
+
+### NS Services ready for ADO import (14 of 29)
+
+| # | CSV | Service | Rows | Status |
+|---|---|---|---|---|
+| 1 | `appgateway_rechecked_controls_v2.csv` | Application Gateway | 35 | READY |
+| 2 | `azuredns_rechecked_controls_v2.csv` | Azure DNS | 35 | READY |
+| 3 | `azurefirewall_rechecked_controls_v2.csv` | Azure Firewall | 36 | READY |
+| 4 | `bastion_rechecked_controls_v2.csv` | Azure Bastion | 35 | READY |
+| 5 | `ddosprotection_rechecked_controls_v2.csv` | DDoS Protection | 35 | READY |
+| 6 | `firewallmanager_rechecked_controls_v2.csv` | Firewall Manager | 35 | READY |
+| 7 | `frontdoor_rechecked_controls_v2.csv` | Front Door | 35 | READY |
+| 8 | `networkwatcher_rechecked_controls_v2.csv` | Network Watcher | 35 | READY |
+| 9 | `privatelink_rechecked_controls_v2.csv` | Private Link | 35 | READY |
+| 10 | `publicip_rechecked_controls_v2.csv` | Public IP | 36 | READY |
+| 11 | `redis_rechecked_controls_v2.csv` | Azure Cache for Redis | 35 | READY |
+| 12 | `servicebus_rechecked_controls_v2.csv` | Service Bus | 34 | READY |
+| 13 | `vpngateway_rechecked_controls_v2.csv` | VPN Gateway | 35 | READY |
+| 14 | `waf_rechecked_controls_v2.csv` | Web Application Firewall | 35 | READY |
+
+**Total tasks to create in ADO**: ~490 (14 services × ~35 rows each)
+
+**Prerequisite**: User must supply ADO parent User Story ID for each NS service.
+See `docs/avd_task_import_guide.md` for import commands.
+
+### Deferred to Phase 53+
+
+| Domain | Services | Count |
+|---|---|---|
+| IM | addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint | 9 |
+| PA | automation, customerlockbox, lighthouse | 3 |
+| BR | backup, siterecovery | 2 |
+| ANOMALY | keyvault (10-col — fix first) | 1 |

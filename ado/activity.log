@@ -446,3 +446,14 @@
 - KEEP: v2 CSVs, phase49_applicable/risk_ranked, v3_controls.csv, v3_control_judgments.json
 - ARCHIVE: 16 na_research JSONs, 3 v3_service_controls_*.csv, effort estimates, automation_classes.csv, phase49_cspm_mapping.csv
 - CONDITIONAL: phase49_policy_initiative.json (keep if Azure Policy deployment planned)
+
+---
+
+## Phase 52 — Planning Entry (2026-06-24)
+
+**Status**: PLAN DRAFTED — awaiting user confirmation before execution
+**Goal**: ADO import of Network Security (NS) domain services first — 14 services, ~490 tasks
+**Priority driver**: Stakeholder delivery deadline — NS domain must be imported to ADO before IM/PA/BR
+**NS services in scope**: appgateway, azuredns, azurefirewall, bastion, ddosprotection, firewallmanager, frontdoor, networkwatcher, privatelink, publicip, redis, servicebus, vpngateway, waf
+**Blocked by**: User must supply ADO parent User Story IDs for each NS service before import can run
+**NOT in scope**: IM (9 services), PA (3 services), BR (2 services) — deferred to Phase 53+
