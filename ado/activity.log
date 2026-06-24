@@ -298,3 +298,39 @@
 **Total Phase 47**: 3 services, 105 rows, all validated
 **Total CSVs tracked**: 28 *_rechecked_controls.csv files
 **Next**: Phase 48 — next domain TBD
+
+---
+
+## 2026-06-24 — Phase 48 CSV Schema Fix + NS Web-Search Verdict Review
+
+**Approach**: (A) Schema rewrite for apimanagement from xlsx. (B) Live Exa web-search for all 63 False/NA still_not_applicable NS candidates. (C) ASB v2 NS-6 IDPS gap append.
+**Web search tool**: mcp__plugin_ecc_exa__web_search_exa (Exa) — selected over WebSearch after head-to-head test; Exa returns table content from MS docs vs links only.
+
+**Task A — apimanagement rewrite**:
+- Rewrote from 22-col bad schema to 10-col standard schema using xlsx Feature Summary sheet
+- 35 rows (38 xlsx rows minus 3 "No Related Feature" skips; 1 asb_control_id=None treated as BR-1)
+- 18 implemented, 1 now_applicable_native (LT-1 Defender for APIs — confirmed GA), 16 still_not_applicable
+
+**Task B — NS False/NA web search** (63 candidates across 14 NS CSVs):
+- Tool: Exa MCP. Searched batches: Defender support matrix, Customer Lockbox list, Bastion FAQ, VPN Gateway cert auth docs, Front Door Private Link docs
+- Confirmed flips (evidence URL in notes):
+  - bastion NS-2 "Disable Public Network Access" → conditional (Private-only Bastion, Premium SKU, GA 2025-03; Source: learn.microsoft.com/azure/bastion/private-only-deployment)
+  - vpngateway IM-3 "Managed Identities" → now_applicable_native (User-assigned MI for S2S cert auth KV; Source: learn.microsoft.com/azure/vpn-gateway/site-to-site-certificate-authentication-gateway-about)
+  - vpngateway IM-8 "Service Credential in KV" → now_applicable_native (same source)
+  - vpngateway DP-7 "Certificate Management in KV" → now_applicable_native (same source)
+- Confirmed still_not_applicable via search:
+  - Redis LT-1, Service Bus LT-1: Defender support matrix shows no security alerts plan (CSPM only)
+  - PA-8 Customer Lockbox all NS networking services: NOT in MS supported services list (verified 2026-05-05 doc date)
+  - Bastion NS-2 Azure Private Link: Bastion FAQ explicitly says "No, Azure Bastion doesn't currently support Azure Private Link"
+  - Bastion IM-3 Managed Identities: MCSB baseline explicitly says "not supported"
+- All other 55 candidates: no confirming documentation found → stay still_not_applicable
+- Bonus fix: redis CSV had 21 pre-existing n/a bad verdicts → corrected to proper taxonomy
+
+**Task C — azurefirewall NS-6 IDPS**:
+- Appended ASB v2 NS-6 gap row: azurefirewall now 36 rows; verdict=conditional (Premium=implemented, Standard=gap)
+
+**Validation**: 28/28 *_rechecked_controls.csv PASS (10-col schema, valid taxonomy)
+
+**Total Phase 48**: 5 files changed, 1 rewritten, 5 rows flipped, 21 legacy bad verdicts fixed
+**Total CSVs tracked**: 28 *_rechecked_controls.csv files
+**Next**: Phase 49 — CSPM secondary approach (Defender for Cloud mapping, applicable-only filter, risk-ranked remediation backlog)
