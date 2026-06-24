@@ -262,3 +262,104 @@ SignalR Service, Spring Apps, Stack Edge, VMware Solution, Web PubSub
 | Delivery approach | `ado/wiki/delivery-approach.md` |
 | Activity log | `ado/activity.log` |
 | Context inventory | `data/outputs/context.md` |
+
+---
+
+## JSON-LD Plan Prompt (for AI sessions)
+
+```json
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "nsg": "https://newsecgap.internal/ontology#",
+    "phase": "nsg:phase",
+    "targetDomain": "nsg:targetDomain",
+    "csvSchema": "nsg:csvSchema",
+    "verdictTaxonomy": "nsg:verdictTaxonomy",
+    "serviceScope": "nsg:serviceScope",
+    "readFirst": "nsg:readFirst"
+  },
+  "@type": "SoftwareProject",
+  "@id": "nsg:phase-52-ns-full-assessment",
+  "name": "NewSecGap Phase 52 — NS Domain Full Assessment Pipeline",
+  "version": "1.0.0",
+  "dateCreated": "2026-06-24",
+  "phase": "52",
+  "projectRoot": "/Users/nahuelavalos/Repo/NewSecGap",
+  "gitRemote": "https://github.com/jfcanon/gps",
+  "description": "Apply full v3 xlsx → verdict → web research → 14-col v2 CSV pipeline to all 20 remaining NS domain services. Do NOT import to ADO. Do NOT assess other domains. 14 existing NS v2 CSVs are done — reuse, do not redo.",
+  "targetDomain": {"name":"Network Security","termCode":"NS","adoFeature":"Security Domain #1: Network Security (NS) Baselines","totalUserStories":52},
+  "readFirst": [
+    {"order":1,"path":"ado/wiki/delivery-approach.md","why":"ADO hierarchy, exclusion list"},
+    {"order":2,"path":"ado/user_stories/ns.md","why":"52 NS User Stories, defines scope"},
+    {"order":3,"path":"data/outputs/context.md","why":"Which v2 CSVs already exist"},
+    {"order":4,"path":"docs/phase52_plan_prompt.md","why":"This document — full plan"}
+  ],
+  "alreadyDone": {"count":14,"services":["appgateway","azuredns","azurefirewall","bastion","ddosprotection","firewallmanager","frontdoor","networkwatcher","privatelink","publicip","redis","servicebus","vpngateway","waf"]},
+  "exclusionList": ["Batch","Communication Services","Communications Gateway","Container Apps","Digital Twins","HPC Cache","Machine Learning Service","Managed Lustre","Nutanix on Azure","Remote Rendering","SignalR Service","Spring Apps","Stack Edge","VMware Solution","Web PubSub"],
+  "serviceScope": {"totalCount":20,"itemListElement":[
+    {"position":1,"name":"Virtual Network","xlsxSlug":"virtual-network","outputCSV":"data/outputs/virtualnetwork_rechecked_controls_v2.csv","nsControl":"NS-1"},
+    {"position":2,"name":"NAT Gateway","xlsxSlug":"azure-nat-gateway","outputCSV":"data/outputs/natgateway_rechecked_controls_v2.csv","nsControl":"NS-1"},
+    {"position":3,"name":"Virtual WAN","xlsxSlug":"virtual-wan","outputCSV":"data/outputs/virtualwan_rechecked_controls_v2.csv","nsControl":"NS-1"},
+    {"position":4,"name":"Load Balancer","xlsxSlug":"azure-load-balancer","outputCSV":"data/outputs/loadbalancer_rechecked_controls_v2.csv","nsControl":"NS-1"},
+    {"position":5,"name":"Traffic Manager","xlsxSlug":"traffic-manager","outputCSV":"data/outputs/trafficmanager_rechecked_controls_v2.csv","nsControl":"NS-1"},
+    {"position":6,"name":"Peering Service","xlsxSlug":"microsoft-azure-peering-service","outputCSV":"data/outputs/peeringservice_rechecked_controls_v2.csv","nsControl":"NS-1"},
+    {"position":7,"name":"App Service","xlsxSlug":"app-service","outputCSV":"data/outputs/appservice_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":8,"name":"Cognitive Search","xlsxSlug":"azure-cognitive-search","outputCSV":"data/outputs/cognitivesearch_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":9,"name":"Data Factory","xlsxSlug":"data-factory","outputCSV":"data/outputs/datafactory_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":10,"name":"Database Migration Service","xlsxSlug":"azure-database-migration-service","outputCSV":"data/outputs/databasemigration_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":11,"name":"Databricks","xlsxSlug":"azure-databricks","outputCSV":"data/outputs/databricks_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":12,"name":"Event Grid","xlsxSlug":"event-grid","outputCSV":"data/outputs/eventgrid_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":13,"name":"Event Hubs","xlsxSlug":"event-hubs","outputCSV":"data/outputs/eventhubs_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":14,"name":"File Sync","xlsxSlug":"azure-file-sync","outputCSV":"data/outputs/filesync_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":15,"name":"Functions","xlsxSlug":"functions","outputCSV":"data/outputs/functions_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":16,"name":"Logic Apps","xlsxSlug":"logic-apps","outputCSV":"data/outputs/logicapps_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":17,"name":"Notification Hubs","xlsxSlug":"notification-hubs","outputCSV":"data/outputs/notificationhubs_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":18,"name":"Cognitive Services","xlsxSlug":"cognitive-services","outputCSV":"data/outputs/cognitiveservices_rechecked_controls_v2.csv","nsControl":"NS-2"},
+    {"position":19,"name":"Virtual Desktop","xlsxSlug":"azure-virtual-desktop","outputCSV":"data/outputs/virtualdesktop_rechecked_controls_v2.csv","nsControl":"NS-9"},
+    {"position":20,"name":"Content Delivery Network","xlsxSlug":null,"outputCSV":"data/outputs/azurecdn_rechecked_controls_v2.csv","nsControl":"NS-2","hasXlsx":false,"specialHandling":"No xlsx. Create minimal CSV from ns.md [SEC-2] CDN. verdict=conditional, blast_radius=Wide."}
+  ]},
+  "csvSchema": {
+    "columns": ["asb_control_id","feature_name","feature_supported_original","feature_enabled_by_default_original","status_2025","verdict_2025","azure_api_property","script_module","script_function","notes","service","severity","blast_radius","risk_rank"],
+    "scriptFields": "empty string",
+    "severityMapping": {"NS":"High","IM":"High","PA":"High","LT":"High","IR":"High","DP":"Medium","AM":"Medium","ES":"Medium","BR":"Medium","PV":"Low","GS":"Low"},
+    "blastRadiusRule": "Wide if verdict=conditional OR azure_api_property empty/NA OR feature_enabled_by_default_original=False",
+    "riskRankFormula": "severity_score(H=3,M=2,L=1) × blast_radius_score(Wide=2,Narrow=1)"
+  },
+  "verdictTaxonomy": {
+    "values": ["implemented","now_applicable_native","upgraded_implemented","still_not_applicable","conditional","not_applicable_paas","not_applicable_arm"],
+    "rules": {"True/True":"implemented — microsoft_managed","True/False":"implemented — LIVE-DIRECT + fill azure_api_property","False/NA":"web research → now_applicable_native or still_not_applicable","NA/NA":"still_not_applicable"}
+  },
+  "webResearchRule": {"trigger":"feature_supported_original=False OR Not Applicable","query":"Azure {ServiceName} {feature_name} 2025 2026","cacheFile":"data/outputs/{service}_na_research.json","checkCacheFirst":true},
+  "executionSteps": [
+    {"position":1,"action":"READ xlsx sheet='Feature Summary' with openpyxl data_only=True"},
+    {"position":2,"action":"EXTRACT all ~35 rows (all domains, not just NS)"},
+    {"position":3,"action":"APPLY verdict logic per verdictTaxonomy.rules"},
+    {"position":4,"action":"WEB RESEARCH all False/NA controls via Exa — check cache first"},
+    {"position":5,"action":"COMPUTE severity, blast_radius, risk_rank per csvSchema"},
+    {"position":6,"action":"WRITE 14-col CSV to data/outputs/{service}_rechecked_controls_v2.csv"},
+    {"position":7,"action":"VALIDATE: 14 cols, rows>0, no empty verdict_2025"},
+    {"position":8,"action":"COMMIT per service: feat: Phase 52 NS — {Name} rechecked_controls_v2"},
+    {"position":9,"action":"REPEAT for next service"},
+    {"position":10,"action":"UPDATE ado/activity.log every 5 services"},
+    {"position":11,"action":"STOP after 20 done — do not start Phase 53"}
+  ],
+  "constraints": [
+    "One service at a time — validate before next",
+    "Do NOT modify 14 existing NS v2 CSVs",
+    "Do NOT assess non-NS services",
+    "Do NOT import to ADO",
+    "xlsx sheet always = 'Feature Summary' NOT active sheet",
+    "script_module and script_function = empty string",
+    "Check na_research.json cache before Exa search",
+    "CDN: no xlsx — minimal CSV from ns.md",
+    "NS-4, NS-8: pure v2, no per-service CSV"
+  ],
+  "qualityGate": {
+    "expectedNewFiles": 20,
+    "totalNSFilesAfter": 34,
+    "expectedCols": 14,
+    "mustPass": ["34 NS v2 CSVs total","All 14 cols","No empty verdict_2025","All False/NA controls have web research evidence","git status clean"]
+  }
+}
+```
