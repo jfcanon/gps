@@ -416,3 +416,8 @@
 **ADO import path going forward**: use data/outputs/{service}_rechecked_controls_v2.csv
 **File inventory**: see data/outputs/context.md
 **Next**: Phase 51 (TBD)
+
+**Phase 50 correction — xlsx archive scope**:
+- Initial move archived ALL 118 xlsx → corrected: only 29 matching the 29 assessed services kept in archive
+- 89 non-assessed xlsx moved back to data/inputs/v3_baselines/ root
+- Archive: 29 files | Root: 89 files
