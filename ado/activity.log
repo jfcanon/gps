@@ -421,3 +421,28 @@
 - Initial move archived ALL 118 xlsx → corrected: only 29 matching the 29 assessed services kept in archive
 - 89 non-assessed xlsx moved back to data/inputs/v3_baselines/ root
 - Archive: 29 files | Root: 89 files
+
+---
+
+## Phase 51 — data/outputs Context Audit (2026-06-24)
+
+**Commit**: TBD
+**Goal**: Rewrite context.md — complete per-file inventory of all files in data/outputs/
+
+**Discovery findings** (65+ files, more than original plan anticipated):
+- 29 `*_rechecked_controls_v2.csv` — primary ADO import files
+- 4 `phase49_*` — secondary analytics (applicable_controls, risk_ranked_backlog, policy_initiative.json, cspm_mapping)
+- 16 `*_na_research.json` — Phase 48 Exa web search research caches
+- 3 `v3_service_controls_*.csv` — large early-project extractions (4157 rows each, 1.8–2.5MB)
+- 5 `effort_estimates*.csv` / `effort_summary.csv` — planning artifacts
+- 5 early project reference files (v3_controls.csv, mcsb_v3_raw.csv, v3_unique_controls.csv, v3_control_judgments.json, automation_classes.csv)
+- 1 empty directory: assessment_results/
+
+**Key anomalies flagged**:
+- `keyvault_rechecked_controls_v2.csv`: 10 cols (not 14) — pre-Phase50 file, not regenerated — ACTION REQUIRED before ADO import
+- `keyvault_rechecked_controls_2.csv`: 15-col experimental schema (status_2026, verdict_2026, evidence_url, etc.) — review before archiving
+
+**Obsolescence recommendations**:
+- KEEP: v2 CSVs, phase49_applicable/risk_ranked, v3_controls.csv, v3_control_judgments.json
+- ARCHIVE: 16 na_research JSONs, 3 v3_service_controls_*.csv, effort estimates, automation_classes.csv, phase49_cspm_mapping.csv
+- CONDITIONAL: phase49_policy_initiative.json (keep if Azure Policy deployment planned)
