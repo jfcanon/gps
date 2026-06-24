@@ -16,37 +16,37 @@
 
 **Created in**: Phase 50 (scored from Phase 40–48 v1 CSVs). Scoring: `risk_rank = severity_score × blast_radius_score` (max 6).
 
-| # | Filename | Service | Rows | Cols | Size | Verdict | Notes |
-|---|---|---|---|---|---|---|---|
-| 1 | `addds_rechecked_controls_v2.csv` | Active Directory Domain Services | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 2 | `apimanagement_rechecked_controls_v2.csv` | API Management | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 3 | `appgateway_rechecked_controls_v2.csv` | Application Gateway | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 4 | `attestation_rechecked_controls_v2.csv` | Attestation | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 5 | `automation_rechecked_controls_v2.csv` | Azure Automation | 35 | 14 | 10KB | KEEP — PRIMARY |  |
-| 6 | `azuredns_rechecked_controls_v2.csv` | Azure DNS | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 7 | `azurefirewall_rechecked_controls_v2.csv` | Azure Firewall | 36 | 14 | 10KB | KEEP — PRIMARY |  |
-| 8 | `backup_rechecked_controls_v2.csv` | Azure Backup | 36 | 14 | 10KB | KEEP — PRIMARY |  |
-| 9 | `bastion_rechecked_controls_v2.csv` | Azure Bastion | 35 | 14 | 10KB | KEEP — PRIMARY |  |
-| 10 | `botservice_rechecked_controls_v2.csv` | Bot Service | 35 | 14 | 8KB | KEEP — PRIMARY |  |
-| 11 | `cloudshell_rechecked_controls_v2.csv` | Cloud Shell | 35 | 14 | 10KB | KEEP — PRIMARY |  |
-| 12 | `customerlockbox_rechecked_controls_v2.csv` | Customer Lockbox | 35 | 14 | 10KB | KEEP — PRIMARY |  |
-| 13 | `ddosprotection_rechecked_controls_v2.csv` | DDoS Protection | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 14 | `firewallmanager_rechecked_controls_v2.csv` | Firewall Manager | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 15 | `frontdoor_rechecked_controls_v2.csv` | Front Door | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 16 | `intelligentrecommendations_rechecked_controls_v2.csv` | Intelligent Recommendations | 38 | 14 | 10KB | KEEP — PRIMARY |  |
-| 17 | `keyvault_rechecked_controls_v2.csv` | Key Vault | 34 | 10 | 8KB | KEEP — PRIMARY | ⚠️ ANOMALY: 10 cols not 14 — pre-Phase50 file, not regenerated (no v1 source). Verify before ADO import. |
-| 18 | `lighthouse_rechecked_controls_v2.csv` | Azure Lighthouse | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 19 | `networkwatcher_rechecked_controls_v2.csv` | Network Watcher | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 20 | `privatelink_rechecked_controls_v2.csv` | Private Link | 35 | 14 | 10KB | KEEP — PRIMARY |  |
-| 21 | `publicip_rechecked_controls_v2.csv` | Public IP | 36 | 14 | 9KB | KEEP — PRIMARY |  |
-| 22 | `redis_rechecked_controls_v2.csv` | Azure Cache for Redis | 35 | 14 | 12KB | KEEP — PRIMARY |  |
-| 23 | `servicebus_rechecked_controls_v2.csv` | Service Bus | 34 | 14 | 9KB | KEEP — PRIMARY |  |
-| 24 | `siterecovery_rechecked_controls_v2.csv` | Site Recovery | 35 | 14 | 10KB | KEEP — PRIMARY |  |
-| 25 | `spatialanchors_rechecked_controls_v2.csv` | Spatial Anchors | 36 | 14 | 9KB | KEEP — PRIMARY |  |
-| 26 | `trustedhardwareim_rechecked_controls_v2.csv` | Trusted Hardware IM | 35 | 14 | 11KB | KEEP — PRIMARY |  |
-| 27 | `universalprint_rechecked_controls_v2.csv` | Universal Print | 35 | 14 | 9KB | KEEP — PRIMARY |  |
-| 28 | `vpngateway_rechecked_controls_v2.csv` | VPN Gateway | 35 | 14 | 10KB | KEEP — PRIMARY |  |
-| 29 | `waf_rechecked_controls_v2.csv` | Web Application Firewall | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| # | Filename | Service | ADO Domain | Rows | Cols | Size | Verdict | Notes |
+|---|---|---|---|---|---|---|---|---|
+| 1 | `addds_rechecked_controls_v2.csv` | Active Directory Domain Services | IM | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 2 | `apimanagement_rechecked_controls_v2.csv` | API Management | IM | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 3 | `appgateway_rechecked_controls_v2.csv` | Application Gateway | NS | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 4 | `attestation_rechecked_controls_v2.csv` | Attestation | IM | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 5 | `automation_rechecked_controls_v2.csv` | Azure Automation | PA | 35 | 14 | 10KB | KEEP — PRIMARY |  |
+| 6 | `azuredns_rechecked_controls_v2.csv` | Azure DNS | NS | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 7 | `azurefirewall_rechecked_controls_v2.csv` | Azure Firewall | NS | 36 | 14 | 10KB | KEEP — PRIMARY |  |
+| 8 | `backup_rechecked_controls_v2.csv` | Azure Backup | BR | 36 | 14 | 10KB | KEEP — PRIMARY |  |
+| 9 | `bastion_rechecked_controls_v2.csv` | Azure Bastion | NS | 35 | 14 | 10KB | KEEP — PRIMARY |  |
+| 10 | `botservice_rechecked_controls_v2.csv` | Bot Service | IM | 35 | 14 | 8KB | KEEP — PRIMARY |  |
+| 11 | `cloudshell_rechecked_controls_v2.csv` | Cloud Shell | IM | 35 | 14 | 10KB | KEEP — PRIMARY |  |
+| 12 | `customerlockbox_rechecked_controls_v2.csv` | Customer Lockbox | PA | 35 | 14 | 10KB | KEEP — PRIMARY |  |
+| 13 | `ddosprotection_rechecked_controls_v2.csv` | DDoS Protection | NS | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 14 | `firewallmanager_rechecked_controls_v2.csv` | Firewall Manager | NS | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 15 | `frontdoor_rechecked_controls_v2.csv` | Front Door | NS | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 16 | `intelligentrecommendations_rechecked_controls_v2.csv` | Intelligent Recommendations | IM | 38 | 14 | 10KB | KEEP — PRIMARY |  |
+| 17 | `keyvault_rechecked_controls_v2.csv` | Key Vault | NS | 34 | 10 | 8KB | KEEP — PRIMARY | ⚠️ ANOMALY: 10 cols not 14 — pre-Phase50 file, not regenerated (no v1 source). Verify before ADO import. |
+| 18 | `lighthouse_rechecked_controls_v2.csv` | Azure Lighthouse | PA | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 19 | `networkwatcher_rechecked_controls_v2.csv` | Network Watcher | NS | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 20 | `privatelink_rechecked_controls_v2.csv` | Private Link | NS | 35 | 14 | 10KB | KEEP — PRIMARY |  |
+| 21 | `publicip_rechecked_controls_v2.csv` | Public IP | NS | 36 | 14 | 9KB | KEEP — PRIMARY |  |
+| 22 | `redis_rechecked_controls_v2.csv` | Azure Cache for Redis | NS | 35 | 14 | 12KB | KEEP — PRIMARY |  |
+| 23 | `servicebus_rechecked_controls_v2.csv` | Service Bus | NS | 34 | 14 | 9KB | KEEP — PRIMARY |  |
+| 24 | `siterecovery_rechecked_controls_v2.csv` | Site Recovery | BR | 35 | 14 | 10KB | KEEP — PRIMARY |  |
+| 25 | `spatialanchors_rechecked_controls_v2.csv` | Spatial Anchors | IM | 36 | 14 | 9KB | KEEP — PRIMARY |  |
+| 26 | `trustedhardwareim_rechecked_controls_v2.csv` | Trusted Hardware IM | IM | 35 | 14 | 11KB | KEEP — PRIMARY |  |
+| 27 | `universalprint_rechecked_controls_v2.csv` | Universal Print | IM | 35 | 14 | 9KB | KEEP — PRIMARY |  |
+| 28 | `vpngateway_rechecked_controls_v2.csv` | VPN Gateway | NS | 35 | 14 | 10KB | KEEP — PRIMARY |  |
+| 29 | `waf_rechecked_controls_v2.csv` | Web Application Firewall | NS | 35 | 14 | 9KB | KEEP — PRIMARY |  |
 
 ---
 
@@ -147,34 +147,34 @@ Created during early planning phases to estimate implementation effort per User 
 
 | # | Filename | Rows | Superseded by | Verdict |
 |---|---|---|---|---|
-| 1 | `archive/addds_rechecked_controls.csv` | 35 | `addds_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 2 | `archive/apimanagement_rechecked_controls.csv` | 35 | `apimanagement_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 3 | `archive/appgateway_rechecked_controls.csv` | 35 | `appgateway_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 4 | `archive/attestation_rechecked_controls.csv` | 35 | `attestation_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 5 | `archive/automation_rechecked_controls.csv` | 35 | `automation_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 6 | `archive/azuredns_rechecked_controls.csv` | 35 | `azuredns_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 7 | `archive/azurefirewall_rechecked_controls.csv` | 36 | `azurefirewall_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 8 | `archive/backup_rechecked_controls.csv` | 36 | `backup_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 9 | `archive/bastion_rechecked_controls.csv` | 35 | `bastion_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 10 | `archive/botservice_rechecked_controls.csv` | 35 | `botservice_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 11 | `archive/cloudshell_rechecked_controls.csv` | 35 | `cloudshell_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 12 | `archive/customerlockbox_rechecked_controls.csv` | 35 | `customerlockbox_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 13 | `archive/ddosprotection_rechecked_controls.csv` | 35 | `ddosprotection_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 14 | `archive/firewallmanager_rechecked_controls.csv` | 35 | `firewallmanager_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 15 | `archive/frontdoor_rechecked_controls.csv` | 35 | `frontdoor_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 16 | `archive/intelligentrecommendations_rechecked_controls.csv` | 38 | `intelligentrecommendations_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 17 | `archive/lighthouse_rechecked_controls.csv` | 35 | `lighthouse_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 18 | `archive/networkwatcher_rechecked_controls.csv` | 35 | `networkwatcher_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 19 | `archive/privatelink_rechecked_controls.csv` | 35 | `privatelink_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 20 | `archive/publicip_rechecked_controls.csv` | 36 | `publicip_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 21 | `archive/redis_rechecked_controls.csv` | 35 | `redis_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 22 | `archive/servicebus_rechecked_controls.csv` | 34 | `servicebus_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 23 | `archive/siterecovery_rechecked_controls.csv` | 35 | `siterecovery_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 24 | `archive/spatialanchors_rechecked_controls.csv` | 36 | `spatialanchors_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 25 | `archive/trustedhardwareim_rechecked_controls.csv` | 35 | `trustedhardwareim_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 26 | `archive/universalprint_rechecked_controls.csv` | 35 | `universalprint_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 27 | `archive/vpngateway_rechecked_controls.csv` | 35 | `vpngateway_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
-| 28 | `archive/waf_rechecked_controls.csv` | 35 | `waf_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable |
+| 1 | `archive/addds_rechecked_controls.csv` | 35 | `addds_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | IM |
+| 2 | `archive/apimanagement_rechecked_controls.csv` | 35 | `apimanagement_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | IM |
+| 3 | `archive/appgateway_rechecked_controls.csv` | 35 | `appgateway_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 4 | `archive/attestation_rechecked_controls.csv` | 35 | `attestation_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | IM |
+| 5 | `archive/automation_rechecked_controls.csv` | 35 | `automation_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | PA |
+| 6 | `archive/azuredns_rechecked_controls.csv` | 35 | `azuredns_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 7 | `archive/azurefirewall_rechecked_controls.csv` | 36 | `azurefirewall_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 8 | `archive/backup_rechecked_controls.csv` | 36 | `backup_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | BR |
+| 9 | `archive/bastion_rechecked_controls.csv` | 35 | `bastion_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 10 | `archive/botservice_rechecked_controls.csv` | 35 | `botservice_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | IM |
+| 11 | `archive/cloudshell_rechecked_controls.csv` | 35 | `cloudshell_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | IM |
+| 12 | `archive/customerlockbox_rechecked_controls.csv` | 35 | `customerlockbox_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | PA |
+| 13 | `archive/ddosprotection_rechecked_controls.csv` | 35 | `ddosprotection_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 14 | `archive/firewallmanager_rechecked_controls.csv` | 35 | `firewallmanager_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 15 | `archive/frontdoor_rechecked_controls.csv` | 35 | `frontdoor_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 16 | `archive/intelligentrecommendations_rechecked_controls.csv` | 38 | `intelligentrecommendations_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | IM |
+| 17 | `archive/lighthouse_rechecked_controls.csv` | 35 | `lighthouse_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | PA |
+| 18 | `archive/networkwatcher_rechecked_controls.csv` | 35 | `networkwatcher_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 19 | `archive/privatelink_rechecked_controls.csv` | 35 | `privatelink_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 20 | `archive/publicip_rechecked_controls.csv` | 36 | `publicip_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 21 | `archive/redis_rechecked_controls.csv` | 35 | `redis_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 22 | `archive/servicebus_rechecked_controls.csv` | 34 | `servicebus_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 23 | `archive/siterecovery_rechecked_controls.csv` | 35 | `siterecovery_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | BR |
+| 24 | `archive/spatialanchors_rechecked_controls.csv` | 36 | `spatialanchors_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | IM |
+| 25 | `archive/trustedhardwareim_rechecked_controls.csv` | 35 | `trustedhardwareim_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | IM |
+| 26 | `archive/universalprint_rechecked_controls.csv` | 35 | `universalprint_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | IM |
+| 27 | `archive/vpngateway_rechecked_controls.csv` | 35 | `vpngateway_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
+| 28 | `archive/waf_rechecked_controls.csv` | 35 | `waf_rechecked_controls_v2.csv` | ARCHIVED — keep for git history; delete in Phase 55+ once v2 confirmed stable | NS |
 
 ---
 
