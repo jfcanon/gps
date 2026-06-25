@@ -1,0 +1,226 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "nsg": "https://newsecgap.internal/ontology#",
+    "phase": "nsg:phase",
+    "workstream": "nsg:workstream",
+    "csvSchema": "nsg:csvSchema",
+    "verdictTaxonomy": "nsg:verdictTaxonomy",
+    "readFirst": "nsg:readFirst",
+    "constraint": "nsg:constraint",
+    "qualityGate": "nsg:qualityGate"
+  },
+
+  "@type": "SoftwareProject",
+  "@id": "nsg:phase-59-im-9-csvs",
+  "name": "NewSecGap Phase 59 — IM Domain 9 CSVs: Copy, URL Backfill, Q2 Audit",
+  "version": "1.0.0",
+  "dateCreated": "2026-06-24",
+
+  "description": "Bring 9 IM domain CSVs from data/outputs/ into data/outputs/im/*.final.csv with ~85%+ per-row confidence. Three steps: (1) copy to final; (2) MCSB IM URL backfill; (3) Q1-C spot-checks + Q2 new-feature audit. Lighter than NS Phase 57+58 — only 1 now_applicable_native row (already covered), 0 conditional rows, heavy N/A profile. Retired service (intelligentrecommendations) needs graceful handling.",
+
+  "phase": "59",
+  "domain": "IM",
+  "continuedFrom": "Phase 58 (NS domain complete)",
+  "targetConfidence": "85%",
+  "currentConfidence": "15%",
+  "confidenceGap": "All 9 CSVs are v2 schema but have zero URL coverage (8/9 services). 309 rows total. 1 now_applicable_native row already has source URL (apimanagement LT-1). 0 conditional rows. Heavy N/A profile. intelligentrecommendations is a retired service (~2023), trustedhardwareim is all-N/A infrastructure.",
+
+  "projectRoot": "/Users/nahuelavalos/Repo/NewSecGap",
+  "outputDir": "data/outputs/im/",
+  "gitAddFlag": "-f",
+
+  "readFirst": [
+    { "order": 1, "path": "CLAUDE.md", "why": "Phase log through Phase 58, scope gates" },
+    { "order": 2, "path": "ado/activity.log", "why": "Tail Phase 58 entry" },
+    { "order": 3, "path": "data/outputs/context.md", "why": "Section inventory — im/ folder does not yet exist; note gap" },
+    { "order": 4, "path": "scripts/phase57_copy_to_final.py", "why": "Copy pattern to mirror" },
+    { "order": 5, "path": "scripts/phase57_url_backfill.py", "why": "URL backfill pattern to mirror" },
+    { "order": 6, "path": "scripts/phase58_individual_patches.py", "why": "Individual patch pattern (for Q1-C if needed)" },
+    { "order": 7, "path": "data/outputs/{slug}_rechecked_controls_v2.csv", "why": "9 source CSVs — read header + sample rows" }
+  ],
+
+  "csvSchema": {
+    "columns": [
+      "asb_control_id", "feature_name", "feature_supported_original",
+      "feature_enabled_by_default_original", "status_2025", "verdict_2025",
+      "azure_api_property", "script_module", "script_function", "notes",
+      "service", "severity", "blast_radius", "risk_rank"
+    ],
+    "noteUpdatePattern": "Append to existing notes — do NOT replace. Pattern: '{existing} | {evidence}. Source: {url}'",
+    "supplementNotePattern": "v2 gap: {description}. Source: {url} | Q2-{group} WebSearch June 2026 confirmed GA."
+  },
+
+  "verdictTaxonomy": {
+    "values": [
+      "implemented", "now_applicable_native", "upgraded_implemented",
+      "still_not_applicable", "conditional", "not_applicable_paas", "not_applicable_arm"
+    ],
+    "changeRule": "Do NOT change verdict without evidence. Q1-C may flip still_not_applicable to now_applicable_native if confirmed."
+  },
+
+  "targetFiles": [
+    { "slug": "addds",                    "rows": 35, "now_app": 0, "cond": 0, "impl": 8,  "na": 27, "url_coverage": 0 },
+    { "slug": "apimanagement",            "rows": 35, "now_app": 1, "cond": 0, "impl": 18, "na": 16, "url_coverage": 2, "note": "LT-1 now_applicable_native already has source URL" },
+    { "slug": "attestation",              "rows": 35, "now_app": 0, "cond": 0, "impl": 11, "na": 24, "url_coverage": 0 },
+    { "slug": "botservice",               "rows": 35, "now_app": 0, "cond": 0, "impl": 15, "na": 20, "url_coverage": 0 },
+    { "slug": "cloudshell",               "rows": 35, "now_app": 0, "cond": 0, "impl": 2,  "na": 33, "url_coverage": 0 },
+    { "slug": "intelligentrecommendations","rows": 38, "now_app": 0, "cond": 0, "impl": 6,  "na": 32, "url_coverage": 0, "note": "Service RETIRED ~2023 — no MCSB baseline expected" },
+    { "slug": "spatialanchors",           "rows": 36, "now_app": 0, "cond": 0, "impl": 8,  "na": 28, "url_coverage": 0 },
+    { "slug": "trustedhardwareim",        "rows": 35, "now_app": 0, "cond": 0, "impl": 0,  "na": 35, "url_coverage": 0, "note": "ALL 35 rows N/A — infrastructure service, all N/A expected" },
+    { "slug": "universalprint",           "rows": 35, "now_app": 0, "cond": 0, "impl": 5,  "na": 30, "url_coverage": 0 }
+  ],
+
+  "mscbUrlCandidates": [
+    { "slug": "addds",                    "candidate": "active-directory-domain-services", "risk": "Medium" },
+    { "slug": "apimanagement",            "candidate": "api-management",                  "risk": "Low" },
+    { "slug": "attestation",              "candidate": "azure-attestation",               "risk": "Medium" },
+    { "slug": "botservice",               "candidate": "azure-bot-service",               "risk": "Medium" },
+    { "slug": "cloudshell",               "candidate": "cloud-shell",                     "risk": "Medium" },
+    { "slug": "intelligentrecommendations","candidate": "LIKELY_404_RETIRED",             "risk": "High" },
+    { "slug": "spatialanchors",           "candidate": "azure-spatial-anchors",           "risk": "Medium" },
+    { "slug": "trustedhardwareim",        "candidate": "trusted-hardware-identity-management", "risk": "High" },
+    { "slug": "universalprint",           "candidate": "universal-print",                 "risk": "Low" }
+  ],
+
+  "workstreams": [
+    {
+      "@type": "nsg:Workstream",
+      "id": "STEP1",
+      "name": "Copy to Final",
+      "priority": "HIGH",
+      "script": "scripts/phase59_copy_to_final.py",
+      "pattern": "Mirror scripts/phase57_copy_to_final.py",
+      "action": "mkdir -p data/outputs/im/ && copy 9 source CSVs to data/outputs/im/{slug}.final.csv. Idempotent (skip if dest exists).",
+      "expectedRows": 309
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "STEP2",
+      "name": "MCSB URL Verification + Backfill",
+      "priority": "HIGH",
+      "script": "scripts/phase59_url_backfill.py",
+      "pattern": "Mirror scripts/phase57_url_backfill.py",
+      "preStep": "Python urllib HEAD-verify 9 MCSB IM URLs before writing script — correct any 404 slugs",
+      "has_evidence_checks": ["http", "source:", "infrastructure", "azure platform", "no customer", "not applicable", "monitoring service", "retired", "no mcsb"],
+      "fallbackForRetired": "Leave notes unchanged for intelligentrecommendations and trustedhardwareim if no baseline found"
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q1-C",
+      "name": "Key still_not_applicable Spot-Checks",
+      "priority": "MEDIUM",
+      "description": "4 high-value N/A rows to verify still hold June 2026. Parallel WebSearch.",
+      "rows": [
+        { "slug": "addds",       "ctrl": "IM-3",  "feat": "Managed Identity",      "query": "Azure AD Domain Services managed identity support 2025 2026" },
+        { "slug": "cloudshell",  "ctrl": "NS-2",  "feat": "Azure Private Link",    "query": "Azure Cloud Shell private endpoint supported 2025 2026" },
+        { "slug": "botservice",  "ctrl": "IM-7",  "feat": "Conditional Access",    "query": "Azure Bot Service Entra ID Conditional Access data plane 2025" },
+        { "slug": "universalprint","ctrl": "IM-1","feat": "Azure AD Auth",         "query": "Azure Universal Print Entra ID authentication MFA supported 2025" }
+      ],
+      "action": "If confirmed N/A: add standard rationale note. If flipped: update verdict + add source. Write phase59_individual_patches.py ONLY if flip found."
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q2",
+      "name": "Per-Service New-Feature Audit 2025-2026",
+      "priority": "MEDIUM",
+      "queries": [
+        {
+          "id": "Q2-A",
+          "query": "Azure API Management Bot Service new identity IM-1 IM-3 IM-7 managed identity Entra 2025 2026",
+          "services": ["apimanagement", "botservice"],
+          "focus": "API Management Entra integration improvements, Bot Service managed identity expansion"
+        },
+        {
+          "id": "Q2-B",
+          "query": "Azure Attestation Trusted Hardware Identity Management new security feature 2025 2026",
+          "services": ["attestation", "trustedhardwareim"],
+          "focus": "Attestation policy updates, THIM service changes"
+        },
+        {
+          "id": "Q2-C",
+          "query": "Azure Spatial Anchors Cloud Shell Universal Print ADDS new identity security 2025 2026",
+          "services": ["spatialanchors", "cloudshell", "universalprint", "addds"],
+          "focus": "Spatial Anchors deprecation, Cloud Shell private endpoint, Universal Print Entra, ADDS managed identity"
+        }
+      ],
+      "supplementCondition": "Only add SUPPLEMENT row if feature is GA and maps to IM control (IM-1 through IM-8)"
+    }
+  ],
+
+  "scriptsToWrite": [
+    {
+      "path": "scripts/phase59_copy_to_final.py",
+      "pattern": "Mirror scripts/phase57_copy_to_final.py",
+      "required": true
+    },
+    {
+      "path": "scripts/phase59_url_backfill.py",
+      "pattern": "Mirror scripts/phase57_url_backfill.py",
+      "required": true
+    },
+    {
+      "path": "scripts/phase59_individual_patches.py",
+      "pattern": "Mirror scripts/phase58_individual_patches.py",
+      "required": false,
+      "condition": "Only write if Q1-C finds N/A flips or if Q2 rows need note enrichment"
+    },
+    {
+      "path": "scripts/phase59_supplement_rows.py",
+      "pattern": "Mirror scripts/phase58_supplement_rows.py",
+      "required": false,
+      "condition": "Only write if Q2 finds at least one new GA feature"
+    }
+  ],
+
+  "executionSteps": [
+    { "order": 1,  "action": "Read: CLAUDE.md, activity.log, 9 source CSVs (header + sample rows)" },
+    { "order": 2,  "action": "Write + run scripts/phase59_copy_to_final.py" },
+    { "order": 3,  "action": "Python urllib HEAD-verify 9 MCSB IM baseline URLs (correct slugs before writing backfill)" },
+    { "order": 4,  "action": "Write + run scripts/phase59_url_backfill.py" },
+    { "order": 5,  "action": "WebSearch Q1-C: 4 spot-checks (parallel)" },
+    { "order": 6,  "action": "WebSearch Q2-A/B/C: 3 grouped new-feature searches (parallel)" },
+    { "order": 7,  "action": "If Q1-C found flips: write + run scripts/phase59_individual_patches.py" },
+    { "order": 8,  "action": "If Q2 found new features: write + run scripts/phase59_supplement_rows.py" },
+    { "order": 9,  "action": "Run quality gate — all 9 must PASS" },
+    { "order": 10, "action": "Fix any FAIL rows" },
+    { "order": 11, "action": "git add -f data/outputs/im/ scripts/phase59_*.py && git commit" },
+    { "order": 12, "action": "Update ado/activity.log — Phase 59 entry" },
+    { "order": 13, "action": "Update CLAUDE.md — Phase 59 one-liner" },
+    { "order": 14, "action": "STOP — do not start IM ADO import or Phase 60 without user confirmation" }
+  ],
+
+  "qualityGate": {
+    "slugs": ["addds","apimanagement","attestation","botservice","cloudshell","intelligentrecommendations","spatialanchors","trustedhardwareim","universalprint"],
+    "outputDir": "data/outputs/im/",
+    "uncovExemptions": ["infrastructure", "azure platform", "no customer", "not applicable", "monitoring service", "retired", "no mcsb"],
+    "extraExemptions": ["retired", "no mcsb"],
+    "passCriteria": [
+      "Zero bad verdicts",
+      "Zero now_applicable_native without URL",
+      "Uncovered < 5 per CSV",
+      "trustedhardwareim: all 35 N/A rows — all should pass via 'not applicable' exemption",
+      "intelligentrecommendations: retired service rows exempt via 'retired' or 'not applicable' notes"
+    ],
+    "command": "python3 -c \"import csv\nALLOWED={'implemented','now_applicable_native','upgraded_implemented','still_not_applicable','conditional','not_applicable_paas','not_applicable_arm'}\nslugs=['addds','apimanagement','attestation','botservice','cloudshell','intelligentrecommendations','spatialanchors','trustedhardwareim','universalprint']\nall_ok=True\nfor s in slugs:\n    rows=list(csv.DictReader(open(f'data/outputs/im/{s}.final.csv')))\n    bad={r['verdict_2025'] for r in rows}-ALLOWED\n    no_url=[r for r in rows if r['verdict_2025']=='now_applicable_native' and 'http' not in r.get('notes','')]\n    uncov=[r for r in rows if 'http' not in r.get('notes','') and 'Source' not in r.get('notes','') and not any(x in r.get('notes','').lower() for x in ['infrastructure','azure platform','no customer','not applicable','monitoring service','retired','no mcsb'])]\n    ok=not bad and not no_url and len(uncov)<5\n    if not ok: all_ok=False\n    print(f'[{\\\"OK\\\" if ok else \\\"FAIL\\\"}] {s:<28} rows={len(rows):>3} no_url={len(no_url):>2} uncov={len(uncov):>3}')\nprint()\nprint('QUALITY GATE:','PASS' if all_ok else 'FAIL')\""
+  },
+
+  "constraints": [
+    "NO verdict change without evidence",
+    "NO CSV recreation — enrich in-place only",
+    "git add data/outputs/im/ requires -f flag",
+    "intelligentrecommendations: retired service — do NOT fabricate MCSB URL; use 'service retired ~2023' in notes",
+    "trustedhardwareim: all 35 N/A expected — no enrichment needed beyond URL attempt",
+    "NO ADO operations — Phase 53 IM ADO import blocked on user providing User Story IDs",
+    "Cost hook: ignore — user standing green light"
+  ],
+
+  "successCriteria": [
+    "data/outputs/im/*.final.csv created for all 9 services",
+    "Quality gate 9/9 PASS",
+    "Research confidence ~85%+ for all 9 CSVs",
+    "CLAUDE.md Phase 59 one-liner added",
+    "ado/activity.log Phase 59 entry added",
+    "Commit pushed"
+  ]
+}
