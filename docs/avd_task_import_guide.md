@@ -113,10 +113,11 @@ python3 import_assessment_tasks_to_ado.py \
 
 ### IM Domain — 9 services
 
-> Phase 59 not yet run. Use `data/outputs/im/*.final.csv` after Phase 59 completes.
-> Until then, use `data/outputs/*_rechecked_controls_v2.csv` as fallback.
+> Phase 59 complete (2026-06-25). All 9 CSVs at `data/outputs/im/*.final.csv`. QG 9/9 PASS.
+> Note: `intelligentrecommendations` is retired ~2023; `spatialanchors` retired Nov 2024.
+> Both are included for completeness — tasks will reflect retired status in notes.
 
-| Service | `--csv` path (post Phase 59) | `--parent-id` |
+| Service | `--csv` path | `--parent-id` |
 |---|---|---|
 | ADDS | `data/outputs/im/addds.final.csv` | `<ID>` |
 | API Management | `data/outputs/im/apimanagement.final.csv` | `<ID>` |
@@ -215,7 +216,7 @@ RULES:
 
 ---
 
-## AVD Copilot Prompt — IM Domain (9 services, post Phase 59)
+## AVD Copilot Prompt — IM Domain (9 services)
 
 ```
 You are running ADO task import for IM domain (9 services).
