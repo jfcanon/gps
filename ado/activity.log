@@ -788,3 +788,43 @@ All 14 CSVs: **PASS**
 
 ### Next
 - STOP — do not start IM ADO import or Phase 60 without user confirmation
+
+## Phase 60 — 2026-06-25
+
+### BR domain — 2 CSVs finalized to 85%+ confidence
+
+- [x] `scripts/phase60_copy_to_final.py` — 2 BR v2 CSVs copied to `data/outputs/br/*.final.csv` (71 rows total: backup=36, siterecovery=35)
+- [x] URL HEAD-verify: 2 MCSB BR baseline URLs checked; both required slug corrections:
+  - `backup`: correct slug `backup` (not `azure-backup`)
+  - `siterecovery`: correct slug `site-recovery` (not `azure-site-recovery`)
+- [x] `scripts/phase60_url_backfill.py` — 32 rows updated (backup=15, siterecovery=17); MCSB URLs appended to all UNCOV rows including backup IM-3 now_applicable_native
+- [x] Q1-A (WebSearch June 2026): backup IM-3 Managed Identity
+  - System-assigned MI GA confirmed (2026-04-29 docs). ARM: vault.identity.type = SystemAssigned; now default on vault provisioning.
+  - Source: https://learn.microsoft.com/en-us/azure/backup/enable-managed-identity-recovery-services-vault
+- [x] Q1-C spot-checks (WebSearch June 2026 — 3 rows, all confirmed no flip):
+  - backup PA-7 RBAC: management plane RBAC only (no data plane concept) → still_not_applicable confirmed
+  - backup NS-2 Private Link: already `implemented` in CSV — no flip needed
+  - siterecovery IM-8 Credentials/KV: Run As accounts retired Sep 2023; ASR migrated to managed identity → no credentials to store in KV → still_not_applicable confirmed
+- [x] Q2 audit (WebSearch June 2026 — 2 grouped queries):
+  - backup: Immutable vault locked (WORM) GA confirmed + Enhanced policy GA — both enhancements to already-implemented rows (DP-2/BR-1); no new gaps found
+  - siterecovery: Only kernel/OS support updates and churn-limit improvements; no new security gaps
+  - No SUPPLEMENT rows added
+- [x] `scripts/phase60_individual_patches.py` — 3 rows patched:
+  - backup IM-3: MI docs URL appended (Q1-A specific source URL)
+  - backup PA-7: RBAC guide URL appended confirming management-plane-only scope
+  - siterecovery IM-8: Run As retirement note + migration URL appended
+- [x] Quality gate: 2/2 PASS (uncov=0 for both; no_url=0; bad verdicts=0)
+- [x] `docs/avd_task_import_guide.md` updated — BR Domain section added (2 services) + BR copilot prompt; import guide now complete for 45 services
+- [x] Commit: `f01d5a2`
+
+**BR domain confidence**: ~85%+ for both CSVs (up from ~20%)
+
+### ADO import readiness (after Phase 60)
+- NS: 34 services, 1176 rows, QG PASS — `data/outputs/ns/*.final.csv`
+- IM: 9 services, 319 rows, QG PASS — `data/outputs/im/*.final.csv`
+- BR: 2 services, 71 rows, QG PASS — `data/outputs/br/*.final.csv`
+- Total: 45 services, ~1566 tasks ready for import
+- Remaining: `ado_config.py` ADO_ORG + ADO_PROJECT must be filled on AVD before import
+
+### Next
+- STOP — do not start next domain or Phase 61 without user confirmation

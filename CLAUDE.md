@@ -128,8 +128,11 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 59**: IM domain 9 CSVs finalized to 85%+ confidence — 319 rows copied to data/outputs/im/; 8 MCSB IM URLs HEAD-verified (2 slug corrections: addds=azure-active-directory-domain-services, attestation=microsoft-azure-attestation); 130 rows URL-backfilled; Q1-C 4 spot-checks all confirmed still_not_applicable (no flips); Q2 audit: intelligentrecommendations retired ~2023 (27 rows patched), spatialanchors retired Nov 2024 (36 rows annotated); no SUPPLEMENT rows. QG 9/9 PASS. Scripts: phase59_copy_to_final.py, phase59_url_backfill.py, phase59_individual_patches.py. Commit: 894f45e. (2026-06-25)
 
-**Current state (Phase 59 complete)**:
+**Phase 60**: BR domain 2 CSVs finalized to 85%+ confidence — 71 rows copied to data/outputs/br/; 2 MCSB BR URLs HEAD-verified (slug corrections: backup=backup, siterecovery=site-recovery); 32 rows URL-backfilled; Q1-A confirmed backup IM-3 MI GA (2022+, docs 2026-04-29); Q1-C 3 spot-checks all confirmed still_not_applicable (no flips); Q2: WORM immutable vault + enhanced policy GA but no new security gaps → no SUPPLEMENT rows; 3 individual patches. QG 2/2 PASS. docs/avd_task_import_guide.md updated (BR section added — import guide complete for 45 services). Commit: f01d5a2. (2026-06-25)
+
+**Current state (Phase 60 complete)**:
 - `data/outputs/ns/` — 34 enriched NS CSVs. QG PASS all 34. ~95%+ confidence. NS domain COMPLETE.
 - `data/outputs/im/` — 9 enriched IM CSVs. QG PASS all 9. ~85%+ confidence. IM domain COMPLETE.
-- Next: Phase 60 scope TBD — user confirmation required.
-- Blocked: IM ADO import — user provides User Story IDs as --parent-id args when running scripts/import_assessment_tasks_to_ado.py.
+- `data/outputs/br/` — 2 enriched BR CSVs. QG PASS all 2. ~85%+ confidence. BR domain COMPLETE.
+- ADO import: 45 services / ~1566 tasks ready. ado_config.py ADO_ORG+ADO_PROJECT must be filled on AVD.
+- Next: Phase 61 scope TBD — user confirmation required.
