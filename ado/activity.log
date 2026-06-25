@@ -660,3 +660,49 @@ All 14 CSVs: **PASS**
 ### Next
 - Phase 57 / Session 6: IM domain initial prompt — 9 IM CSVs in data/outputs/ (addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint)
 - Phase 53: IM ADO import — still blocked on user providing ADO User Story IDs
+
+---
+
+## 2026-06-24 (Session 5 close-out — pivot decision)
+
+- [x] Session 5 complete. Phase 56 done. Preparing Session 6.
+
+### Pivot: IM domain → NS domain finalization
+
+**Decision**: Session 6 will NOT start IM domain. Instead:
+- Finalize 20 NS Phase 52 CSVs (copy data/outputs/{slug}_rechecked_controls_v2.csv → data/outputs/ns/{slug}.final.csv + Exa-enrich)
+- Same Phase 56 approach: MCSB baseline URL bulk backfill + Q2 audit + quality gate
+- This completes NS domain to 95%+ confidence before moving to IM domain (Session 7)
+
+**Rationale**: All 20 NS services already have 14-col v2 CSVs from Phase 52. Converting + enriching them is faster and more systematic than starting IM domain cold. 
+
+### 20 NS services to finalize in Session 6 (Phase 57)
+
+| Service slug | Rows | Uncovered | Priority |
+|---|---|---|---|
+| virtualdesktop | 36 | 35 | HIGH |
+| appservice | 43 | 32 | HIGH |
+| cognitivesearch | 35 | 25 | HIGH |
+| cognitiveservices | 35 | 25 | HIGH |
+| datafactory | 35 | 24 | HIGH |
+| functions | 35 | 24 | HIGH |
+| eventgrid | 35 | 25 | HIGH |
+| eventhubs | 35 | 25 | HIGH |
+| logicapps | 35 | 21 | HIGH |
+| databricks | 36 | 21 | HIGH |
+| notificationhubs | 35 | 23 | MEDIUM |
+| filesync | 35 | 23 | MEDIUM |
+| databasemigration | 35 | 16 | MEDIUM |
+| peeringservice | 35 | 7 | LOW |
+| virtualnetwork | 35 | 7 | LOW |
+| virtualwan | 35 | 6 | LOW |
+| trafficmanager | 35 | 5 | LOW |
+| natgateway | 35 | 4 | LOW |
+| loadbalancer | 35 | 3 | LOW |
+| azurecdn | 3 | 2 | NOTE: legacy CDN, 3 rows intentional |
+
+**Total uncovered**: ~332 rows across 20 services
+**Expected after Phase 57**: <5 uncovered per service (same QG as Phase 56)
+
+### Session 6 phase number: Phase 57
+### Handover doc: docs/session6_handover.md

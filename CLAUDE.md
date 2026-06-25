@@ -116,7 +116,7 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 51**: data/outputs context audit — `data/outputs/context.md` updated. Inventory of all 65+ files. keyvault anomaly (10-col) flagged. (2026-06-24)
 
-**Phase 52**: NS domain full assessment for remaining 20 services — `data/outputs/ns/{slug}.final.csv` (14-col v2). 20 new services × ~35 rows = ~700 rows. Total NS: 34 services. (2026-06-24). Plan prompt: `docs/phase52_plan_prompt.md`.
+**Phase 52**: NS domain 20 remaining services assessed — output: `data/outputs/{slug}_rechecked_controls_v2.csv` (14-col v2, in data/outputs/ NOT ns/). ~700 rows. Total NS assessed: 34 services. NOTE: final.csv in ns/ NOT yet created for these 20 — that is Session 6 / Phase 57 scope. (2026-06-24). Plan prompt: `docs/phase52_plan_prompt.md`.
 
 **Phase 55**: NS original 14 CSVs enriched to 95%+ confidence — Q1 Exa web research (47 searches), standard rationale (125+ rows), verdict corrections (6 Phase 48 cache errors reverted), Q2 supplement rows (NS-6 azurefirewall, NS-7 redis+servicebus). Quality gate: 14/14 PASS. Scripts: `scripts/phase55_*.py`. (2026-06-24)
 
@@ -124,6 +124,6 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Current state (Phase 56 complete)**:
 - `data/outputs/ns/` — 14 enriched NS CSVs. Quality gate PASS. ~95%+ confidence after Phase 56 (5 residual uncovered rows are legitimate no-data-plane cases).
-- `data/outputs/ns/` Phase 52 CSVs — 20 more NS CSVs, NOT YET enriched (Phase 57/54 pending).
-- Next: Session 6 — IM domain initial prompt (9 IM CSVs: addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint).
+- `data/outputs/{slug}_rechecked_controls_v2.csv` — 20 NS Phase 52 CSVs exist but NOT in ns/ yet, NOT Exa-enriched. These are Session 6 / Phase 57 scope.
+- Next: Session 6 / Phase 57 — Finalize 20 NS Phase 52 CSVs: copy to data/outputs/ns/{slug}.final.csv + Exa-enrich (same Phase 56 approach). Pivot from IM domain — IM deferred to Session 7.
 - Blocked: Phase 53 IM ADO import — awaiting User Story IDs from user.
