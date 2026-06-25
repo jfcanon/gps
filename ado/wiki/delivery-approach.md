@@ -149,21 +149,6 @@ Example: `[SEC-1] Network Segmentation: Azure Kubernetes Service`
 | **Acceptance Criteria** | Option A / B / C based on policy status |
 | **Tags** | `Security`, domain code (e.g. `NS`) |
 
-### Acceptance Criteria Options
-
-| Option | Condition | Criteria |
-|---|---|---|
-| **A** | `policy_status = confirmed` | Verified Azure Policy built-in exists. AC: confirm policy assigned + compliant. |
-| **B** | `policy_status = uncertain` | ⚠️ Policy may exist. AC: verify or create custom. |
-| **C** | `policy_status = none` | No built-in found. AC: manual check or custom policy. |
-
-### Policy Coverage
-
-| Status | Count | % | Meaning |
-|---|---|---|---|
-| confirmed | 22 | 14% | Azure Policy built-in verified via learn.microsoft.com |
-| uncertain | 48 | 30% | ⚠️ Policy name found but not verified |
-| none | 90 | 56% | No built-in; custom script or manual review required |
 
 ### Assessment Tone Rationale
 
@@ -179,7 +164,7 @@ Stories use assessment language ("audit and identify WHERE the environment devia
 - Path: `Azure Offer Security Baselines/3.0`
 - 118 `.xlsx` files — one per Azure service
 
-### "Feature Summary" Sheet Schema
+### "Feature Summary" Sheet Schema (Currentl Reworking. In Progreess. TBC)
 
 | Column | Description |
 |---|---|
@@ -189,7 +174,7 @@ Stories use assessment language ("audit and identify WHERE the environment devia
 | Feature Enabled by Default | True / False / Not Applicable |
 | Feature Reference | URL to Azure docs |
 
-### Phase 35: Applicability Breakdown (Mechanical — Excel field proxy)
+### Phase 35: Applicability Breakdown (Mechanical — Excel field proxy) (Currentl Reworking. In Progreess. TBC)
 
 | Applicability | Rows | % |
 |---|---|---|
@@ -198,7 +183,7 @@ Stories use assessment language ("audit and identify WHERE the environment devia
 | microsoft_managed | 367 | 9% |
 | shared | 24 | 1% |
 
-### Phase 37: Qwen3 Reclassification (Complete)
+### Phase 37: Qwen3 Reclassification (Complete) (Deprecated)
 
 34 unique `asb_control_id` values analyzed by Qwen3 local LLM (`qwen3:30b-a3b`). Verdicts propagated to all 4,157 rows. Key results:
 
@@ -218,13 +203,13 @@ Reclassification applied 2025 Azure capability knowledge and third-party tool aw
 
 ### Industry Benchmark
 
-Research via Qwen3 local LLM against published security assessment benchmarks:
+Research against published security assessment benchmarks:
 
 - Industry norm: **4–6 hours per control** for MCSB-class assessments
 - Total range for this class of assessment: **600–1,000 hours**
 - Our calibrated estimate (485h) is below the low end, reflecting: (a) infra-scope exclusions (IR, DS, 15 absent services) and (b) automation leverage from script_simple/script_medium controls
 
-### Effort Formula
+### Effort Formula (Currentl Reworking. In Progreess. TBC)
 
 | automation_class | policy_status | Hours |
 |---|---|---|
@@ -237,7 +222,7 @@ Research via Qwen3 local LLM against published security assessment benchmarks:
 | manual_only | none | 7h |
 | not_applicable | any | 0.5h |
 
-### Matching Strategy
+### Matching Strategy (Currentl Reworking. In Progreess. TBC)
 
 Story `resource` field (e.g. "Bot Service") is fuzzy-matched to v3 `service_name` (e.g. "azure-bot-service") using `rapidfuzz.token_sort_ratio` with threshold 60. Noise words ("azure", "microsoft", "service") normalised before matching.
 
@@ -246,7 +231,7 @@ Story `resource` field (e.g. "Bot Service") is fuzzy-matched to v3 `service_name
 
 ---
 
-## Current Effort Estimates
+## Current Effort Estimates (Currentl Reworking. In Progreess. TBC)
 
 **Revised estimate: 485h / 60.6 working days** (8h/day, 1 FTE sequential)
 

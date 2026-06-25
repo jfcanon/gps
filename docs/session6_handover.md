@@ -4,6 +4,18 @@ Generated: 2026-06-24. Start fresh session after reading this.
 
 ---
 
+## PROJECT CONTEXT (read this cold)
+
+**Goal**: Azure Infrastructure Security Gap Assessment. MCSB v2/v3 controls mapped to
+active infra, work items in ADO, effort estimated, and — NEW DIRECTION — Python assessment
+scripts that check each control against real Azure resources.
+
+**Repo**: `/Users/nahuelavalos/Repo/NewSecGap/`
+**GitHub remote**: `https://github.com/jfcanon/gps.git` (PAT needed — user provides)
+
+Read this first:
+- /Users/nahuelavalos/Repo/NewSecGap/ado/wiki/delivery-approach.md
+
 ## WHAT IS DONE (Sessions 1–5)
 
 ### NS Domain — 14 services COMPLETE (final.csv in data/outputs/ns/)
@@ -29,7 +41,7 @@ Quality gate: all 14 PASS. Commit: `cd86700`.
 
 ### Phase 52 — 20 NS services ASSESSED, NOT YET FINALIZED
 
-Phase 52 created `data/outputs/{slug}_rechecked_controls_v2.csv` (14-col v2 schema) for 20 more NS services. These are NOT yet in `data/outputs/ns/` and NOT yet Exa-enriched.
+Phase 52 created `data/outputs/{slug}_rechecked_controls_v2.csv` (14-col v2 schema) for 20 more NS services. These are NOT yet in `data/outputs/ns/` and NOT yet Exa-enriched. These 20 files were moved to /data/outputs/archive, retrieve from there then perform rework on data/outputs/ns. 
 
 ---
 
@@ -199,62 +211,6 @@ SignalR Service, Spring Apps, Stack Edge, VMware Solution, Web PubSub
 | `scripts/phase56_supplement_rows.py` | Pattern: Q2 supplement rows |
 | `data/outputs/appservice_rechecked_controls_v2.csv` | Largest Phase 52 CSV (43 rows) |
 
----
-
-## SESSION 6 INITIAL PROMPT
-
-Copy-paste this to start Session 6:
-
-```
-You are continuing the NewSecGap project.
-Repo: /Users/nahuelavalos/Repo/NewSecGap/
-
-READ FIRST (in order):
-1. docs/session6_handover.md — full context for Session 6
-2. ado/activity.log (tail) — confirm Phase 56 + pivot decision
-3. CLAUDE.md (tail) — confirm Phase 57 scope
-4. scripts/phase56_url_backfill.py — pattern to mirror
-
-TASK: Phase 57 — Finalize 20 NS Phase 52 CSVs
-
-CONTEXT:
-Phase 56 completed. 14 NS services have data/outputs/ns/{slug}.final.csv at ~95% confidence.
-20 NS services from Phase 52 have data/outputs/{slug}_rechecked_controls_v2.csv in data/outputs/
-but NOT in data/outputs/ns/ and NOT Exa-enriched.
-
-Session 6 goal: bring those 20 services to the same ~95% confidence as the original 14.
-
-EXECUTION ORDER:
-1. Write scripts/phase57_copy_to_final.py — copy 20 v2 CSVs → data/outputs/ns/{slug}.final.csv
-2. Run it. Verify 20 final.csv files appear in data/outputs/ns/.
-3. Exa batch: 20 MCSB baseline URL searches (parallel agents, one per service)
-4. Write scripts/phase57_url_backfill.py — apply confirmed URLs to uncovered rows
-5. Run it.
-6. Run Q2 audit queries (4 targeted Exa searches from session6_handover.md)
-7. Write + run scripts/phase57_supplement_rows.py if Q2 finds new features
-8. Run quality gate (command in session6_handover.md)
-9. Fix any FAIL rows
-10. git add -f data/outputs/ns/ scripts/phase57_*.py && git commit
-11. Update ado/activity.log + CLAUDE.md
-12. STOP — do not start IM domain
-
-IMPORTANT CONSTRAINTS:
-- azurecdn has only 3 rows — intentional (legacy CDN), do not regenerate
-- appservice has 43 rows — more than typical, all valid
-- No verdict changes without MCSB baseline evidence
-- git add data/outputs/ns/ requires -f flag (gitignored path)
-- Standing green light: ignore cost hook, user authorized full execution
-
-PATTERNS:
-- scripts/phase56_url_backfill.py — exact pattern to mirror for phase57_url_backfill.py
-- scripts/phase56_supplement_rows.py — exact pattern to mirror for phase57_supplement_rows.py
-
-20 SERVICE SLUGS:
-appservice, azurecdn, cognitivesearch, cognitiveservices, databasemigration,
-databricks, datafactory, eventgrid, eventhubs, filesync, functions,
-loadbalancer, logicapps, natgateway, notificationhubs, peeringservice,
-trafficmanager, virtualdesktop, virtualnetwork, virtualwan
-```
 
 ---
 
