@@ -1,0 +1,289 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "nsg": "https://newsecgap.internal/ontology#",
+    "phase": "nsg:phase",
+    "workstream": "nsg:workstream",
+    "csvSchema": "nsg:csvSchema",
+    "verdictTaxonomy": "nsg:verdictTaxonomy",
+    "readFirst": "nsg:readFirst",
+    "constraint": "nsg:constraint",
+    "qualityGate": "nsg:qualityGate"
+  },
+
+  "@type": "SoftwareProject",
+  "@id": "nsg:phase-60-br-2-csvs",
+  "name": "NewSecGap Phase 60 — BR Domain 2 CSVs: Copy, URL Backfill, Q2 Audit + ADO Guide Update",
+  "version": "1.0.0",
+  "dateCreated": "2026-06-25",
+
+  "description": "Bring 2 BR domain CSVs from data/outputs/ into data/outputs/br/*.final.csv with ~85%+ per-row confidence. Steps: (1) copy to final; (2) MCSB BR URL backfill; (3) Q1-A URL for backup IM-3 now_applicable_native; (4) Q1-C spot-checks (backup NS-2 PE, backup PA-7 RBAC, siterecovery IM-8 credentials); (5) Q2 new-feature audit. Also update docs/avd_task_import_guide.md with BR section — completes import guide for all 45 assessed services.",
+
+  "phase": "60",
+  "domain": "BR",
+  "continuedFrom": "Phase 59 (IM domain complete)",
+  "targetConfidence": "85%",
+  "currentConfidence": "20%",
+  "confidenceGap": "71 rows total (backup=36, siterecovery=35). Zero URL coverage. backup has 1 now_applicable_native (IM-3 Managed Identity, no HTTP source URL). backup has 15 UNCOV rows, siterecovery has 17 UNCOV rows.",
+
+  "projectRoot": "/Users/nahuelavalos/Repo/NewSecGap",
+  "outputDir": "data/outputs/br/",
+  "gitAddFlag": "-f",
+
+  "readFirst": [
+    { "order": 1, "path": "CLAUDE.md",                                                "why": "Phase log through Phase 59, scope gates" },
+    { "order": 2, "path": "ado/activity.log",                                          "why": "Tail Phase 59 entry" },
+    { "order": 3, "path": "data/outputs/context.md",                                  "why": "Inventory — br/ folder does not yet exist; note gap" },
+    { "order": 4, "path": "scripts/phase59_copy_to_final.py",                         "why": "Copy pattern to mirror" },
+    { "order": 5, "path": "scripts/phase59_url_backfill.py",                          "why": "URL backfill pattern to mirror" },
+    { "order": 6, "path": "scripts/phase59_individual_patches.py",                    "why": "Individual patch pattern (for Q1-A/C)" },
+    { "order": 7, "path": "docs/avd_task_import_guide.md",                            "why": "Add BR section after QG PASS" },
+    { "order": 8, "path": "data/outputs/backup_rechecked_controls_v2.csv",            "why": "Source CSV — read all rows" },
+    { "order": 9, "path": "data/outputs/siterecovery_rechecked_controls_v2.csv",      "why": "Source CSV — read all rows" }
+  ],
+
+  "csvSchema": {
+    "columns": [
+      "asb_control_id", "feature_name", "feature_supported_original",
+      "feature_enabled_by_default_original", "status_2025", "verdict_2025",
+      "azure_api_property", "script_module", "script_function", "notes",
+      "service", "severity", "blast_radius", "risk_rank"
+    ],
+    "noteUpdatePattern": "Append to existing notes — do NOT replace. Pattern: '{existing} | {evidence}. Source: {url}'",
+    "supplementNotePattern": "v2 gap: {description}. Source: {url} | Q2-{group} WebSearch June 2026 confirmed GA."
+  },
+
+  "verdictTaxonomy": {
+    "values": [
+      "implemented", "now_applicable_native", "upgraded_implemented",
+      "still_not_applicable", "conditional", "not_applicable_paas", "not_applicable_arm"
+    ],
+    "changeRule": "Do NOT change verdict without evidence. Q1-C may flip still_not_applicable to now_applicable_native if confirmed GA."
+  },
+
+  "targetFiles": [
+    {
+      "slug": "backup",
+      "rows": 36,
+      "now_app": 1,
+      "cond": 0,
+      "impl": 13,
+      "na": 22,
+      "url_coverage": 0,
+      "uncov_before_backfill": 15,
+      "note": "IM-3 now_applicable_native exists but has NO http source URL — MUST be added in Q1-A. backup NS-2 Private Link: check if PE support was added (may flip)."
+    },
+    {
+      "slug": "siterecovery",
+      "rows": 35,
+      "now_app": 0,
+      "cond": 0,
+      "impl": 12,
+      "na": 23,
+      "url_coverage": 0,
+      "uncov_before_backfill": 17,
+      "note": "No now_applicable_native rows. siterecovery IM-8 Run As account / service credential: check if managed identity replaced Run As (may flip)."
+    }
+  ],
+
+  "mscbUrlCandidates": [
+    { "slug": "backup",       "candidate": "azure-backup",        "risk": "Low" },
+    { "slug": "siterecovery", "candidate": "azure-site-recovery", "risk": "Low" }
+  ],
+
+  "workstreams": [
+    {
+      "@type": "nsg:Workstream",
+      "id": "STEP1",
+      "name": "Copy to Final",
+      "priority": "HIGH",
+      "script": "scripts/phase60_copy_to_final.py",
+      "pattern": "Mirror scripts/phase59_copy_to_final.py",
+      "action": "mkdir -p data/outputs/br/ && copy 2 source CSVs to data/outputs/br/{slug}.final.csv. Idempotent.",
+      "expectedRows": 71
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "STEP2",
+      "name": "MCSB URL Verification + Backfill",
+      "priority": "HIGH",
+      "script": "scripts/phase60_url_backfill.py",
+      "pattern": "Mirror scripts/phase59_url_backfill.py",
+      "preStep": "Python urllib HEAD-verify 2 MCSB BR URLs before writing script",
+      "has_evidence_checks": ["http", "source:", "infrastructure", "azure platform", "no customer", "not applicable", "monitoring service", "retired", "no mcsb"],
+      "expectedRowsUpdated": "~32 of 71"
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q1-A",
+      "name": "now_applicable_native URL Fix",
+      "priority": "CRITICAL",
+      "description": "backup IM-3 Managed Identity is now_applicable_native but has no HTTP source URL. QG will FAIL without this. Must find ARM property and source URL.",
+      "rows": [
+        {
+          "slug": "backup",
+          "ctrl": "IM-3",
+          "feat": "Managed Identities",
+          "current_note_fragment": "Azure Backup gained system-assigned managed identity",
+          "query": "Azure Backup system-assigned managed identity GA ARM property Microsoft.RecoveryServices/vaults 2024 2025",
+          "expectedArm": "Microsoft.RecoveryServices/vaults (identity.type = SystemAssigned)",
+          "expectedUrl": "https://learn.microsoft.com/en-us/azure/backup/backup-azure-managed-identity"
+        }
+      ]
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q1-C",
+      "name": "Key still_not_applicable Spot-Checks",
+      "priority": "MEDIUM",
+      "description": "3 high-value N/A rows to verify still hold June 2026. Parallel WebSearch.",
+      "rows": [
+        {
+          "slug": "backup",
+          "ctrl": "PA-7",
+          "feat": "Azure RBAC",
+          "query": "Azure Backup RBAC roles data plane operations management plane 2025 2026",
+          "note": "Current verdict: still_not_applicable. RBAC may apply to management plane only."
+        },
+        {
+          "slug": "backup",
+          "ctrl": "NS-2",
+          "feat": "Azure Private Link",
+          "query": "Azure Backup private endpoint private link supported GA 2024 2025",
+          "note": "WATCH: Azure Backup DID add private endpoint support. May need flip to now_applicable_native."
+        },
+        {
+          "slug": "siterecovery",
+          "ctrl": "IM-8",
+          "feat": "Service Credentials / Secrets in Key Vault",
+          "query": "Azure Site Recovery Run As account service principal Key Vault secret management 2025",
+          "note": "IM-8 uses Run As account; check if managed identity has replaced it (flip risk)."
+        }
+      ],
+      "action": "If flip confirmed: update verdict + add source. Write phase60_individual_patches.py."
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q2",
+      "name": "Per-Service New-Feature Audit 2025-2026",
+      "priority": "MEDIUM",
+      "queries": [
+        {
+          "id": "Q2-A",
+          "query": "Azure Backup new feature BR-1 BR-2 immutable vault cross-region restore Enhanced policy 2025 2026",
+          "services": ["backup"],
+          "focus": "Immutable vault GA, Enhanced backup policy, Cross-region restore, Backup center"
+        },
+        {
+          "id": "Q2-B",
+          "query": "Azure Site Recovery new feature managed identity zone-to-zone replication 2025 2026",
+          "services": ["siterecovery"],
+          "focus": "Managed identity in ASR, Enhanced replication policies, Zone-to-zone DR"
+        }
+      ],
+      "supplementCondition": "Only add SUPPLEMENT row if feature is GA and maps to BR-1/BR-2/BR-3 or significantly changes IM/NS/DP coverage for these services"
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "STEP6",
+      "name": "ADO Import Guide Update",
+      "priority": "HIGH",
+      "description": "After QG PASS, update docs/avd_task_import_guide.md with BR domain section.",
+      "action": "Add BR Domain table (2 services: backup, siterecovery with data/outputs/br/*.final.csv paths) and BR AVD Copilot Prompt section. Update import totals to 45 services / ~1566 tasks."
+    }
+  ],
+
+  "scriptsToWrite": [
+    {
+      "path": "scripts/phase60_copy_to_final.py",
+      "pattern": "Mirror scripts/phase59_copy_to_final.py",
+      "required": true
+    },
+    {
+      "path": "scripts/phase60_url_backfill.py",
+      "pattern": "Mirror scripts/phase59_url_backfill.py",
+      "required": true
+    },
+    {
+      "path": "scripts/phase60_individual_patches.py",
+      "pattern": "Mirror scripts/phase59_individual_patches.py",
+      "required": true,
+      "condition": "Always required — at minimum adds HTTP source URL to backup IM-3 now_applicable_native row. Also applies any Q1-C flips."
+    },
+    {
+      "path": "scripts/phase60_supplement_rows.py",
+      "pattern": "Mirror phase59 supplement pattern",
+      "required": false,
+      "condition": "Only write if Q2 finds at least one new GA feature mapping to BR/IM/NS/DP control"
+    }
+  ],
+
+  "executionSteps": [
+    { "order": 1,  "action": "Read: CLAUDE.md, activity.log, 2 source CSVs (all rows), avd_task_import_guide.md" },
+    { "order": 2,  "action": "Write + run scripts/phase60_copy_to_final.py" },
+    { "order": 3,  "action": "Python urllib HEAD-verify 2 MCSB BR baseline URLs" },
+    { "order": 4,  "action": "Write + run scripts/phase60_url_backfill.py" },
+    { "order": 5,  "action": "WebSearch Q1-A: backup IM-3 Managed Identity source URL + ARM property" },
+    { "order": 6,  "action": "WebSearch Q1-C: 3 spot-checks in parallel (backup PA-7, backup NS-2, siterecovery IM-8)" },
+    { "order": 7,  "action": "WebSearch Q2-A/B: 2 grouped new-feature searches in parallel" },
+    { "order": 8,  "action": "Write + run scripts/phase60_individual_patches.py (backup IM-3 URL patch + any Q1-C flips)" },
+    { "order": 9,  "action": "If Q2 found new GA features: write + run scripts/phase60_supplement_rows.py" },
+    { "order": 10, "action": "Run quality gate — both must PASS (zero no_url, uncov<5)" },
+    { "order": 11, "action": "Fix any FAIL rows" },
+    { "order": 12, "action": "Update docs/avd_task_import_guide.md — add BR section + copilot prompt" },
+    { "order": 13, "action": "git add -f data/outputs/br/ scripts/phase60_*.py docs/avd_task_import_guide.md && git commit" },
+    { "order": 14, "action": "Update ado/activity.log — Phase 60 entry" },
+    { "order": 15, "action": "Update CLAUDE.md — Phase 60 one-liner" },
+    { "order": 16, "action": "git commit + push" },
+    { "order": 17, "action": "STOP — do not start next domain or Phase 61 without user confirmation" }
+  ],
+
+  "qualityGate": {
+    "slugs": ["backup", "siterecovery"],
+    "outputDir": "data/outputs/br/",
+    "uncovExemptions": ["infrastructure", "azure platform", "no customer", "not applicable", "monitoring service", "retired", "no mcsb"],
+    "passCriteria": [
+      "Zero bad verdicts",
+      "Zero now_applicable_native without URL (backup IM-3 MUST have http in notes)",
+      "Uncovered < 5 per CSV"
+    ],
+    "command": "python3 -c \"import csv\nALLOWED={'implemented','now_applicable_native','upgraded_implemented','still_not_applicable','conditional','not_applicable_paas','not_applicable_arm'}\nslugs=['backup','siterecovery']\nall_ok=True\nfor s in slugs:\n    rows=list(csv.DictReader(open(f'data/outputs/br/{s}.final.csv')))\n    bad={r['verdict_2025'] for r in rows}-ALLOWED\n    no_url=[r for r in rows if r['verdict_2025']=='now_applicable_native' and 'http' not in r.get('notes','')]\n    uncov=[r for r in rows if 'http' not in r.get('notes','') and 'Source' not in r.get('notes','') and not any(x in r.get('notes','').lower() for x in ['infrastructure','azure platform','no customer','not applicable','monitoring service','retired','no mcsb'])]\n    ok=not bad and not no_url and len(uncov)<5\n    if not ok: all_ok=False\n    print(f'[{\\\"OK\\\" if ok else \\\"FAIL\\\"}] {s:<16} rows={len(rows):>3} no_url={len(no_url):>2} uncov={len(uncov):>3}')\nprint()\nprint('QUALITY GATE:','PASS' if all_ok else 'FAIL')\""
+  },
+
+  "adoImportReadiness": {
+    "currentState": {
+      "importScript": "scripts/import_assessment_tasks_to_ado.py — ready (--parent-id, dry-run, idempotent)",
+      "requirementsTxt": "requirements.txt — created (requests, python-dotenv)",
+      "adoConfigPy": "scripts/ado_config.py — ADO_ORG + ADO_PROJECT still placeholder; user fills on AVD",
+      "importGuide": "docs/avd_task_import_guide.md — NS 34 + IM 9 covered; BR to be added this phase",
+      "nsCsvs": "data/outputs/ns/*.final.csv — 34 services, 1176 rows, QG PASS",
+      "imCsvs": "data/outputs/im/*.final.csv — 9 services, 319 rows, QG PASS",
+      "brCsvs": "data/outputs/br/*.final.csv — 2 services, 71 rows — CREATED BY THIS PHASE"
+    },
+    "totalsAfterPhase60": {
+      "services": 45,
+      "estimatedTasks": 1566,
+      "domains": "NS (34) + IM (9) + BR (2)"
+    }
+  },
+
+  "constraints": [
+    "NO verdict change without evidence",
+    "NO CSV recreation — enrich in-place only",
+    "git add data/outputs/br/ requires -f flag",
+    "backup IM-3: now_applicable_native MUST have HTTP source URL — QG hard gate",
+    "backup NS-2: verify carefully — Azure Backup DID add private endpoint support post-2023",
+    "NO ADO operations — user provides --parent-id when running import_assessment_tasks_to_ado.py",
+    "Cost hook: ignore — user standing green light"
+  ],
+
+  "successCriteria": [
+    "data/outputs/br/backup.final.csv and siterecovery.final.csv created (71 rows)",
+    "Quality gate 2/2 PASS",
+    "backup IM-3: HTTP source URL in notes",
+    "docs/avd_task_import_guide.md updated with BR section (import guide complete for 45 services)",
+    "CLAUDE.md Phase 60 one-liner added",
+    "ado/activity.log Phase 60 entry added",
+    "Commit pushed"
+  ]
+}
