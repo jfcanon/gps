@@ -122,8 +122,9 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 56**: NS 14 CSVs URL backfill + June 2026 re-search + Q2 audit — 86 bulk rows covered, 16 individual patches, 3 Q2 supplement rows (azuredns NS-1-SUPPLEMENT, appgateway NS-7-SUPPLEMENT-APPGW, frontdoor NS-2-SUPPLEMENT). azuredns PA-7 flipped conditional→now_applicable_native. Quality gate 14/14 PASS. ~95%+ confidence. (2026-06-24)
 
-**Current state (Phase 56 complete)**:
-- `data/outputs/ns/` — 14 enriched NS CSVs. Quality gate PASS. ~95%+ confidence after Phase 56 (5 residual uncovered rows are legitimate no-data-plane cases).
-- `data/outputs/{slug}_rechecked_controls_v2.csv` — 20 NS Phase 52 CSVs exist but NOT in ns/ yet, NOT Exa-enriched. These are Session 6 / Phase 57 scope.
-- Next: Session 6 / Phase 57 — Finalize 20 NS Phase 52 CSVs: copy to data/outputs/ns/{slug}.final.csv + Exa-enrich (same Phase 56 approach). Pivot from IM domain — IM deferred to Session 7.
+**Phase 57**: NS 20 Phase 52 CSVs finalized to 95%+ confidence — 678 rows copied to data/outputs/ns/, 352 rows URL-backfilled (20 MCSB URLs HEAD-verified), 2 Q2 supplement rows (virtualnetwork NS-2-SUPPLEMENT defaultOutboundAccess=false March 2026, virtualwan NS-7-SUPPLEMENT-VIRTUALWAN forced tunneling). Quality gate 20/20 PASS. Scripts: phase57_copy_to_final.py, phase57_url_backfill.py, phase57_supplement_rows.py. Commit: c7d6532. (2026-06-24)
+
+**Current state (Phase 57 complete)**:
+- `data/outputs/ns/` — 34 enriched NS CSVs (14 Phase 55/56 + 20 Phase 57). Quality gate PASS all 34. ~95%+ confidence. NS domain COMPLETE.
+- Next: Session 7 / IM domain — 9 IM CSVs exist as _rechecked_controls_v2.csv (addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint).
 - Blocked: Phase 53 IM ADO import — awaiting User Story IDs from user.

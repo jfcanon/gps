@@ -706,3 +706,25 @@ All 14 CSVs: **PASS**
 
 ### Session 6 phase number: Phase 57
 ### Handover doc: docs/session6_handover.md
+
+---
+
+## 2026-06-24 (Session 6 — Phase 57)
+
+### Phase 57 — NS 20 CSVs finalized to 95%+ confidence
+
+- [x] `scripts/phase57_copy_to_final.py` — copied 20 `_rechecked_controls_v2.csv` → `data/outputs/ns/{slug}.final.csv` (678 total rows)
+- [x] MCSB baseline URL verification — 20 URLs HEAD-verified (7 had incorrect default slugs, all corrected)
+- [x] `scripts/phase57_url_backfill.py` — 352 rows covered with confirmed MCSB baseline URLs
+- [x] Q2 audit (4 WebSearch queries) — 2 new 2025-2026 features found
+- [x] `scripts/phase57_supplement_rows.py` — 2 supplement rows added:
+  - virtualnetwork `NS-2-SUPPLEMENT`: Private Subnet Default (defaultOutboundAccess=false, GA March 31 2026)
+  - virtualwan `NS-7-SUPPLEMENT-VIRTUALWAN`: Forced Tunneling for Secure Hubs via NVA/SASE
+- [x] Quality gate: 20/20 PASS (zero bad verdicts, zero now_applicable_native without URL, uncov<5 per CSV)
+- [x] Commit: `c7d6532`
+
+**NS domain complete**: 34 total services with `final.csv` in `data/outputs/ns/` (~95%+ confidence)
+
+### Next
+- Session 7: IM domain — 9 IM CSVs exist as `_rechecked_controls_v2.csv` (addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint)
+- Phase 53: IM ADO import — still blocked on user providing ADO User Story IDs
