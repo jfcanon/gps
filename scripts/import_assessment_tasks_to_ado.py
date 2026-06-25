@@ -137,11 +137,10 @@ def task_exists(title: str) -> int | None:
 
 def _build_task_ops(row: dict, service_name: str, parent_story_id: int) -> list[dict]:
     title = f"{row['asb_control_id']} — {row['feature_name']}"
+    # AcceptanceCriteria is NOT valid on Task type — folded into Description.
     description = (
         f"<p><b>Property:</b> {_md_links_to_html(row['azure_api_property'])}</p>"
         f"<p>{_md_links_to_html(row['notes'])}</p>"
-    )
-    ac = (
         f"<ul>"
         f"<li>Module: {row['script_module']}</li>"
         f"<li>Function: {row['script_function']}</li>"
@@ -153,11 +152,9 @@ def _build_task_ops(row: dict, service_name: str, parent_story_id: int) -> list[
     parent_url = f"{cfg.ADO_ORG}/_apis/wit/workitems/{parent_story_id}"
 
     ops = [
-        {"op": "add", "path": "/fields/System.Title",         "value": title},
-        {"op": "add", "path": "/fields/System.Description",   "value": description},
-        {"op": "add", "path": "/fields/Microsoft.VSTS.Common.AcceptanceCriteria", "value": ac},
-        {"op": "add", "path": "/fields/System.Tags",          "value": tags},
-        {"op": "add", "path": "/fields/System.State",         "value": "To Do"},
+        {"op": "add", "path": "/fields/System.Title",       "value": title},
+        {"op": "add", "path": "/fields/System.Description", "value": description},
+        {"op": "add", "path": "/fields/System.Tags",        "value": tags},
         {"op": "add", "path": "/relations/-", "value": {
             "rel": "System.LinkTypes.Hierarchy-Reverse",
             "url": parent_url,
@@ -185,6 +182,8 @@ def create_task(row: dict, service_name: str, parent_story_id: int, _retry: bool
         print(f"    [429] Rate limited — waiting {wait}s...")
         time.sleep(wait)
         return create_task(row, service_name, parent_story_id, _retry=True)
+    if not resp.ok:
+        print(f"    [DEBUG] HTTP {resp.status_code} — {resp.text[:600]}")
     resp.raise_for_status()
     return resp.json()["id"]
 
