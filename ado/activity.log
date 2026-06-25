@@ -728,3 +728,32 @@ All 14 CSVs: **PASS**
 ### Next
 - Session 7: IM domain — 9 IM CSVs exist as `_rechecked_controls_v2.csv` (addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint)
 - Phase 53: IM ADO import — still blocked on user providing ADO User Story IDs
+
+---
+
+## 2026-06-24 (Session 6 — Phase 58)
+
+### Phase 58 — NS 20 CSVs per-row evidence enrichment (~45% → ~80% confidence)
+
+- [x] Q1-A research: 14 WebSearch queries (10 NS-2 Private Link + 4 IM-7 Conditional Access)
+- [x] Q1-B: azurecdn 2 conditional rows enriched (CDN classic WAF logic + Private Link Premium-only)
+- [x] Q1-C: filesync NS-2 Private Link confirmed GA via Microsoft.StorageSync/storageSyncServices — flipped to now_applicable_native. notificationhubs NS-1 Private Link preview note added (not GA, no verdict flip).
+- [x] `scripts/phase58_individual_patches.py` — 21 patches applied across 13 CSVs:
+  - NS-2 rows: appservice, databricks, datafactory, eventgrid, eventhubs, functions, logicapps, virtualdesktop, cognitivesearch, cognitiveservices — specific ARM property + source URL appended
+  - IM-7 rows: appservice, cognitivesearch, cognitiveservices, virtualdesktop — Entra ID CA pattern + source URL
+  - azurecdn: 2 conditional rows enriched
+  - filesync: NS-2 verdict flip (now_applicable_native)
+  - notificationhubs: NS-1 preview note
+  - appservice: 3 duplicate rows removed (1x NS-2 + 2x PV-2 identical)
+- [x] Q2 audit: 4 WebSearch queries across all 20 services
+- [x] `scripts/phase58_supplement_rows.py` — 2 supplement rows added:
+  - eventgrid `NS-2-SUPPLEMENT-EVENTGRID`: Event Grid Namespaces (Standard/MQTT tier) private endpoint (distinct from Basic tier topics/domains)
+  - notificationhubs `NS-2-SUPPLEMENT-NOTIFICATIONHUBS`: Private Link preview (conditional)
+- [x] Quality gate: 20/20 PASS (zero bad verdicts, zero now_applicable_native without URL, uncov=0 all 20)
+- [x] Commit: `007f0ea`
+
+**NS domain confidence**: ~80%+ for all 20 new CSVs (up from ~45% after Phase 57)
+
+### Next
+- Session 7: IM domain — 9 IM CSVs exist as `_rechecked_controls_v2.csv`
+- STOP — do not start IM domain without user confirmation

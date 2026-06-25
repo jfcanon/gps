@@ -124,7 +124,9 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 57**: NS 20 Phase 52 CSVs finalized to 95%+ confidence — 678 rows copied to data/outputs/ns/, 352 rows URL-backfilled (20 MCSB URLs HEAD-verified), 2 Q2 supplement rows (virtualnetwork NS-2-SUPPLEMENT defaultOutboundAccess=false March 2026, virtualwan NS-7-SUPPLEMENT-VIRTUALWAN forced tunneling). Quality gate 20/20 PASS. Scripts: phase57_copy_to_final.py, phase57_url_backfill.py, phase57_supplement_rows.py. Commit: c7d6532. (2026-06-24)
 
-**Current state (Phase 57 complete)**:
+**Phase 58**: NS 20 CSVs per-row evidence enrichment (~45%→~80% confidence) — 21 patches (NS-2 ARM props + IM-7 Entra CA + azurecdn conditional logic + filesync NS-2 flip now_applicable_native + notificationhubs preview note + appservice 3 dupes removed). 2 Q2 supplements (eventgrid NS-2-SUPPLEMENT-EVENTGRID MQTT namespaces; notificationhubs NS-2-SUPPLEMENT-NOTIFICATIONHUBS preview). QG 20/20 PASS. Scripts: phase58_individual_patches.py, phase58_supplement_rows.py. Commit: 007f0ea. (2026-06-24)
+
+**Current state (Phase 58 complete)**:
 - `data/outputs/ns/` — 34 enriched NS CSVs (14 Phase 55/56 + 20 Phase 57). Quality gate PASS all 34. ~95%+ confidence. NS domain COMPLETE.
 - Next: Session 7 / IM domain — 9 IM CSVs exist as _rechecked_controls_v2.csv (addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint).
 - Blocked: Phase 53 IM ADO import — awaiting User Story IDs from user.
