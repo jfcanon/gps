@@ -5,8 +5,9 @@
 Creates ADO Tasks (children of User Stories) from enriched assessment CSVs.
 One Task per CSV row. Each Task links to a parent User Story via `--parent-id`.
 
-> **CSV source**: Use `data/outputs/ns/*.final.csv` for NS domain (enriched, Phase 58).
-> Use `data/outputs/*_rechecked_controls_v2.csv` for IM domain until Phase 59 creates `data/outputs/im/*.final.csv`.
+> **CSV source**: `data/outputs/ns/*.final.csv` for NS domain (34 services, Phase 58).
+> `data/outputs/im/*.final.csv` for IM domain (9 services, Phase 59).
+> `data/outputs/br/*.final.csv` for BR domain (2 services, Phase 60).
 > Script reads headers dynamically — works with all v2 schemas.
 
 Script: `scripts/import_assessment_tasks_to_ado.py`
@@ -129,6 +130,15 @@ python3 import_assessment_tasks_to_ado.py \
 | Trusted HW IM | `data/outputs/im/trustedhardwareim.final.csv` | `<ID>` |
 | Universal Print | `data/outputs/im/universalprint.final.csv` | `<ID>` |
 
+### BR Domain — 2 services
+
+> Phase 60 complete (2026-06-25). All 2 CSVs at `data/outputs/br/*.final.csv`. QG 2/2 PASS.
+
+| Service | `--csv` path | `--parent-id` |
+|---|---|---|
+| Azure Backup | `data/outputs/br/backup.final.csv` | `<ID>` |
+| Azure Site Recovery | `data/outputs/br/siterecovery.final.csv` | `<ID>` |
+
 ---
 
 ## Troubleshooting
@@ -240,6 +250,31 @@ STEP 3: For each service, dry run then live run.
   spatialanchors           → --parent-id <ID_SPATIALANCHORS>
   trustedhardwareim        → --parent-id <ID_TRUSTEDHARDWAREIM>
   universalprint           → --parent-id <ID_UNIVERSALPRINT>
+
+STEP 4: Final report — table: service | rows | tasks created | failures
+
+RULES: Dry-run before every live run. Stop on error.
+```
+
+---
+
+## AVD Copilot Prompt — BR Domain (2 services)
+
+```
+You are running ADO task import for BR domain (2 services).
+Repo is at: <REPO_PATH>
+ADO_PAT is already set. ado_config.py is already configured.
+
+STEP 1: Pull latest
+  cd <REPO_PATH> && git pull origin master
+
+STEP 2: Verify BR CSVs exist
+  ls data/outputs/br/*.final.csv
+  Expected: 2 files. If any missing → STOP.
+
+STEP 3: For each service, dry run then live run.
+  backup       → --parent-id <ID_BACKUP>
+  siterecovery → --parent-id <ID_SITERECOVERY>
 
 STEP 4: Final report — table: service | rows | tasks created | failures
 
