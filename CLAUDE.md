@@ -126,7 +126,10 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 58**: NS 20 CSVs per-row evidence enrichment (~45%→~80% confidence) — 21 patches (NS-2 ARM props + IM-7 Entra CA + azurecdn conditional logic + filesync NS-2 flip now_applicable_native + notificationhubs preview note + appservice 3 dupes removed). 2 Q2 supplements (eventgrid NS-2-SUPPLEMENT-EVENTGRID MQTT namespaces; notificationhubs NS-2-SUPPLEMENT-NOTIFICATIONHUBS preview). QG 20/20 PASS. Scripts: phase58_individual_patches.py, phase58_supplement_rows.py. Commit: 007f0ea. (2026-06-24)
 
-**Current state (Phase 58 complete)**:
-- `data/outputs/ns/` — 34 enriched NS CSVs (14 Phase 55/56 + 20 Phase 57). Quality gate PASS all 34. ~95%+ confidence. NS domain COMPLETE.
-- Next: Session 7 / IM domain — 9 IM CSVs exist as _rechecked_controls_v2.csv (addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint).
-- Blocked: Phase 53 IM ADO import — awaiting User Story IDs from user.
+**Phase 59**: IM domain 9 CSVs finalized to 85%+ confidence — 319 rows copied to data/outputs/im/; 8 MCSB IM URLs HEAD-verified (2 slug corrections: addds=azure-active-directory-domain-services, attestation=microsoft-azure-attestation); 130 rows URL-backfilled; Q1-C 4 spot-checks all confirmed still_not_applicable (no flips); Q2 audit: intelligentrecommendations retired ~2023 (27 rows patched), spatialanchors retired Nov 2024 (36 rows annotated); no SUPPLEMENT rows. QG 9/9 PASS. Scripts: phase59_copy_to_final.py, phase59_url_backfill.py, phase59_individual_patches.py. Commit: 894f45e. (2026-06-25)
+
+**Current state (Phase 59 complete)**:
+- `data/outputs/ns/` — 34 enriched NS CSVs. QG PASS all 34. ~95%+ confidence. NS domain COMPLETE.
+- `data/outputs/im/` — 9 enriched IM CSVs. QG PASS all 9. ~85%+ confidence. IM domain COMPLETE.
+- Next: Phase 60 scope TBD — user confirmation required.
+- Blocked: IM ADO import — user provides User Story IDs as --parent-id args when running scripts/import_assessment_tasks_to_ado.py.

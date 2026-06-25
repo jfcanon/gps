@@ -757,3 +757,34 @@ All 14 CSVs: **PASS**
 ### Next
 - Session 7: IM domain — 9 IM CSVs exist as `_rechecked_controls_v2.csv`
 - STOP — do not start IM domain without user confirmation
+
+## Phase 59 — 2026-06-25
+
+### IM domain — 9 CSVs finalized to 85%+ confidence
+
+- [x] `scripts/phase59_copy_to_final.py` — 9 IM v2 CSVs copied to `data/outputs/im/*.final.csv` (319 rows total)
+- [x] URL HEAD-verify: 9 MCSB IM baseline URLs checked; 2 slug corrections required:
+  - `addds`: correct slug `azure-active-directory-domain-services` (not `active-directory-domain-services`)
+  - `attestation`: correct slug `microsoft-azure-attestation` (not `azure-attestation`)
+  - `intelligentrecommendations`: no URL (retired service); `trustedhardwareim`: 200 (baseline exists)
+- [x] `scripts/phase59_url_backfill.py` — 8 URLs backfilled; 130 rows updated across 8 services; intelligentrecommendations skipped
+- [x] Q1-C spot-checks (WebSearch June 2026 — 4 rows, all confirmed still_not_applicable, no flips):
+  - addds IM-3 Managed Identity: AADDS is the identity infrastructure itself; cannot be MI client
+  - cloudshell NS-2 Private Link: VNet integration supported but NOT Private Link/PE for Cloud Shell itself
+  - botservice IM-7 Conditional Access: CA applies to Entra sign-in; Bot data plane does not support CA
+  - universalprint IM-1 Azure AD Auth: no flip evidence found
+- [x] Q2 audit (WebSearch June 2026 — 3 grouped queries):
+  - intelligentrecommendations: confirmed retired ~2023 — 27 UNCOV rows needed 'retired' marker
+  - spatialanchors: confirmed RETIRED November 20, 2024 (announced Nov 2023) — all 36 rows annotated
+  - API Management: ADAL→MSAL migration Sep 2025, Trusted Service Connectivity retirement Mar 2026 (breaking changes, not new gaps)
+  - No new GA IM features found → no SUPPLEMENT rows added
+- [x] `scripts/phase59_individual_patches.py` — 63 rows patched:
+  - intelligentrecommendations: 27 UNCOV rows patched with 'retired ~2023' note (QG fix)
+  - spatialanchors: 36 rows annotated with 'retired November 20 2024' note (accuracy)
+- [x] Quality gate: 9/9 PASS (uncov=0 for 7 services; apimanagement+cloudshell uncov=1 each — both < 5 threshold)
+- [x] Commit: `894f45e`
+
+**IM domain confidence**: ~85%+ for all 9 CSVs (up from ~15%)
+
+### Next
+- STOP — do not start IM ADO import or Phase 60 without user confirmation
