@@ -1,0 +1,283 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "nsg": "https://newsecgap.internal/ontology#",
+    "phase": "nsg:phase",
+    "workstream": "nsg:workstream",
+    "csvSchema": "nsg:csvSchema",
+    "verdictTaxonomy": "nsg:verdictTaxonomy",
+    "serviceScope": "nsg:serviceScope",
+    "readFirst": "nsg:readFirst",
+    "constraint": "nsg:constraint",
+    "qualityGate": "nsg:qualityGate",
+    "exaQuery": "nsg:exaQuery",
+    "patch": "nsg:patch"
+  },
+
+  "@type": "SoftwareProject",
+  "@id": "nsg:phase-58-ns-20-deep-research",
+  "name": "NewSecGap Phase 58 — NS 20 CSVs Per-Row Deep Research",
+  "version": "1.0.0",
+  "dateCreated": "2026-06-24",
+
+  "description": "Bring data/outputs/ns/*.final.csv (20 Phase 57 files) from ~45% to ~80%+ per-row evidence confidence. Three workstreams: (Q1-A) per-row now_applicable_native verification with specific feature evidence; (Q1-B) conditional row patches; (Q1-C) key still_not_applicable verification; (Q2) per-service new-row audit for 2025-2026 features. No CSV recreation. Enrich in-place only.",
+
+  "phase": "58",
+  "continuedFrom": "docs/session6_handover.md",
+  "targetConfidence": "80%",
+  "currentConfidence": "45%",
+  "confidenceGap": "All rows have MCSB baseline URL (Phase 57 bulk backfill) but lack per-row specific feature evidence: GA date, ARM property, customer enable steps, service-specific source URL. Q2 new-row audit not done per service.",
+
+  "projectRoot": "/Users/nahuelavalos/Repo/NewSecGap",
+  "gitBranch": "master",
+
+  "readFirst": [
+    { "order": 1, "path": "CLAUDE.md", "why": "Full phase log through Phase 57, scope gates" },
+    { "order": 2, "path": "ado/activity.log", "why": "Tail Phase 57 entry — Session 6 complete" },
+    { "order": 3, "path": "data/outputs/context.md", "why": "Section 5 ns/ inventory, Section 11 delivery table — updated Phase 57" },
+    { "order": 4, "path": "scripts/phase56_individual_patches.py", "why": "Pattern to mirror for phase58_individual_patches.py" },
+    { "order": 5, "path": "scripts/phase56_supplement_rows.py", "why": "Pattern to mirror for phase58_supplement_rows.py" },
+    { "order": 6, "path": "data/outputs/ns/", "why": "20 .final.csv files to enrich. Read header + sample rows before writing." }
+  ],
+
+  "csvSchema": {
+    "columns": [
+      "asb_control_id", "feature_name", "feature_supported_original",
+      "feature_enabled_by_default_original", "status_2025", "verdict_2025",
+      "azure_api_property", "script_module", "script_function", "notes",
+      "service", "severity", "blast_radius", "risk_rank"
+    ],
+    "noteUpdatePattern": "Append specific evidence to existing notes — do NOT replace. Pattern: '{existing} | {specific_evidence}. Source: {url}'",
+    "supplementNotePattern": "v2 gap: {description}. {conditional_logic_if_any}. Source: {url} | Q2-{group} WebSearch June 2026 confirmed GA."
+  },
+
+  "verdictTaxonomy": {
+    "values": [
+      "implemented", "now_applicable_native", "upgraded_implemented",
+      "still_not_applicable", "conditional", "not_applicable_paas", "not_applicable_arm"
+    ],
+    "changeRule": "Do NOT change verdict without MCSB baseline evidence. Q1 workstreams = notes enrichment only. Exception: if Q1-C research confirms a still_not_applicable has changed to now_applicable_native, update verdict AND add source."
+  },
+
+  "targetFiles": [
+    { "slug": "appservice",        "path": "data/outputs/ns/appservice.final.csv",        "rows": 43, "now_app": 3, "cond": 0, "impl": 17, "issue": "duplicate NS-2 Azure Private Link row — remove one" },
+    { "slug": "azurecdn",          "path": "data/outputs/ns/azurecdn.final.csv",          "rows":  3, "now_app": 0, "cond": 2, "impl":  0, "issue": "legacy CDN — 3 rows intentional, conditional rows need logic" },
+    { "slug": "cognitivesearch",   "path": "data/outputs/ns/cognitivesearch.final.csv",   "rows": 35, "now_app": 2, "cond": 0, "impl": 12 },
+    { "slug": "cognitiveservices", "path": "data/outputs/ns/cognitiveservices.final.csv", "rows": 35, "now_app": 2, "cond": 0, "impl": 15 },
+    { "slug": "databasemigration", "path": "data/outputs/ns/databasemigration.final.csv", "rows": 35, "now_app": 0, "cond": 0, "impl":  6 },
+    { "slug": "databricks",        "path": "data/outputs/ns/databricks.final.csv",        "rows": 36, "now_app": 1, "cond": 0, "impl": 16 },
+    { "slug": "datafactory",       "path": "data/outputs/ns/datafactory.final.csv",       "rows": 35, "now_app": 1, "cond": 0, "impl": 20 },
+    { "slug": "eventgrid",         "path": "data/outputs/ns/eventgrid.final.csv",         "rows": 35, "now_app": 1, "cond": 0, "impl": 11 },
+    { "slug": "eventhubs",         "path": "data/outputs/ns/eventhubs.final.csv",         "rows": 35, "now_app": 1, "cond": 0, "impl": 16 },
+    { "slug": "filesync",          "path": "data/outputs/ns/filesync.final.csv",          "rows": 35, "now_app": 0, "cond": 0, "impl":  6 },
+    { "slug": "functions",         "path": "data/outputs/ns/functions.final.csv",         "rows": 35, "now_app": 1, "cond": 0, "impl": 20 },
+    { "slug": "loadbalancer",      "path": "data/outputs/ns/loadbalancer.final.csv",      "rows": 35, "now_app": 0, "cond": 0, "impl":  3 },
+    { "slug": "logicapps",         "path": "data/outputs/ns/logicapps.final.csv",         "rows": 35, "now_app": 1, "cond": 0, "impl": 17 },
+    { "slug": "natgateway",        "path": "data/outputs/ns/natgateway.final.csv",        "rows": 35, "now_app": 0, "cond": 0, "impl":  2 },
+    { "slug": "notificationhubs",  "path": "data/outputs/ns/notificationhubs.final.csv",  "rows": 35, "now_app": 0, "cond": 0, "impl":  4 },
+    { "slug": "peeringservice",    "path": "data/outputs/ns/peeringservice.final.csv",    "rows": 35, "now_app": 0, "cond": 0, "impl":  2 },
+    { "slug": "trafficmanager",    "path": "data/outputs/ns/trafficmanager.final.csv",    "rows": 35, "now_app": 0, "cond": 0, "impl":  2 },
+    { "slug": "virtualdesktop",    "path": "data/outputs/ns/virtualdesktop.final.csv",    "rows": 36, "now_app": 2, "cond": 0, "impl": 20 },
+    { "slug": "virtualnetwork",    "path": "data/outputs/ns/virtualnetwork.final.csv",    "rows": 36, "now_app": 1, "cond": 0, "impl":  3, "note": "NS-2-SUPPLEMENT already added Phase 57" },
+    { "slug": "virtualwan",        "path": "data/outputs/ns/virtualwan.final.csv",        "rows": 36, "now_app": 0, "cond": 1, "impl":  5, "note": "NS-7-SUPPLEMENT-VIRTUALWAN already added Phase 57" }
+  ],
+
+  "workstreams": [
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q1-A",
+      "name": "Per-Row now_applicable_native Verification",
+      "priority": "HIGH",
+      "description": "14 now_applicable_native rows across 11 services need specific per-row evidence beyond the generic MCSB baseline URL applied in Phase 57.",
+      "subgroups": [
+        {
+          "id": "Q1-A-NS2",
+          "name": "NS-2 Azure Private Link — 10 services",
+          "services": ["appservice","databricks","datafactory","eventgrid","eventhubs","functions","logicapps","virtualdesktop","cognitivesearch","cognitiveservices"],
+          "exaQueryPattern": "{ServiceName} Azure Private Link private endpoint GA ARM property privateEndpointConnections",
+          "armPropertyPattern": "properties.privateEndpointConnections[].properties.privateLinkServiceConnectionState",
+          "targetNoteContent": "Azure Private Link GA: private endpoint supported ({armProperty}). Customer creates private endpoint in target VNet; service assigns private IP. Public access can be disabled via {publicNetworkAccessProperty}. Source: {specific_doc_url} | MCSB v3 baseline: {baseline_url}"
+        },
+        {
+          "id": "Q1-A-IM7",
+          "name": "IM-7 Conditional Access — 4 services",
+          "services": ["appservice","cognitivesearch","cognitiveservices","virtualdesktop"],
+          "exaQueryPattern": "{ServiceName} Entra ID Conditional Access data plane MFA enforced GA 2024 2025",
+          "targetNoteContent": "Entra ID Conditional Access now applicable: service integrates with Entra ID for data plane auth; Conditional Access policies (MFA, compliant device, location) apply via App Registration. Not an ARM property on the service — configured in Entra ID portal. Source: {url} | MCSB v3 baseline: {baseline_url}"
+        }
+      ],
+      "specialCase": {
+        "slug": "appservice",
+        "issue": "Duplicate NS-2 Azure Private Link row (two rows with same asb_control_id+feature_name). Remove second occurrence. Update first with specific evidence.",
+        "action": "In phase58_individual_patches.py: dedup on (asb_control_id, feature_name) before writing"
+      }
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q1-B",
+      "name": "Conditional Row Patches",
+      "priority": "MEDIUM",
+      "rows": [
+        {
+          "slug": "azurecdn",
+          "ctrl": "NS-2",
+          "feat": "Disable Public Network Access",
+          "current_verdict": "conditional",
+          "action": "Add specific note: Azure CDN classic does not have publicNetworkAccess ARM toggle. Conditional logic: disable requires WAF policy with block rules OR migration to Azure Front Door Standard/Premium. Source: {url}"
+        },
+        {
+          "slug": "azurecdn",
+          "ctrl": "NS-2",
+          "feat": "Azure Private Link",
+          "current_verdict": "conditional",
+          "action": "Verify CDN classic Private Link origin GA status June 2026. Add source URL. Conditional: Private Link for origins requires CDN Premium tier; not available in Standard.",
+          "exaQuery": "Azure CDN classic Private Link origin private endpoint GA 2024 2025"
+        },
+        {
+          "slug": "virtualwan",
+          "ctrl": "NS-7-SUPPLEMENT-VIRTUALWAN",
+          "feat": "Forced Tunneling for Virtual WAN Secure Hubs via NVA/SASE",
+          "current_verdict": "conditional",
+          "action": "Verify ARM property path for routing configuration. Currently: properties.routingConfiguration.propagatedRouteTables — confirm or correct."
+        }
+      ]
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q1-C",
+      "name": "Key still_not_applicable Verification",
+      "priority": "MEDIUM",
+      "description": "Verify Phase 52 N/A verdicts still hold June 2026. If flipped: update verdict to now_applicable_native + add source.",
+      "rows": [
+        { "slug": "notificationhubs", "ctrl": "NS-1", "feat": "VNet Integration",   "exaQuery": "Azure Notification Hubs VNet integration supported 2025 2026" },
+        { "slug": "filesync",         "ctrl": "NS-2", "feat": "Azure Private Link", "exaQuery": "Azure File Sync private endpoint GA supported 2025" },
+        { "slug": "databasemigration","ctrl": "NS-2", "feat": "Azure Private Link", "exaQuery": "Azure Database Migration Service private endpoint GA 2025" },
+        { "slug": "peeringservice",   "ctrl": "NS-2", "feat": "Azure Private Link", "exaQuery": "Azure Peering Service Private Link endpoint 2025", "expectedResult": "still N/A — infrastructure service" },
+        { "slug": "trafficmanager",   "ctrl": "NS-2", "feat": "Azure Private Link", "exaQuery": "Azure Traffic Manager Private Link private endpoint 2025", "expectedResult": "still N/A — DNS-based GTM, no data plane" },
+        { "slug": "natgateway",       "ctrl": "NS-2", "feat": "Azure Private Link", "exaQuery": "Azure NAT Gateway Private Link 2025", "expectedResult": "still N/A — VNet infrastructure" },
+        { "slug": "loadbalancer",     "ctrl": "NS-2", "feat": "Azure Private Link", "exaQuery": "Azure Load Balancer as Private Link consumer 2025", "expectedResult": "still N/A — LB is VNet infrastructure, not PaaS consumer" }
+      ]
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q2",
+      "name": "Per-Service New-Row Audit 2025-2026",
+      "priority": "MEDIUM",
+      "description": "5 grouped searches for new 2025-2026 NS features per service cluster. Add SUPPLEMENT rows if new features found.",
+      "supplementRowFormat": {
+        "asb_control_id": "NS-{N}-SUPPLEMENT or NS-{N}-SUPPLEMENT-{slug}",
+        "status_2025": "gap",
+        "verdict_2025": "now_applicable_native or conditional",
+        "notes": "v2 gap: {description}. Source: {url} | Q2-{group} WebSearch June 2026 confirmed GA.",
+        "severity": "High or Medium",
+        "blast_radius": "Wide or Narrow",
+        "risk_rank": "int 1-6"
+      },
+      "queries": [
+        {
+          "id": "Q2-A",
+          "query": "Azure App Service Functions Logic Apps new network security NS-1 NS-2 NS-7 Flex Consumption private endpoint 2025 2026",
+          "services": ["appservice", "functions", "logicapps"],
+          "focus": "Flex Consumption plan private networking GA, Logic Apps Standard VNet injection improvements"
+        },
+        {
+          "id": "Q2-B",
+          "query": "Azure Virtual Desktop AVD new NS security private link session host RDP Shortpath 2025 2026",
+          "services": ["virtualdesktop"],
+          "focus": "AVD Private Link for session hosts, RDP Shortpath for managed networks"
+        },
+        {
+          "id": "Q2-C",
+          "query": "Azure Databricks Data Factory new network security managed VNet Unity Catalog NS-2 NS-7 2025 2026",
+          "services": ["databricks", "datafactory"],
+          "focus": "Databricks Unity Catalog network isolation, ADF managed private endpoints improvements"
+        },
+        {
+          "id": "Q2-D",
+          "query": "Azure Event Hubs Event Grid Cognitive Search Cognitive Services new private endpoint NS-2 2025 2026",
+          "services": ["eventhubs", "eventgrid", "cognitivesearch", "cognitiveservices"],
+          "focus": "Event Hubs Kafka private access, Event Grid namespace private link, AI Foundry integration"
+        },
+        {
+          "id": "Q2-E",
+          "query": "Azure File Sync Notification Hubs Load Balancer NAT Gateway Traffic Manager new network security 2025 2026",
+          "services": ["filesync", "notificationhubs", "loadbalancer", "natgateway", "trafficmanager"],
+          "focus": "Infra/legacy services — low probability of new features"
+        }
+      ]
+    }
+  ],
+
+  "scriptsToWrite": [
+    {
+      "path": "scripts/phase58_individual_patches.py",
+      "purpose": "Patch now_applicable_native and conditional rows with specific per-row evidence",
+      "pattern": "Mirror scripts/phase56_individual_patches.py — PATCHES list with (slug, ctrl, feat_fragment, note_to_append)",
+      "includes": [
+        "10 NS-2 Azure Private Link now_applicable_native rows — specific ARM property + source",
+        "4 IM-7 Conditional Access now_applicable_native rows — specific Entra CA note",
+        "azurecdn 2 conditional rows — conditional logic notes",
+        "appservice duplicate NS-2 row dedup — keep first, remove second"
+      ],
+      "output": "Same 20 CSVs, enriched in-place"
+    },
+    {
+      "path": "scripts/phase58_supplement_rows.py",
+      "purpose": "Add Q2 new SUPPLEMENT rows for 2025-2026 features not yet in rows",
+      "pattern": "Mirror scripts/phase57_supplement_rows.py — idempotent, skip if asb_control_id already present",
+      "condition": "Only write if Q2 queries find at least one genuinely new feature"
+    }
+  ],
+
+  "executionSteps": [
+    { "order": 1,  "action": "Read: CLAUDE.md, ado/activity.log (tail), data/outputs/context.md, all 20 final.csv files (header + sample rows)" },
+    { "order": 2,  "workstream": "Q1-A", "action": "WebSearch/Exa batch (parallel): 10 NS-2 Private Link searches + 4 IM-7 Conditional Access searches" },
+    { "order": 3,  "workstream": "Q1-B", "action": "WebSearch: azurecdn CDN classic Private Link GA verification" },
+    { "order": 4,  "workstream": "Q1-C", "action": "WebSearch batch (parallel): 7 still_not_applicable verification searches" },
+    { "order": 5,  "workstream": "Q2",   "action": "WebSearch batch (parallel): Q2-A through Q2-E (5 queries)" },
+    { "order": 6,  "workstream": "Q1-A+B+C", "action": "Write scripts/phase58_individual_patches.py with all Q1 patch findings" },
+    { "order": 7,  "action": "Run: python3 scripts/phase58_individual_patches.py" },
+    { "order": 8,  "workstream": "Q2", "action": "Write scripts/phase58_supplement_rows.py IF Q2 found new features" },
+    { "order": 9,  "action": "Run: python3 scripts/phase58_supplement_rows.py (if written)" },
+    { "order": 10, "action": "Run quality gate — all 20 must PASS" },
+    { "order": 11, "action": "Fix any FAIL rows" },
+    { "order": 12, "action": "git add -f data/outputs/ns/ scripts/phase58_*.py && git commit" },
+    { "order": 13, "action": "Update ado/activity.log — Phase 58 entry" },
+    { "order": 14, "action": "Update CLAUDE.md — Phase 58 one-liner" },
+    { "order": 15, "action": "STOP — do not start IM domain or Session 7 without user confirmation" }
+  ],
+
+  "qualityGate": {
+    "slugs": ["appservice","azurecdn","cognitivesearch","cognitiveservices","databasemigration","databricks","datafactory","eventgrid","eventhubs","filesync","functions","loadbalancer","logicapps","natgateway","notificationhubs","peeringservice","trafficmanager","virtualdesktop","virtualnetwork","virtualwan"],
+    "passCriteria": [
+      "Zero bad verdicts (verdict not in allowed set)",
+      "Zero now_applicable_native without URL in notes",
+      "Uncovered rows < 5 per CSV",
+      "azurecdn exception: 3 rows — max 3 uncovered acceptable",
+      "appservice: no duplicate NS-2 Azure Private Link rows"
+    ],
+    "command": "python3 -c \"import csv,pathlib\nALLOWED={'implemented','now_applicable_native','upgraded_implemented','still_not_applicable','conditional','not_applicable_paas','not_applicable_arm'}\nslugs=['appservice','azurecdn','cognitivesearch','cognitiveservices','databasemigration','databricks','datafactory','eventgrid','eventhubs','filesync','functions','loadbalancer','logicapps','natgateway','notificationhubs','peeringservice','trafficmanager','virtualdesktop','virtualnetwork','virtualwan']\nall_ok=True\nfor s in slugs:\n    rows=list(csv.DictReader(open(f'data/outputs/ns/{s}.final.csv')))\n    bad={r['verdict_2025'] for r in rows}-ALLOWED\n    no_url=[r for r in rows if r['verdict_2025']=='now_applicable_native' and 'http' not in r.get('notes','')]\n    uncov=[r for r in rows if 'http' not in r.get('notes','') and 'Source' not in r.get('notes','') and not any(x in r.get('notes','').lower() for x in ['infrastructure','azure platform','no customer','not applicable','monitoring service'])]\n    ok=not bad and not no_url and len(uncov)<5\n    if not ok: all_ok=False\n    print(f'[{\"OK\" if ok else \"FAIL\"}] {s:<22} rows={len(rows):>3} no_url={len(no_url):>2} uncov={len(uncov):>3}')\nprint()\nprint('QUALITY GATE:','PASS' if all_ok else 'FAIL')\""
+  },
+
+  "constraints": [
+    "NO verdict change without MCSB baseline evidence — Q1 is notes enrichment; only Q1-C can flip still_not_applicable if evidence found",
+    "NO CSV recreation — enrich in-place only",
+    "NO ADO operations",
+    "git add with -f flag required for data/outputs/ns/",
+    "azurecdn: 3 rows ONLY — do not regenerate",
+    "appservice: 43 rows all valid — only remove ONE duplicate NS-2 row",
+    "virtualnetwork: NS-2-SUPPLEMENT already exists — do NOT add again (idempotent guard in supplement script)",
+    "virtualwan: NS-7-SUPPLEMENT-VIRTUALWAN already exists — same guard",
+    "Cost hook: ignore — user standing green light"
+  ],
+
+  "successCriteria": [
+    "All 20 CSVs: QG PASS",
+    "All now_applicable_native rows: specific feature evidence in notes (not just generic baseline URL)",
+    "azurecdn: conditional logic documented for both NS-2 rows",
+    "Q2 audit: documented in activity.log",
+    "appservice: no duplicate NS-2 row",
+    "Research confidence: ~80%+ per CSV (from ~45%)",
+    "Commits: CSVs + scripts + activity.log + CLAUDE.md"
+  ]
+}

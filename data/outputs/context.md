@@ -1,6 +1,6 @@
 # data/outputs — Complete File Inventory
 
-**Updated**: Phase 55, 2026-06-24 | **Total files**: 65+ root/archive + 14 enriched ns/ CSVs
+**Updated**: Phase 57, 2026-06-24 | **Total files**: 65+ root/archive + 34 enriched ns/ CSVs
 
 
 > This document is the authoritative inventory of every file in `data/outputs/` and `data/outputs/archive/`.
@@ -229,77 +229,114 @@ Summary for human review. Verdicts are recommendations — nothing is deleted by
 
 ---
 
-## 11. Delivery Priority — NS Domain First (Phase 52)
+## 11. Delivery Priority — NS Domain (Phase 52–57 complete)
 
-**Decision (2026-06-24)**: Import Network Security domain services to ADO before IM/PA/BR.
-Reason: stakeholder delivery deadline on NS domain.
+**NS Domain STATUS (2026-06-24)**: 34/34 services have `final.csv` in `data/outputs/ns/`. QG 34/34 PASS.
+**Prerequisite for ADO import**: User must supply ADO parent User Story ID for each NS service. Blocked: Phase 53.
 
-### NS Services ready for ADO import (14 of 29)
+### NS Domain — All 34 services (ADO import ready pending story IDs)
 
-| # | CSV | Service | Rows | Status |
-|---|---|---|---|---|
-| 1 | `appgateway_rechecked_controls_v2.csv` | Application Gateway | 35 | READY |
-| 2 | `azuredns_rechecked_controls_v2.csv` | Azure DNS | 35 | READY |
-| 3 | `azurefirewall_rechecked_controls_v2.csv` | Azure Firewall | 36 | READY |
-| 4 | `bastion_rechecked_controls_v2.csv` | Azure Bastion | 35 | READY |
-| 5 | `ddosprotection_rechecked_controls_v2.csv` | DDoS Protection | 35 | READY |
-| 6 | `firewallmanager_rechecked_controls_v2.csv` | Firewall Manager | 35 | READY |
-| 7 | `frontdoor_rechecked_controls_v2.csv` | Front Door | 35 | READY |
-| 8 | `networkwatcher_rechecked_controls_v2.csv` | Network Watcher | 35 | READY |
-| 9 | `privatelink_rechecked_controls_v2.csv` | Private Link | 35 | READY |
-| 10 | `publicip_rechecked_controls_v2.csv` | Public IP | 36 | READY |
-| 11 | `redis_rechecked_controls_v2.csv` | Azure Cache for Redis | 35 | READY |
-| 12 | `servicebus_rechecked_controls_v2.csv` | Service Bus | 34 | READY |
-| 13 | `vpngateway_rechecked_controls_v2.csv` | VPN Gateway | 35 | READY |
-| 14 | `waf_rechecked_controls_v2.csv` | Web Application Firewall | 35 | READY |
+| # | File | Service | Rows | Research confidence | ADO status |
+|---|---|---|---|---|---|
+| 1 | `appgateway.final.csv` | Application Gateway | 36 | ~95% | Awaiting story ID |
+| 2 | `azuredns.final.csv` | Azure DNS | 37 | ~95% | Awaiting story ID |
+| 3 | `azurefirewall.final.csv` | Azure Firewall | 37 | ~95% | Awaiting story ID |
+| 4 | `bastion.final.csv` | Azure Bastion | 35 | ~95% | Awaiting story ID |
+| 5 | `ddosprotection.final.csv` | DDoS Protection | 35 | ~95% | Awaiting story ID |
+| 6 | `firewallmanager.final.csv` | Firewall Manager | 35 | ~95% | Awaiting story ID |
+| 7 | `frontdoor.final.csv` | Azure Front Door | 36 | ~95% | Awaiting story ID |
+| 8 | `networkwatcher.final.csv` | Network Watcher | 35 | ~95% | Awaiting story ID |
+| 9 | `privatelink.final.csv` | Private Link | 35 | ~95% | Awaiting story ID |
+| 10 | `publicip.final.csv` | Public IP | 36 | ~95% | Awaiting story ID |
+| 11 | `redis.final.csv` | Azure Cache for Redis | 36 | ~95% | Awaiting story ID |
+| 12 | `servicebus.final.csv` | Service Bus | 35 | ~95% | Awaiting story ID |
+| 13 | `vpngateway.final.csv` | VPN Gateway | 35 | ~95% | Awaiting story ID |
+| 14 | `waf.final.csv` | Web Application Firewall | 35 | ~95% | Awaiting story ID |
+| 15 | `appservice.final.csv` | App Service | 43 | ~45% | Phase 58 → then story ID |
+| 16 | `azurecdn.final.csv` | Azure CDN (legacy) | 3 | ~45% | Phase 58 → then story ID |
+| 17 | `cognitivesearch.final.csv` | Cognitive Search | 35 | ~45% | Phase 58 → then story ID |
+| 18 | `cognitiveservices.final.csv` | Cognitive Services | 35 | ~45% | Phase 58 → then story ID |
+| 19 | `databasemigration.final.csv` | DB Migration Svc | 35 | ~45% | Phase 58 → then story ID |
+| 20 | `databricks.final.csv` | Azure Databricks | 36 | ~45% | Phase 58 → then story ID |
+| 21 | `datafactory.final.csv` | Data Factory | 35 | ~45% | Phase 58 → then story ID |
+| 22 | `eventgrid.final.csv` | Event Grid | 35 | ~45% | Phase 58 → then story ID |
+| 23 | `eventhubs.final.csv` | Event Hubs | 35 | ~45% | Phase 58 → then story ID |
+| 24 | `filesync.final.csv` | Azure File Sync | 35 | ~45% | Phase 58 → then story ID |
+| 25 | `functions.final.csv` | Azure Functions | 35 | ~45% | Phase 58 → then story ID |
+| 26 | `loadbalancer.final.csv` | Load Balancer | 35 | ~45% | Phase 58 → then story ID |
+| 27 | `logicapps.final.csv` | Logic Apps | 35 | ~45% | Phase 58 → then story ID |
+| 28 | `natgateway.final.csv` | NAT Gateway | 35 | ~45% | Phase 58 → then story ID |
+| 29 | `notificationhubs.final.csv` | Notification Hubs | 35 | ~45% | Phase 58 → then story ID |
+| 30 | `peeringservice.final.csv` | Peering Service | 35 | ~45% | Phase 58 → then story ID |
+| 31 | `trafficmanager.final.csv` | Traffic Manager | 35 | ~45% | Phase 58 → then story ID |
+| 32 | `virtualdesktop.final.csv` | Virtual Desktop | 36 | ~45% | Phase 58 → then story ID |
+| 33 | `virtualnetwork.final.csv` | Virtual Network | 36 | ~45% | Phase 58 → then story ID |
+| 34 | `virtualwan.final.csv` | Virtual WAN | 36 | ~45% | Phase 58 → then story ID |
 
-**Total tasks to create in ADO**: ~490 (14 services × ~35 rows each)
-
-**Prerequisite**: User must supply ADO parent User Story ID for each NS service.
-See `docs/avd_task_import_guide.md` for import commands.
-
-### Deferred to Phase 53+
-
-| Domain | Services | Count |
-|---|---|---|
-| IM | addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint | 9 |
-| PA | automation, customerlockbox, lighthouse | 3 |
-| BR | backup, siterecovery | 2 |
-| ANOMALY | keyvault (10-col — fix first) | 1 |
+**Total NS rows**: ~1,230 across 34 services
+**Phase 58 scope**: Bring rows 15–34 from ~45% → ~80%+ per-row research depth (see `docs/phase58_plan_prompt.md`)
+**Other domains deferred**: IM (9 svc), PA (3 svc), BR (2 svc), ANOMALY keyvault (1 svc)
 
 ---
 
-## 5. ns/ — Enriched NS Domain Final CSVs (Phase 55)
+## 5. ns/ — Enriched NS Domain Final CSVs (Phase 55/56/57)
 
 **Path**: `data/outputs/ns/*.final.csv`
-**Created**: Phase 55 (2026-06-24) — enrichment of Phase 48 v2 CSVs
 **Schema**: 14-col v2 (same as root `*_rechecked_controls_v2.csv`)
-**Quality gate**: 14/14 PASS (no invalid verdicts, no now_applicable_native without URL)
-**Exa coverage**: ~78% (387/490 rows have URL or standard rationale; 103 `implemented` rows need MCSB baseline URL)
-**Consumer**: Phase 56 (URL backfill + June 2026 re-search), then ADO task import
+**Quality gate**: 34/34 PASS (no invalid verdicts, no now_applicable_native without URL, uncov<5 per CSV)
+**Consumer**: Phase 58 (per-row deep research for 20 new CSVs), then ADO task import
 
-| # | File | Service | Rows | Supplement rows | Exa coverage |
+### Original 14 — Phase 55/56 (~95% research confidence)
+
+| # | File | Service | Rows | Supplement rows | Confidence |
 |---|---|---|---|---|---|
-| 1 | `appgateway.final.csv` | Application Gateway | 35 | — | ~66% |
-| 2 | `azuredns.final.csv` | Azure DNS | 35 | — | ~89% |
-| 3 | `azurefirewall.final.csv` | Azure Firewall | 37 | NS-6-SUPPLEMENT (IDPS) | ~78% |
-| 4 | `bastion.final.csv` | Azure Bastion | 35 | — | ~80% |
-| 5 | `ddosprotection.final.csv` | DDoS Protection | 35 | — | ~89% |
-| 6 | `firewallmanager.final.csv` | Firewall Manager | 35 | — | ~89% |
-| 7 | `frontdoor.final.csv` | Azure Front Door | 35 | — | ~77% |
-| 8 | `networkwatcher.final.csv` | Network Watcher | 35 | — | ~86% |
-| 9 | `privatelink.final.csv` | Private Link | 35 | — | ~86% |
-| 10 | `publicip.final.csv` | Public IP | 36 | — | ~89% |
-| 11 | `redis.final.csv` | Azure Cache for Redis | 36 | NS-7-SUPPLEMENT (publicNetworkAccess) | ~67% |
-| 12 | `servicebus.final.csv` | Service Bus | 35 | NS-7-SUPPLEMENT (publicNetworkAccess) | ~63% |
-| 13 | `vpngateway.final.csv` | VPN Gateway | 35 | — | ~80% |
-| 14 | `waf.final.csv` | Web Application Firewall | 35 | — | ~71% |
+| 1 | `appgateway.final.csv` | Application Gateway | 36 | NS-7-SUPPLEMENT-APPGW | ~95% |
+| 2 | `azuredns.final.csv` | Azure DNS | 37 | NS-1-SUPPLEMENT | ~95% |
+| 3 | `azurefirewall.final.csv` | Azure Firewall | 37 | NS-6-SUPPLEMENT (IDPS) | ~95% |
+| 4 | `bastion.final.csv` | Azure Bastion | 35 | — | ~95% |
+| 5 | `ddosprotection.final.csv` | DDoS Protection | 35 | — | ~95% |
+| 6 | `firewallmanager.final.csv` | Firewall Manager | 35 | — | ~95% |
+| 7 | `frontdoor.final.csv` | Azure Front Door | 36 | NS-2-SUPPLEMENT (WAF DRS 2.2) | ~95% |
+| 8 | `networkwatcher.final.csv` | Network Watcher | 35 | — | ~95% |
+| 9 | `privatelink.final.csv` | Private Link | 35 | — | ~95% |
+| 10 | `publicip.final.csv` | Public IP | 36 | — | ~95% |
+| 11 | `redis.final.csv` | Azure Cache for Redis | 36 | NS-7-SUPPLEMENT | ~95% |
+| 12 | `servicebus.final.csv` | Service Bus | 35 | NS-7-SUPPLEMENT | ~95% |
+| 13 | `vpngateway.final.csv` | VPN Gateway | 35 | — | ~95% |
+| 14 | `waf.final.csv` | Web Application Firewall | 35 | — | ~95% |
 
-**Verdict taxonomy used**: `implemented`, `now_applicable_native`, `upgraded_implemented`, `still_not_applicable`, `conditional`, `not_applicable_paas`, `not_applicable_arm`
+### New 20 — Phase 57 (~45% research confidence — Phase 58 scope)
 
-**Key corrections vs Phase 48 cache**:
-- appgateway DP-6 + PA-8: now_applicable_native → still_not_applicable (MCSB=False)
-- servicebus DP-2 + IM-8 + PA-1 + PA-8: now_applicable_native → still_not_applicable (MCSB=False)
-- appgateway IM-1 (AAD Auth): still_not_applicable → conditional (JWT PUBLIC PREVIEW Jan 2026)
+Phase 57 applied bulk MCSB baseline URL backfill. Per-row deep research still pending.
 
-**Gap to 95%+**: Phase 56 must add MCSB baseline URLs to 103 `implemented`/`conditional` rows lacking evidence links, re-search azuredns+frontdoor with June 2026 sources, and run exhaustive new-row audit (NS sub-controls added in 2025–2026).
+| # | File | Service | Rows | now_app | cond | impl | Supplement rows | Confidence |
+|---|---|---|---|---|---|---|---|---|
+| 15 | `appservice.final.csv` | App Service | 43 | 3† | 0 | 17 | — | ~45% |
+| 16 | `azurecdn.final.csv` | Azure CDN (legacy) | 3 | 0 | 2 | 0 | — | ~45% |
+| 17 | `cognitivesearch.final.csv` | Cognitive Search | 35 | 2 | 0 | 12 | — | ~45% |
+| 18 | `cognitiveservices.final.csv` | Cognitive Services | 35 | 2 | 0 | 15 | — | ~45% |
+| 19 | `databasemigration.final.csv` | DB Migration Svc | 35 | 0 | 0 | 6 | — | ~45% |
+| 20 | `databricks.final.csv` | Azure Databricks | 36 | 1 | 0 | 16 | — | ~45% |
+| 21 | `datafactory.final.csv` | Data Factory | 35 | 1 | 0 | 20 | — | ~45% |
+| 22 | `eventgrid.final.csv` | Event Grid | 35 | 1 | 0 | 11 | — | ~45% |
+| 23 | `eventhubs.final.csv` | Event Hubs | 35 | 1 | 0 | 16 | — | ~45% |
+| 24 | `filesync.final.csv` | Azure File Sync | 35 | 0 | 0 | 6 | — | ~45% |
+| 25 | `functions.final.csv` | Azure Functions | 35 | 1 | 0 | 20 | — | ~45% |
+| 26 | `loadbalancer.final.csv` | Load Balancer | 35 | 0 | 0 | 3 | — | ~45% |
+| 27 | `logicapps.final.csv` | Logic Apps | 35 | 1 | 0 | 17 | — | ~45% |
+| 28 | `natgateway.final.csv` | NAT Gateway | 35 | 0 | 0 | 2 | — | ~45% |
+| 29 | `notificationhubs.final.csv` | Notification Hubs | 35 | 0 | 0 | 4 | — | ~45% |
+| 30 | `peeringservice.final.csv` | Peering Service | 35 | 0 | 0 | 2 | — | ~45% |
+| 31 | `trafficmanager.final.csv` | Traffic Manager | 35 | 0 | 0 | 2 | — | ~45% |
+| 32 | `virtualdesktop.final.csv` | Virtual Desktop | 36 | 2 | 0 | 20 | — | ~45% |
+| 33 | `virtualnetwork.final.csv` | Virtual Network | 36 | 1‡ | 0 | 3 | NS-2-SUPPLEMENT | ~45% |
+| 34 | `virtualwan.final.csv` | Virtual WAN | 36 | 0 | 1‡ | 5 | NS-7-SUPPLEMENT-VIRTUALWAN | ~45% |
+
+† appservice has duplicate NS-2 Azure Private Link row (known, flagged — verify in Phase 58)
+‡ supplement rows added by Phase 57 Q2 audit
+
+**Verdict taxonomy**: `implemented`, `now_applicable_native`, `upgraded_implemented`, `still_not_applicable`, `conditional`, `not_applicable_paas`, `not_applicable_arm`
+
+**Research gap for 20 new CSVs**: All rows have MCSB baseline URL (Phase 57 backfill). Missing: per-row specific feature evidence (GA date, ARM property, enable steps) for `now_applicable_native` and `implemented` rows. Phase 58 closes this gap.
+
+**Phase 58 target**: ~80%+ per-row confidence (per-service Q1 Exa research + Q2 new-row audit per service group).
