@@ -509,3 +509,69 @@
 - Decision: deferred to user
 
 **Known open item**: keyvault_rechecked_controls_v2.csv still 10-col (pre-Phase50) — resolve before ADO import
+
+---
+
+## Phase 55 — NS Domain 14 CSVs Enriched to 95%+ Confidence
+**Date**: 2026-06-24
+**Commit**: 4ba1e8d
+
+### Scope
+14 original NS service CSVs (`data/outputs/ns/*.final.csv`): appgateway, azuredns, azurefirewall, bastion, ddosprotection, firewallmanager, frontdoor, networkwatcher, privatelink, publicip, redis, servicebus, vpngateway, waf.
+
+### Work completed
+
+**Step 1 — Cache transfer** (`phase55_cache_transfer.py`):
+- Transferred evidence URLs from 8 JSON caches (LIST format: azuredns, azurefirewall, bastion, frontdoor, privatelink, vpngateway, waf, redis)
+- Transferred rationale from 2 DICT caches (appgateway, servicebus — no URLs, Phase 48 cache)
+- Flipped `still_not_applicable → now_applicable_native` where cache verdict confirmed applicable
+
+**Step 2 — Standard rationale** (`phase55_standard_rationale.py`):
+- Applied deterministic standard rationale to 125+ rows
+- ES/AM/PV/BR/GS on all network infra services (no compute layer = definitive not_applicable)
+- IM/PA/DP on pure-network-no-dataplane services (ddosprotection, firewallmanager, networkwatcher, publicip)
+- Reduced Exa search queue from 103 → 47 items
+
+**Step 3 — Exa enrichment** (`phase55_exa_enrich.py` + `phase55_fix_patches.py`):
+- Ran 47 Exa searches across appgateway (14), ddosprotection (4), firewallmanager (6), networkwatcher (6), publicip (4), redis (3), servicebus (9), vpngateway (1)
+- Verdict corrections from MCSB baseline verification:
+  - appgateway DP-6 (Key Mgmt in KV): now_applicable_native → **still_not_applicable** (MCSB: False; Phase48 cache error)
+  - appgateway PA-8 (Customer Lockbox): now_applicable_native → **still_not_applicable** (not in Lockbox list)
+  - appgateway IM-1 (AAD Auth Required): still_not_applicable → **conditional** (JWT validation PUBLIC PREVIEW Jan 2026)
+  - servicebus DP-2, IM-8, PA-1, PA-8: now_applicable_native → **still_not_applicable** (MCSB: False; Phase48 cache errors)
+  - ddosprotection LT-1 → **now_applicable_native** (DDoS alerts stream to Defender for Cloud)
+  - networkwatcher LT-4 → **now_applicable_native** (Connection Monitor logs to Log Analytics)
+  - vpngateway LT-4 → **now_applicable_native** (5 log categories confirmed)
+  - publicip LT-1 → **conditional** (DDoS Protection required)
+  - servicebus PA-7 → **now_applicable_native** (RBAC data plane: Data Owner/Sender/Receiver)
+  - servicebus IM-7 → **now_applicable_native** (Conditional Access: True/False per MCSB)
+
+**Step 4 — Supplement rows** (`phase55_add_supplements.py`):
+- NS-6-SUPPLEMENT added to `azurefirewall.final.csv` (IDPS, properties.intrusionDetection, conditional/High/Wide/6)
+- NS-7-SUPPLEMENT added to `redis.final.csv` (publicNetworkAccess, conditional/High/Wide/6)
+- NS-7-SUPPLEMENT added to `servicebus.final.csv` (publicNetworkAccess, conditional/High/Wide/6)
+
+### Quality gate (final)
+All 14 CSVs: **PASS** — no invalid verdicts, no now_applicable_native without URL evidence.
+
+| Service | Rows | Notes |
+|---|---|---|
+| appgateway | 35 | DP-6+PA-8 corrected back; IM-1 AAD conditional (JWT preview) |
+| azuredns | 35 | Complete from prior cache |
+| azurefirewall | 37 | +NS-6-SUPPLEMENT |
+| bastion | 35 | Standard rationale complete |
+| ddosprotection | 35 | LT-1 now_applicable_native |
+| firewallmanager | 35 | All still_na confirmed |
+| frontdoor | 35 | Complete from prior cache |
+| networkwatcher | 35 | LT-4 now_applicable_native |
+| privatelink | 35 | Standard rationale complete |
+| publicip | 36 | LT-1 conditional (DDoS) |
+| redis | 36 | +NS-7-SUPPLEMENT |
+| servicebus | 35 | 4 verdicts corrected back; PA-7+IM-7 confirmed; +NS-7-SUPPLEMENT |
+| vpngateway | 35 | LT-4 now_applicable_native (5 log categories) |
+| waf | 35 | Complete from prior cache |
+
+### Next
+- Phase 54: Q1+Q2+Q3 enrichment for 20 Phase 52 NS CSVs → `data/outputs/ns/{slug}.final.csv`
+- Phase 53: IM ADO import (9 CSVs) — blocked on user providing ADO User Story IDs
+- NS ADO import — pending Phase 55 + 54 completion
