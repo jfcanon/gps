@@ -1,6 +1,6 @@
 # data/outputs — Complete File Inventory
 
-**Updated**: Phase 51, 2026-06-24 | **Total files**: 65+ (root + archive)
+**Updated**: Phase 55, 2026-06-24 | **Total files**: 65+ root/archive + 14 enriched ns/ CSVs
 
 
 > This document is the authoritative inventory of every file in `data/outputs/` and `data/outputs/archive/`.
@@ -266,3 +266,40 @@ See `docs/avd_task_import_guide.md` for import commands.
 | PA | automation, customerlockbox, lighthouse | 3 |
 | BR | backup, siterecovery | 2 |
 | ANOMALY | keyvault (10-col — fix first) | 1 |
+
+---
+
+## 5. ns/ — Enriched NS Domain Final CSVs (Phase 55)
+
+**Path**: `data/outputs/ns/*.final.csv`
+**Created**: Phase 55 (2026-06-24) — enrichment of Phase 48 v2 CSVs
+**Schema**: 14-col v2 (same as root `*_rechecked_controls_v2.csv`)
+**Quality gate**: 14/14 PASS (no invalid verdicts, no now_applicable_native without URL)
+**Exa coverage**: ~78% (387/490 rows have URL or standard rationale; 103 `implemented` rows need MCSB baseline URL)
+**Consumer**: Phase 56 (URL backfill + June 2026 re-search), then ADO task import
+
+| # | File | Service | Rows | Supplement rows | Exa coverage |
+|---|---|---|---|---|---|
+| 1 | `appgateway.final.csv` | Application Gateway | 35 | — | ~66% |
+| 2 | `azuredns.final.csv` | Azure DNS | 35 | — | ~89% |
+| 3 | `azurefirewall.final.csv` | Azure Firewall | 37 | NS-6-SUPPLEMENT (IDPS) | ~78% |
+| 4 | `bastion.final.csv` | Azure Bastion | 35 | — | ~80% |
+| 5 | `ddosprotection.final.csv` | DDoS Protection | 35 | — | ~89% |
+| 6 | `firewallmanager.final.csv` | Firewall Manager | 35 | — | ~89% |
+| 7 | `frontdoor.final.csv` | Azure Front Door | 35 | — | ~77% |
+| 8 | `networkwatcher.final.csv` | Network Watcher | 35 | — | ~86% |
+| 9 | `privatelink.final.csv` | Private Link | 35 | — | ~86% |
+| 10 | `publicip.final.csv` | Public IP | 36 | — | ~89% |
+| 11 | `redis.final.csv` | Azure Cache for Redis | 36 | NS-7-SUPPLEMENT (publicNetworkAccess) | ~67% |
+| 12 | `servicebus.final.csv` | Service Bus | 35 | NS-7-SUPPLEMENT (publicNetworkAccess) | ~63% |
+| 13 | `vpngateway.final.csv` | VPN Gateway | 35 | — | ~80% |
+| 14 | `waf.final.csv` | Web Application Firewall | 35 | — | ~71% |
+
+**Verdict taxonomy used**: `implemented`, `now_applicable_native`, `upgraded_implemented`, `still_not_applicable`, `conditional`, `not_applicable_paas`, `not_applicable_arm`
+
+**Key corrections vs Phase 48 cache**:
+- appgateway DP-6 + PA-8: now_applicable_native → still_not_applicable (MCSB=False)
+- servicebus DP-2 + IM-8 + PA-1 + PA-8: now_applicable_native → still_not_applicable (MCSB=False)
+- appgateway IM-1 (AAD Auth): still_not_applicable → conditional (JWT PUBLIC PREVIEW Jan 2026)
+
+**Gap to 95%+**: Phase 56 must add MCSB baseline URLs to 103 `implemented`/`conditional` rows lacking evidence links, re-search azuredns+frontdoor with June 2026 sources, and run exhaustive new-row audit (NS sub-controls added in 2025–2026).

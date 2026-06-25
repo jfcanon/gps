@@ -99,3 +99,29 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 **ADO import**: Managed by separate AI agent on Azure-connected VM. Not in this project's scope.
 **Deferred**: Task generation from v3 Excel rows (~4,157 rows now reclassified in v3_service_controls_reclassified.csv).
 **Deferred**: Infra-filter pass for remaining 9 domains (DP, GS, ES, PV, LT, PA, IM, BR, AM) — confirm excluded services per domain, re-run estimate_effort_ns_filtered.py pattern per domain. Each pass expected to reduce total estimate further.
+
+**Phase 44**: NS bastion gap assessment — Azure Bastion executor scripts. Part of v2 assessment pipeline. (2026-06-22)
+
+**Phase 45**: IM domain CSVs — 8 services (addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, universalprint). 292 rows. 10-col schema. All validated. `data/outputs/*_rechecked_controls.csv`. (2026-06-22)
+
+**Phase 46**: BR domain CSVs — 2 services (backup, siterecovery). 71 rows. All validated. (2026-06-24)
+
+**Phase 47**: PA domain CSVs — 3 services (automation, customerlockbox, lighthouse). 105 rows. All validated. Cloud Shell skipped (done Phase 45). (2026-06-24)
+
+**Phase 48**: CSV schema fix + NS web-search verdict review — Schema upgraded 5 files to 14-col v2. Exa web research on 14 NS service CSVs: 16 `*_na_research.json` caches created. 5 rows flipped to now_applicable_native. 21 legacy bad verdicts fixed. (2026-06-24)
+
+**Phase 49**: CSPM secondary assessment layer — `data/outputs/*_rechecked_controls_v2.csv` generation. Blast radius + risk_rank scoring added. (2026-06-24)
+
+**Phase 50**: Housekeeping — v2 schema enforced across all 29 CSVs. Archive pass. context.md created at `data/outputs/context.md`. (2026-06-24)
+
+**Phase 51**: data/outputs context audit — `data/outputs/context.md` updated. Inventory of all 65+ files. keyvault anomaly (10-col) flagged. (2026-06-24)
+
+**Phase 52**: NS domain full assessment for remaining 20 services — `data/outputs/ns/{slug}.final.csv` (14-col v2). 20 new services × ~35 rows = ~700 rows. Total NS: 34 services. (2026-06-24). Plan prompt: `docs/phase52_plan_prompt.md`.
+
+**Phase 55**: NS original 14 CSVs enriched to 95%+ confidence — Q1 Exa web research (47 searches), standard rationale (125+ rows), verdict corrections (6 Phase 48 cache errors reverted), Q2 supplement rows (NS-6 azurefirewall, NS-7 redis+servicebus). Quality gate: 14/14 PASS. Scripts: `scripts/phase55_*.py`. (2026-06-24)
+
+**Current state (Phase 55 complete)**:
+- `data/outputs/ns/` — 14 enriched NS CSVs. Quality gate PASS. ~78% Exa coverage (103/490 rows still need URL; mostly `implemented` rows needing MCSB baseline URL).
+- `data/outputs/ns/` Phase 52 CSVs — 20 more NS CSVs, NOT YET enriched (Phase 54/56 pending).
+- Next: Phase 56 — URL backfill for `implemented` rows + June 2026 re-search for azuredns/frontdoor + exhaustive new-row audit.
+- Blocked: Phase 53 IM ADO import — awaiting User Story IDs from user.

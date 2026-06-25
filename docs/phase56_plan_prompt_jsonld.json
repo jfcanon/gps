@@ -1,0 +1,248 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "nsg": "https://newsecgap.internal/ontology#",
+    "phase": "nsg:phase",
+    "workstream": "nsg:workstream",
+    "csvSchema": "nsg:csvSchema",
+    "verdictTaxonomy": "nsg:verdictTaxonomy",
+    "serviceScope": "nsg:serviceScope",
+    "readFirst": "nsg:readFirst",
+    "constraint": "nsg:constraint",
+    "qualityGate": "nsg:qualityGate",
+    "exaQuery": "nsg:exaQuery",
+    "uncoveredRows": "nsg:uncoveredRows"
+  },
+
+  "@type": "SoftwareProject",
+  "@id": "nsg:phase-56-ns-url-backfill",
+  "name": "NewSecGap Phase 56 — NS 14 CSVs URL Backfill + June 2026 Re-search + Exhaustive New-Row Audit",
+  "version": "1.0.0",
+  "dateCreated": "2026-06-24",
+
+  "description": "Bring data/outputs/ns/*.final.csv (14 files) from ~78% to 95%+ evidence confidence. Three workstreams: (Q1-A) URL backfill for 103 implemented/conditional rows lacking source URLs; (Q1-B) June 2026 re-search for azuredns+frontdoor stale Phase 48 cache entries; (Q2) exhaustive new-row audit for NS sub-controls GA'd in 2025-2026. No CSV recreation — enrich in-place only.",
+
+  "phase": "56",
+  "continuedFrom": "docs/phase52_plan_prompt.md",
+  "targetConfidence": "95%",
+  "currentConfidence": "78%",
+  "confidenceGap": "103 uncovered rows (mostly implemented without MCSB baseline URL) + azuredns/frontdoor stale 2025 cache + Q2 new-row audit pending",
+
+  "projectRoot": "/Users/nahuelavalos/Repo/NewSecGap",
+  "gitBranch": "master",
+
+  "readFirst": [
+    {
+      "order": 1,
+      "path": "CLAUDE.md",
+      "why": "Full phase log Phases 1-55, scope gates, workflow protocol"
+    },
+    {
+      "order": 2,
+      "path": "ado/activity.log",
+      "why": "Tail for Phase 55 entry — latest completed. Phase 55 = NS 14 CSVs enriched, quality gate PASS"
+    },
+    {
+      "order": 3,
+      "path": "data/outputs/context.md",
+      "why": "Section 5 added Phase 55 — ns/ folder inventory, coverage table, key corrections"
+    },
+    {
+      "order": 4,
+      "path": "data/outputs/ns/",
+      "why": "The 14 .final.csv files to enrich. Read each header + first 5 rows to confirm schema before writing"
+    },
+    {
+      "order": 5,
+      "path": "scripts/phase55_exa_enrich.py",
+      "why": "Prior enrichment script pattern to mirror for phase56_url_backfill.py"
+    }
+  ],
+
+  "csvSchema": {
+    "columns": [
+      "asb_control_id", "feature_name", "feature_supported_original",
+      "feature_enabled_by_default_original", "status_2025", "verdict_2025",
+      "azure_api_property", "script_module", "script_function", "notes",
+      "service", "severity", "blast_radius", "risk_rank"
+    ],
+    "notePattern": "Append 'Source: {url}' to existing notes — do NOT replace existing content"
+  },
+
+  "verdictTaxonomy": {
+    "values": [
+      "implemented", "now_applicable_native", "upgraded_implemented",
+      "still_not_applicable", "conditional", "not_applicable_paas", "not_applicable_arm"
+    ],
+    "changeRule": "Do NOT change verdict without MCSB baseline evidence. URL backfill = notes only."
+  },
+
+  "workstreams": [
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q1-A",
+      "name": "URL Backfill — implemented rows without source",
+      "priority": "HIGH",
+      "rowCount": 103,
+      "approach": "One Exa search per service slug fetches MCSB baseline page. Apply baseline URL to ALL uncovered implemented rows for that service in one pass.",
+      "mscbUrlPattern": "https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/{service-name}-security-baseline",
+      "services": [
+        { "slug": "servicebus",     "uncoveredRows": 13, "priority": "HIGH",   "mscbName": "service-bus" },
+        { "slug": "redis",          "uncoveredRows": 12, "priority": "HIGH",   "mscbName": "azure-cache-for-redis" },
+        { "slug": "appgateway",     "uncoveredRows": 12, "priority": "HIGH",   "mscbName": "application-gateway" },
+        { "slug": "waf",            "uncoveredRows": 10, "priority": "HIGH",   "mscbName": "azure-web-application-firewall" },
+        { "slug": "frontdoor",      "uncoveredRows":  8, "priority": "MEDIUM", "mscbName": "azure-front-door" },
+        { "slug": "azurefirewall",  "uncoveredRows":  8, "priority": "MEDIUM", "mscbName": "azure-firewall" },
+        { "slug": "bastion",        "uncoveredRows":  7, "priority": "MEDIUM", "mscbName": "azure-bastion" },
+        { "slug": "vpngateway",     "uncoveredRows":  7, "priority": "MEDIUM", "mscbName": "vpn-gateway" },
+        { "slug": "networkwatcher", "uncoveredRows":  5, "priority": "MEDIUM", "mscbName": "azure-network-watcher" },
+        { "slug": "privatelink",    "uncoveredRows":  5, "priority": "MEDIUM", "mscbName": "azure-private-link" },
+        { "slug": "azuredns",       "uncoveredRows":  4, "priority": "LOW",    "mscbName": "azure-dns" },
+        { "slug": "ddosprotection", "uncoveredRows":  4, "priority": "LOW",    "mscbName": "azure-ddos-protection" },
+        { "slug": "firewallmanager","uncoveredRows":  4, "priority": "LOW",    "mscbName": "azure-firewall-manager" },
+        { "slug": "publicip",       "uncoveredRows":  4, "priority": "LOW",    "mscbName": "public-ip-addresses" }
+      ],
+      "individualRows": [
+        { "slug": "appgateway",  "ctrl": "IM-3",  "feat": "Service Principals",                   "verdict": "still_not_applicable", "action": "verify still False June 2026" },
+        { "slug": "appgateway",  "ctrl": "PV-3",  "feat": "Azure Automation State Configuration", "verdict": "still_not_applicable", "action": "verify + add standard rationale" },
+        { "slug": "appgateway",  "ctrl": "PV-3",  "feat": "Policy Guest Configuration Agent",     "verdict": "still_not_applicable", "action": "verify + add standard rationale" },
+        { "slug": "appgateway",  "ctrl": "PV-3",  "feat": "Custom Container Images",              "verdict": "still_not_applicable", "action": "verify + add standard rationale" },
+        { "slug": "appgateway",  "ctrl": "PV-5",  "feat": "Vulnerability Assessment via Defender","verdict": "still_not_applicable", "action": "verify + add source" },
+        { "slug": "servicebus",  "ctrl": "PV-3",  "feat": "Policy Guest Configuration Agent",     "verdict": "still_not_applicable", "action": "verify + add standard rationale" },
+        { "slug": "servicebus",  "ctrl": "PV-5",  "feat": "Vulnerability Assessment via Defender","verdict": "still_not_applicable", "action": "verify + add source" },
+        { "slug": "ddosprotection","ctrl": "DP-3","feat": "Data in Transit Encryption",           "verdict": "still_not_applicable", "action": "verify DDoS plan has no data plane — confirm + note" },
+        { "slug": "vpngateway",  "ctrl": "IM-7",  "feat": "Conditional Access for Data Plane",    "verdict": "conditional",          "action": "Exa search + add URL" },
+        { "slug": "vpngateway",  "ctrl": "PA-7",  "feat": "Azure RBAC for Data Plane",            "verdict": "implemented",          "action": "add MCSB baseline URL" },
+        { "slug": "azuredns",    "ctrl": "PA-7",  "feat": "DNS Zone Management RBAC",             "verdict": "conditional",          "action": "Exa search + add URL" },
+        { "slug": "frontdoor",   "ctrl": "PA-7",  "feat": "AFD Management RBAC",                  "verdict": "conditional",          "action": "Exa search + add URL" }
+      ]
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q1-B",
+      "name": "June 2026 Re-search — stale azuredns + frontdoor cache",
+      "priority": "MEDIUM",
+      "rationale": "azuredns and frontdoor evidence from Phase 48 cache (2025 dates). Re-search June 2026 to confirm or update now_applicable_native / still_not_applicable rows.",
+      "services": [
+        {
+          "slug": "azuredns",
+          "exaQuery": "Azure DNS MCSB security baseline 2025 2026 Defender for DNS LT-1 resource logs Policy",
+          "baselineUrl": "https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-dns-security-baseline",
+          "focusControls": ["LT-1", "LT-4", "AM-2", "PA-7"]
+        },
+        {
+          "slug": "frontdoor",
+          "exaQuery": "Azure Front Door MCSB security baseline 2025 2026 WAF IP filtering Private Link KV certs",
+          "baselineUrl": "https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-front-door-security-baseline",
+          "focusControls": ["NS-2", "DP-3", "DP-4", "DP-7", "IM-8", "LT-4", "AM-2", "PA-7"]
+        }
+      ]
+    },
+    {
+      "@type": "nsg:Workstream",
+      "id": "Q2",
+      "name": "Exhaustive New-Row Audit — NS sub-controls 2025-2026",
+      "priority": "MEDIUM",
+      "approach": "6 Exa queries scanning NS sub-controls NS-1 through NS-8 for features GA'd in 2025-2026 not yet in CSVs. If new feature found: add SUPPLEMENT row with same 14-col schema.",
+      "supplementRowFormat": {
+        "asb_control_id": "NS-{N}-SUPPLEMENT-{slug} or NS-{N}-SUPPLEMENT if cross-service",
+        "status_2025": "gap",
+        "verdict_2025": "conditional or now_applicable_native",
+        "severity": "High or Medium",
+        "blast_radius": "Wide if conditional or no azure_api_property",
+        "risk_rank": "severity_score × blast_radius_score (max 6)"
+      },
+      "exaQueries": [
+        {
+          "id": "Q2-1",
+          "query": "Azure network security NS-3 service-to-service firewall rules new feature GA 2025 2026",
+          "targetServices": "all 14"
+        },
+        {
+          "id": "Q2-2",
+          "query": "Azure TLS 1.3 enforcement NS-4 Application Gateway WAF Azure Bastion VPN Gateway 2025 2026 GA",
+          "targetServices": ["appgateway", "waf", "bastion", "vpngateway"]
+        },
+        {
+          "id": "Q2-3",
+          "query": "Azure DDoS Protection NS-5 Standard Network tier update new feature 2025 2026",
+          "targetServices": ["ddosprotection", "publicip"]
+        },
+        {
+          "id": "Q2-4",
+          "query": "Azure IDPS intrusion detection NS-6 new services beyond Azure Firewall Premium 2025 2026",
+          "targetServices": ["appgateway", "waf", "azurefirewall"]
+        },
+        {
+          "id": "Q2-5",
+          "query": "Azure disable public network access NS-7 new services Private Endpoint 2025 2026",
+          "targetServices": ["appgateway", "bastion", "vpngateway", "waf", "frontdoor"]
+        },
+        {
+          "id": "Q2-6",
+          "query": "Azure Private DNS NS-8 WAF Application Gateway Bastion VPN Gateway integration 2025 2026",
+          "targetServices": ["waf", "appgateway", "bastion", "vpngateway"]
+        }
+      ]
+    }
+  ],
+
+  "scriptsToWrite": [
+    {
+      "path": "scripts/phase56_url_backfill.py",
+      "purpose": "Apply MCSB baseline URL to all uncovered implemented/conditional rows",
+      "pattern": "Mirror scripts/phase55_exa_enrich.py — PATCHES list with append=True, notes='Source: {url}'",
+      "inputData": "Exa findings dict built after running workstream Q1-A searches",
+      "output": "Same 14 CSVs, enriched in-place"
+    },
+    {
+      "path": "scripts/phase56_supplement_rows.py",
+      "purpose": "Add Q2 new SUPPLEMENT rows if Exa finds 2025-2026 new NS features",
+      "pattern": "Mirror scripts/phase55_add_supplements.py",
+      "condition": "Only write this script if Q2 audit finds at least one new feature"
+    }
+  ],
+
+  "executionSteps": [
+    { "order": 1,  "workstream": "Q1-A", "action": "Exa batch: fetch 14 MCSB baseline pages (parallel, one per service slug)" },
+    { "order": 2,  "workstream": "Q1-B", "action": "Exa: re-search azuredns (4 queries) + frontdoor (8 queries) June 2026" },
+    { "order": 3,  "workstream": "Q2",   "action": "Exa batch: run 6 NS sub-control sweep queries" },
+    { "order": 4,  "workstream": "Q1-A", "action": "Write scripts/phase56_url_backfill.py with all baseline URL findings" },
+    { "order": 5,  "workstream": "Q1-A", "action": "Run python3 scripts/phase56_url_backfill.py — apply to all 14 CSVs" },
+    { "order": 6,  "workstream": "Q1-A", "action": "Individual rows: verify and patch appgateway PV-3/PV-5/IM-3, servicebus PV-3/PV-5, ddosprotection DP-3, vpngateway IM-7/PA-7, azuredns PA-7, frontdoor PA-7" },
+    { "order": 7,  "workstream": "Q2",   "action": "Write scripts/phase56_supplement_rows.py if new features found; run it" },
+    { "order": 8,  "workstream": "ALL",  "action": "Run quality gate — all 14 must PASS (uncovered < 5, zero bad verdicts, zero now_app without URL)" },
+    { "order": 9,  "workstream": "ALL",  "action": "git add -f data/outputs/ns/ scripts/phase56_*.py && git commit" },
+    { "order": 10, "workstream": "ALL",  "action": "Update ado/activity.log — Phase 56 entry" },
+    { "order": 11, "workstream": "ALL",  "action": "Update CLAUDE.md — Phase 56 one-liner" },
+    { "order": 12, "workstream": "ALL",  "action": "STOP — do not start Phase 57 or IM domain work" }
+  ],
+
+  "qualityGate": {
+    "command": "python3 -c \"\nimport csv, pathlib\nALLOWED = {'implemented','now_applicable_native','upgraded_implemented','still_not_applicable','conditional','not_applicable_paas','not_applicable_arm'}\nslugs = ['appgateway','azuredns','azurefirewall','bastion','ddosprotection','firewallmanager','frontdoor','networkwatcher','privatelink','publicip','redis','servicebus','vpngateway','waf']\nall_ok = True\nfor s in slugs:\n    rows = list(csv.DictReader(open(f'data/outputs/ns/{s}.final.csv')))\n    bad = {r['verdict_2025'] for r in rows} - ALLOWED\n    no_url = [r for r in rows if r['verdict_2025']=='now_applicable_native' and 'http' not in r.get('notes','')]\n    uncovered = [r for r in rows if 'http' not in r.get('notes','') and 'Source' not in r.get('notes','') and not any(x in r.get('notes','').lower() for x in ['infrastructure','azure platform','no customer','not applicable','monitoring service'])]\n    ok = not bad and not no_url and len(uncovered) < 5\n    if not ok: all_ok = False\n    print(f'[{\\\"OK\\\" if ok else \\\"FAIL\\\"}] {s:<22} rows={len(rows):>3} uncovered={len(uncovered):>3}')\nprint()\nprint('QUALITY GATE:', 'PASS' if all_ok else 'FAIL')\n\"",
+    "mustPass": [
+      "All 14 CSVs: zero bad verdicts",
+      "All 14 CSVs: zero now_applicable_native without URL",
+      "All 14 CSVs: uncovered rows < 5",
+      "Q2 finding documented (new rows added OR explicit no-new-features note in activity.log)"
+    ]
+  },
+
+  "constraints": [
+    "NO verdict changes without MCSB baseline evidence — URL backfill = notes append only",
+    "NO CSV recreation — enrich in-place only",
+    "NO ADO operations in Phase 56",
+    "NO Phase 52 NS CSVs in scope (those are Phase 57)",
+    "git add with -f flag required for data/outputs/ns/ (gitignored path, but files are tracked)",
+    "ADO_PAT: not needed in Phase 56 (no ADO ops)",
+    "Process Q1-A first (highest coverage gain per Exa call), then Q1-B, then Q2"
+  ],
+
+  "successCriteria": [
+    "Uncovered rows per CSV: < 5 (down from 4-13 current)",
+    "All now_applicable_native rows: URL present",
+    "azuredns + frontdoor: June 2026 evidence confirmed or updated",
+    "Q2 audit complete: documented",
+    "Commits pushed: CSVs + scripts + activity.log + CLAUDE.md"
+  ]
+}
