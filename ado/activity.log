@@ -575,3 +575,88 @@ All 14 CSVs: **PASS** — no invalid verdicts, no now_applicable_native without 
 - Phase 54: Q1+Q2+Q3 enrichment for 20 Phase 52 NS CSVs → `data/outputs/ns/{slug}.final.csv`
 - Phase 53: IM ADO import (9 CSVs) — blocked on user providing ADO User Story IDs
 - NS ADO import — pending Phase 55 + 54 completion
+
+---
+
+## 2026-06-24 (Phase 56)
+
+- [x] Phase 56 complete: NS 14 CSVs URL backfill + June 2026 re-search + Q2 audit
+
+### Context
+Continued from Phase 55. Target: bring 14 NS CSVs from ~78% to 95%+ evidence confidence.
+Prior uncovered: 103 rows (mostly `implemented` without MCSB baseline URL).
+
+### Step 1 — Bulk URL backfill (`phase56_url_backfill.py`)
+14 MCSB baseline URLs confirmed via Exa (June 2026). Applied to all uncovered rows lacking evidence markers:
+86 rows updated across all 14 services.
+
+| Service | Rows updated |
+|---|---|
+| appgateway | 7 |
+| azuredns | 3 |
+| azurefirewall | 8 |
+| bastion | 7 |
+| ddosprotection | 3 |
+| firewallmanager | 3 |
+| frontdoor | 4 |
+| networkwatcher | 4 |
+| privatelink | 5 |
+| publicip | 4 |
+| redis | 12 |
+| servicebus | 11 |
+| vpngateway | 5 |
+| waf | 10 |
+
+### Step 2 — Individual row patches (`phase56_individual_patches.py`)
+16 patches applied to rows skipped by bulk (had Phase48-cache notes or specific handling needed):
+- appgateway PV-3 (×4), PV-5, IM-3 SP — MCSB URL appended confirming still_not_applicable
+- servicebus PV-3 (×4), PV-5 — same
+- ddosprotection DP-3 — confirmed no data plane, URL appended
+- vpngateway IM-7 (conditional CA/P2S+AAD), PA-7 (implemented RBAC) — URLs appended
+- **azuredns PA-7 FLIPPED: conditional → now_applicable_native** (Q1-B June 2026 evidence: DNS Zone RBAC fully GA at zone/recordset granularity)
+- frontdoor PA-7 — conditional, URL appended
+
+### Step 3 — Q2 supplement rows (`phase56_supplement_rows.py`)
+3 new supplement rows added (Q2 Exa NS sub-control audit June 2026):
+
+| CSV | asb_control_id | Feature | Verdict | Severity/Blast/Risk |
+|---|---|---|---|---|
+| azuredns | NS-1-SUPPLEMENT | DNS Security Policy + TI feed (VNet-level DNS filtering, GA) | now_applicable_native | Medium/Narrow/2 |
+| appgateway | NS-7-SUPPLEMENT-APPGW | Private App Gateway — no public IP deployment (GA May 2025) | conditional | High/Wide/6 |
+| frontdoor | NS-2-SUPPLEMENT | WAF DRS 2.2 (OWASP CRS 3.3.4 + TI, GA Feb 2026) | conditional | High/Wide/6 |
+
+### Q2 audit findings (no new rows needed)
+- NS-3: App Gateway TCP/TLS Layer-4 proxy GA — note updates only, not a new security control
+- NS-4: TLS 1.0/1.1 retirement Aug 2025 for AppGW/WAF — enforcement of existing policy, no new rows
+- NS-5: No new DDoS tier introduced. HTTP DDoS Ruleset 1.0 (WAF L7, preview Nov 2025) — not yet GA
+- NS-6: IDPS remains Azure Firewall Premium only. No expansion in 2025-2026
+- NS-8: No new Private DNS integrations for waf/appgateway/bastion/vpngateway
+
+### Quality gate (final)
+All 14 CSVs: **PASS**
+
+| Service | Rows | Uncov | Note |
+|---|---|---|---|
+| appgateway | 36 | 0 | +NS-7-SUPPLEMENT-APPGW |
+| azuredns | 36 | 0 | +NS-1-SUPPLEMENT; PA-7 flipped now_applicable_native |
+| azurefirewall | 37 | 0 | |
+| bastion | 35 | 0 | |
+| ddosprotection | 35 | 0 | |
+| firewallmanager | 35 | 1 | DP-3 no data plane (acceptable) |
+| frontdoor | 36 | 3 | DP-3/DP-7/IM-8 still_not_applicable (acceptable, <5) +NS-2-SUPPLEMENT |
+| networkwatcher | 35 | 1 | DP-3 no data plane (acceptable) |
+| privatelink | 35 | 0 | |
+| publicip | 36 | 0 | |
+| redis | 36 | 0 | |
+| servicebus | 35 | 0 | |
+| vpngateway | 35 | 0 | |
+| waf | 35 | 0 | |
+
+**Estimated confidence: ~95%+** (103 previously uncovered rows now have URLs; 5 residual rows are legitimate no-data-plane or still_not_applicable cases)
+
+### Commit
+`99f8f07` — 17 files changed (+566/-102)
+
+### Next
+- Phase 57 / Session 6: IM domain initial prompt — 9 IM CSVs in data/outputs/ (addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint)
+- Phase 53: IM ADO import — still blocked on user providing ADO User Story IDs

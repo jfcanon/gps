@@ -120,8 +120,10 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 55**: NS original 14 CSVs enriched to 95%+ confidence — Q1 Exa web research (47 searches), standard rationale (125+ rows), verdict corrections (6 Phase 48 cache errors reverted), Q2 supplement rows (NS-6 azurefirewall, NS-7 redis+servicebus). Quality gate: 14/14 PASS. Scripts: `scripts/phase55_*.py`. (2026-06-24)
 
-**Current state (Phase 55 complete)**:
-- `data/outputs/ns/` — 14 enriched NS CSVs. Quality gate PASS. ~78% Exa coverage (103/490 rows still need URL; mostly `implemented` rows needing MCSB baseline URL).
-- `data/outputs/ns/` Phase 52 CSVs — 20 more NS CSVs, NOT YET enriched (Phase 54/56 pending).
-- Next: Phase 56 — URL backfill for `implemented` rows + June 2026 re-search for azuredns/frontdoor + exhaustive new-row audit.
+**Phase 56**: NS 14 CSVs URL backfill + June 2026 re-search + Q2 audit — 86 bulk rows covered, 16 individual patches, 3 Q2 supplement rows (azuredns NS-1-SUPPLEMENT, appgateway NS-7-SUPPLEMENT-APPGW, frontdoor NS-2-SUPPLEMENT). azuredns PA-7 flipped conditional→now_applicable_native. Quality gate 14/14 PASS. ~95%+ confidence. (2026-06-24)
+
+**Current state (Phase 56 complete)**:
+- `data/outputs/ns/` — 14 enriched NS CSVs. Quality gate PASS. ~95%+ confidence after Phase 56 (5 residual uncovered rows are legitimate no-data-plane cases).
+- `data/outputs/ns/` Phase 52 CSVs — 20 more NS CSVs, NOT YET enriched (Phase 57/54 pending).
+- Next: Session 6 — IM domain initial prompt (9 IM CSVs: addds, apimanagement, attestation, botservice, cloudshell, intelligentrecommendations, spatialanchors, trustedhardwareim, universalprint).
 - Blocked: Phase 53 IM ADO import — awaiting User Story IDs from user.
