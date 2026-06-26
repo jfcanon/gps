@@ -1,0 +1,162 @@
+"""
+Data Protection checks for Azure App Service (MCSB v3).
+
+DP-3: site_config.min_tls_version in ('1.2', '1.3') → PASS.
+DP-4: Platform-managed encryption at rest (static PASS).
+DP-5: CMK not supported for standard App Service config at rest → UNKNOWN.
+DP-6: Managed identity + @Microsoft.KeyVault() app settings references → PASS.
+DP-7: SSL certificates sourced from Key Vault (key_vault_id set) → PASS.
+
+Read-only. Zero ARM writes.
+"""
+from azure.mgmt.web import WebSiteManagementClient
+
+
+def _get_sites(client: WebSiteManagementClient, resource_group: str | None, site_name: str | None) -> list:
+    if resource_group and site_name:
+        return [client.web_apps.get(resource_group, site_name)]
+    elif resource_group:
+        return list(client.web_apps.list_by_resource_group(resource_group))
+    else:
+        return list(client.web_apps.list())
+
+
+def _rg_of(site, fallback: str | None) -> str | None:
+    if fallback:
+        return fallback
+    site_id = getattr(site, "id", "") or ""
+    parts = site_id.split("/")
+    for i, part in enumerate(parts):
+        if part.lower() == "resourcegroups" and i + 1 < len(parts):
+            return parts[i + 1]
+    return None
+
+
+def check_dp3_tls_transit(credential, subscription_id: str, resource_group: str | None, site_name: str | None) -> dict:
+    base = {
+        "control_id": "DP-3",
+        "feature": "Encrypt Data in Transit — Minimum TLS Version",
+        "expected_value": "site_config.min_tls_version in ('1.2', '1.3')",
+        "evidence_url": "https://learn.microsoft.com/en-us/azure/app-service/configure-ssl-bindings#enforce-tls-versions",
+    }
+    try:
+        client = WebSiteManagementClient(credential, subscription_id)
+        sites = _get_sites(client, resource_group, site_name)
+        if not sites:
+            return {**base, "resource": site_name or "none", "status": "PASS",
+                    "actual_value": "No App Service sites found in scope"}
+        first_pass = None
+        for site in sites:
+            cfg = getattr(site, "site_config", None)
+            min_tls = str(getattr(cfg, "min_tls_version", "") or "1.0") if cfg else "unknown"
+            if min_tls in ("1.2", "1.3"):
+                r = {**base, "resource": site.name, "status": "PASS",
+                     "actual_value": f"min_tls_version={min_tls}"}
+                first_pass = first_pass or r
+            else:
+                return {**base, "resource": site.name, "status": "FAIL",
+                        "actual_value": f"min_tls_version={min_tls} — TLS 1.2+ not enforced"}
+        return first_pass
+    except Exception as e:
+        return {**base, "resource": site_name or "unknown", "status": "UNKNOWN", "actual_value": str(e)}
+
+
+def check_dp4_platform_keys(credential, subscription_id: str, resource_group: str | None, site_name: str | None) -> dict:
+    return {
+        "resource": site_name or "all",
+        "control_id": "DP-4",
+        "feature": "Encrypt Data at Rest with Platform-Managed Keys",
+        "status": "PASS",
+        "actual_value": "Azure App Service files and configuration are encrypted at rest with Microsoft-managed keys by default. No customer configuration required.",
+        "expected_value": "Microsoft-managed platform key encryption (default)",
+        "evidence_url": "https://learn.microsoft.com/en-us/azure/security/fundamentals/encryption-atrest",
+    }
+
+
+def check_dp5_cmk(credential, subscription_id: str, resource_group: str | None, site_name: str | None) -> dict:
+    return {
+        "resource": site_name or "all",
+        "control_id": "DP-5",
+        "feature": "Encrypt Data at Rest with Customer-Managed Key",
+        "status": "UNKNOWN",
+        "actual_value": "Standard App Service plans do not expose a CMK configuration ARM property. App Service Environments (ASE) support CMK for disk encryption — verify if running on ASE.",
+        "expected_value": "N/A for standard App Service plans; check ASE if applicable",
+        "evidence_url": "https://learn.microsoft.com/en-us/azure/app-service/environment/intro",
+    }
+
+
+def check_dp6_key_mgmt(credential, subscription_id: str, resource_group: str | None, site_name: str | None) -> dict:
+    base = {
+        "control_id": "DP-6",
+        "feature": "Manage Cryptographic Keys using Key Management Service",
+        "expected_value": "Managed identity assigned AND app settings contain @Microsoft.KeyVault() references",
+        "evidence_url": "https://learn.microsoft.com/en-us/azure/app-service/app-service-key-vault-references",
+    }
+    try:
+        client = WebSiteManagementClient(credential, subscription_id)
+        sites = _get_sites(client, resource_group, site_name)
+        if not sites:
+            return {**base, "resource": site_name or "none", "status": "PASS",
+                    "actual_value": "No App Service sites found in scope"}
+        first_pass = None
+        for site in sites:
+            identity = getattr(site, "identity", None)
+            identity_type = str(getattr(identity, "type", "None")) if identity else "None"
+            has_identity = identity and identity_type.lower() not in ("none", "")
+            rg = _rg_of(site, resource_group)
+            kv_refs = []
+            if rg:
+                try:
+                    settings = client.web_apps.list_application_settings(rg, site.name)
+                    props = getattr(settings, "properties", None) or {}
+                    kv_refs = [k for k, v in props.items() if "@Microsoft.KeyVault(" in str(v)]
+                except Exception:
+                    pass
+            if has_identity and kv_refs:
+                r = {**base, "resource": site.name, "status": "PASS",
+                     "actual_value": f"identity.type={identity_type}; {len(kv_refs)} KV reference(s): {kv_refs[:3]}"}
+                first_pass = first_pass or r
+            elif not has_identity:
+                return {**base, "resource": site.name, "status": "FAIL",
+                        "actual_value": f"No managed identity (identity.type={identity_type}) — KV references cannot be resolved"}
+            else:
+                return {**base, "resource": site.name, "status": "UNKNOWN",
+                        "actual_value": f"identity.type={identity_type} but no @Microsoft.KeyVault() references found — may use inline secrets"}
+        return first_pass
+    except Exception as e:
+        return {**base, "resource": site_name or "unknown", "status": "UNKNOWN", "actual_value": str(e)}
+
+
+def check_dp7_cert_kv(credential, subscription_id: str, resource_group: str | None, site_name: str | None) -> dict:
+    base = {
+        "control_id": "DP-7",
+        "feature": "Certificate Management using Azure Key Vault",
+        "expected_value": "SSL certificates imported from Key Vault (key_vault_id set on certificate resource)",
+        "evidence_url": "https://learn.microsoft.com/en-us/azure/app-service/configure-ssl-certificate",
+    }
+    try:
+        client = WebSiteManagementClient(credential, subscription_id)
+        sites = _get_sites(client, resource_group, site_name)
+        if not sites:
+            return {**base, "resource": site_name or "none", "status": "PASS",
+                    "actual_value": "No App Service sites found in scope"}
+        for site in sites:
+            rg = _rg_of(site, resource_group)
+            if not rg:
+                return {**base, "resource": site.name, "status": "UNKNOWN",
+                        "actual_value": "Could not determine resource group — pass --resource-group to check certificates"}
+            try:
+                certs = list(client.certificates.list_by_resource_group(rg))
+                kv_certs = [c for c in certs if getattr(c, "key_vault_id", None)]
+                if kv_certs:
+                    return {**base, "resource": site.name, "status": "PASS",
+                            "actual_value": f"{len(kv_certs)}/{len(certs)} certificate(s) sourced from Key Vault"}
+                elif certs:
+                    return {**base, "resource": site.name, "status": "FAIL",
+                            "actual_value": f"{len(certs)} certificate(s); none reference Key Vault (key_vault_id not set)"}
+            except Exception:
+                pass
+            return {**base, "resource": site.name, "status": "UNKNOWN",
+                    "actual_value": "No certificates found or could not enumerate — site may use App Service managed certificates"}
+    except Exception as e:
+        return {**base, "resource": site_name or "unknown", "status": "UNKNOWN", "actual_value": str(e)}

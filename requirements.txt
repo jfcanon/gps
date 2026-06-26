@@ -1,2 +1,8 @@
 requests>=2.31.0
 python-dotenv>=1.0.0
+azure-identity>=1.15.0
+azure-mgmt-web>=7.0.0
+azure-mgmt-network>=25.0.0
+azure-mgmt-eventhub>=11.0.0
+azure-mgmt-eventgrid>=10.0.0
+azure-mgmt-monitor>=6.0.0
