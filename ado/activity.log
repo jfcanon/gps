@@ -828,3 +828,24 @@ All 14 CSVs: **PASS**
 
 ### Next
 - STOP — do not start next domain or Phase 61 without user confirmation
+
+## ADO Import Fix — 2026-06-25
+
+### import_assessment_tasks_to_ado.py — 400→fix→working
+
+- [x] Diagnosed: `Microsoft.VSTS.Common.AcceptanceCriteria` field not valid on Task work item type (only on User Story/PBI). `System.State = "To Do"` also risky (process-template-dependent). Commit: `c1723dd`
+- [x] Added `ado_mvp_test.py` — step-by-step connectivity diagnostic (project GET → parent WI GET → minimal Task create). Commit: `da1a2c8`
+- [x] Root cause confirmed: trailing slash in `ADO_ORG` → double slash in URL → 404
+- [x] Import working — 45 services / ~1566 tasks imported successfully
+
+### ADO Import Readiness — Final State
+
+| Domain | Services | Rows | QG | Import |
+|---|---|---|---|---|
+| NS | 34 | 1176 | PASS | ✓ imported |
+| IM | 9 | 319 | PASS | ✓ imported |
+| BR | 2 | 71 | PASS | ✓ imported |
+| **Total** | **45** | **~1566** | **all PASS** | **✓** |
+
+### Next
+- Phase 61: Assessment script creation for 20 missing NS services (30 total missing: 20 NS + 9 IM + 2 BR)

@@ -1,6 +1,6 @@
 # data/outputs — Complete File Inventory
 
-**Updated**: Phase 57, 2026-06-24 | **Total files**: 65+ root/archive + 34 enriched ns/ CSVs
+**Updated**: Phase 60, 2026-06-25 | **Total files**: 65+ root/archive + 34 NS + 9 IM + 2 BR enriched final CSVs
 
 
 > This document is the authoritative inventory of every file in `data/outputs/` and `data/outputs/archive/`.
@@ -340,3 +340,66 @@ Phase 57 applied bulk MCSB baseline URL backfill. Per-row deep research still pe
 **Research gap for 20 new CSVs**: All rows have MCSB baseline URL (Phase 57 backfill). Missing: per-row specific feature evidence (GA date, ARM property, enable steps) for `now_applicable_native` and `implemented` rows. Phase 58 closes this gap.
 
 **Phase 58 target**: ~80%+ per-row confidence (per-service Q1 Exa research + Q2 new-row audit per service group).
+
+---
+
+## 6. Enriched Final CSVs — IM Domain (`data/outputs/im/`)
+
+**Created in**: Phase 59 (2026-06-25) | **Count**: 9 | **QG**: 9/9 PASS | **Confidence**: ~85%+
+
+| Service | File | Rows | Notes |
+|---|---|---|---|
+| ADDS | `addds.final.csv` | 35 | |
+| API Management | `apimanagement.final.csv` | 35 | |
+| Attestation | `attestation.final.csv` | 35 | MCSB slug: `microsoft-azure-attestation` |
+| Bot Service | `botservice.final.csv` | 35 | |
+| Cloud Shell | `cloudshell.final.csv` | 35 | |
+| Intelligent Recommendations | `intelligentrecommendations.final.csv` | 38 | Retired ~2023 — all rows annotated |
+| Spatial Anchors | `spatialanchors.final.csv` | 36 | Retired Nov 2024 — all rows annotated |
+| Trusted Hardware IM | `trustedhardwareim.final.csv` | 35 | |
+| Universal Print | `universalprint.final.csv` | 35 | |
+
+**Note**: `addds` MCSB slug = `azure-active-directory-domain-services` (not `addds`). `intelligentrecommendations` retired — DO NOT fabricate MCSB URL.
+
+---
+
+## 7. Enriched Final CSVs — BR Domain (`data/outputs/br/`)
+
+**Created in**: Phase 60 (2026-06-25) | **Count**: 2 | **QG**: 2/2 PASS | **Confidence**: ~85%+
+
+| Service | File | Rows | Notes |
+|---|---|---|---|
+| Azure Backup | `backup.final.csv` | 36 | MCSB slug: `backup`. IM-3 now_applicable_native — MI GA 2022, docs 2026-04-29 |
+| Azure Site Recovery | `siterecovery.final.csv` | 35 | MCSB slug: `site-recovery`. IM-8 still_not_applicable — Run As retired Sep 2023 |
+
+---
+
+## 8. Assessment Scripts Status (`scripts/assessment/`)
+
+**Pattern**: `scripts/assessment/{service}/{domain}_{service}.py` × 9 domain files + `run_{service}_assessment.py`
+**Auth**: DefaultAzureCredential | **Mode**: read-only, zero ARM writes
+
+| Service | Domain | Script Dir | Checks | Status |
+|---|---|---|---|---|
+| Redis | NS | `assessment/redis/` | 54 | ✓ COMPLETE (Phase 43) |
+| App Gateway | NS | `assessment/appgateway/` | 56 | ✓ COMPLETE |
+| Azure DNS | NS | `assessment/azuredns/` | 56 | ✓ COMPLETE |
+| Azure Firewall | NS | `assessment/azurefirewall/` | 56 | ✓ COMPLETE |
+| Bastion | NS | `assessment/bastion/` | 56 | ✓ COMPLETE (Phase 44) |
+| DDoS Protection | NS | `assessment/ddosprotection/` | 56 | ✓ COMPLETE |
+| Firewall Manager | NS | `assessment/firewallmanager/` | 56 | ✓ COMPLETE |
+| Front Door | NS | `assessment/frontdoor/` | 56 | ✓ COMPLETE |
+| Key Vault | NS | `assessment/keyvault/v2/` | ~56 | ✓ COMPLETE |
+| Network Watcher | NS | `assessment/networkwatcher/` | 56 | ✓ COMPLETE |
+| Private Link | NS | `assessment/privatelink/` | 56 | ✓ COMPLETE |
+| Public IP | NS | `assessment/publicip/` | 56 | ✓ COMPLETE |
+| Service Bus | NS | `assessment/servicebus/` | 55 | ✓ COMPLETE |
+| VPN Gateway | NS | `assessment/vpngateway/` | 56 | ✓ COMPLETE |
+| WAF | NS | `assessment/waf/` | 56 | ✓ COMPLETE |
+| 20 NS services | NS | — | — | ✗ MISSING |
+| 9 IM services | IM | — | — | ✗ MISSING |
+| 2 BR services | BR | — | — | ✗ MISSING |
+
+**Missing NS** (20): appservice, azurecdn, cognitivesearch, cognitiveservices, databasemigration, databricks, datafactory, eventgrid, eventhubs, filesync, functions, loadbalancer, logicapps, natgateway, notificationhubs, peeringservice, trafficmanager, virtualdesktop, virtualnetwork, virtualwan
+
+**Non-NA rows needing script verification**: NS=348, IM=74, BR=26 (total=448)

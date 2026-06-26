@@ -130,9 +130,14 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 60**: BR domain 2 CSVs finalized to 85%+ confidence — 71 rows copied to data/outputs/br/; 2 MCSB BR URLs HEAD-verified (slug corrections: backup=backup, siterecovery=site-recovery); 32 rows URL-backfilled; Q1-A confirmed backup IM-3 MI GA (2022+, docs 2026-04-29); Q1-C 3 spot-checks all confirmed still_not_applicable (no flips); Q2: WORM immutable vault + enhanced policy GA but no new security gaps → no SUPPLEMENT rows; 3 individual patches. QG 2/2 PASS. docs/avd_task_import_guide.md updated (BR section added — import guide complete for 45 services). Commit: f01d5a2. (2026-06-25)
 
-**Current state (Phase 60 complete)**:
+**ADO Import Fix (2026-06-25)**: Removed `AcceptanceCriteria` (invalid on Task type) + `State` from Task create ops. Added `ado_mvp_test.py` debug tool. Root cause: trailing slash in `ADO_ORG`. Import working — 45 services / ~1566 tasks imported. Commits: c1723dd, da1a2c8.
+
+**Phase 61 plan**: Assessment scripts Batch 1 (5 NS services: appservice, virtualnetwork, eventhubs, functions, eventgrid). Plan prompts: `docs/phase61_plan_prompt.md` + `docs/phase61_plan_prompt_jsonld.json`. (2026-06-25)
+
+**Current state (Phase 60 complete + ADO import working)**:
 - `data/outputs/ns/` — 34 enriched NS CSVs. QG PASS all 34. ~95%+ confidence. NS domain COMPLETE.
 - `data/outputs/im/` — 9 enriched IM CSVs. QG PASS all 9. ~85%+ confidence. IM domain COMPLETE.
 - `data/outputs/br/` — 2 enriched BR CSVs. QG PASS all 2. ~85%+ confidence. BR domain COMPLETE.
-- ADO import: 45 services / ~1566 tasks ready. ado_config.py ADO_ORG+ADO_PROJECT must be filled on AVD.
-- Next: Phase 61 scope TBD — user confirmation required.
+- ADO import: 45 services / ~1566 tasks — IMPORTED.
+- Assessment scripts: 15/45 NS services complete. 30 missing (20 NS + 9 IM + 2 BR). 448 non-NA rows need live verification.
+- Next: Phase 61 assessment scripts Batch 1 — green light required.

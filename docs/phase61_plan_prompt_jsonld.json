@@ -1,0 +1,167 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "nsg": "https://newsecgap.internal/ontology#",
+    "phase": "nsg:phase",
+    "workstream": "nsg:workstream",
+    "checkSignature": "nsg:checkSignature",
+    "readFirst": "nsg:readFirst",
+    "qualityGate": "nsg:qualityGate",
+    "constraint": "nsg:constraint"
+  },
+
+  "@type": "SoftwareProject",
+  "@id": "nsg:phase-61-assessment-scripts-ns-batch1",
+  "name": "NewSecGap Phase 61 — Assessment Scripts: 20 Missing NS Services (Batch 1 of 4)",
+  "version": "1.0.0",
+  "dateCreated": "2026-06-25",
+
+  "description": "Create read-only Azure ARM assessment scripts for 5 highest-priority NS services that have final.csv but no scripts/assessment/ directory. Pattern: mirror scripts/assessment/appgateway/. Each service gets 9 domain check files + 1 runner. CHECK_REGISTRY must cover all non-NA rows in the service's final.csv.",
+
+  "phase": "61",
+  "domain": "NS",
+  "batch": "1 of 4",
+  "continuedFrom": "Phase 60 (BR domain CSVs + ADO import working)",
+  "templateService": "scripts/assessment/appgateway/",
+  "goldStandard": "scripts/assessment/redis/ (Phase 43)",
+
+  "projectRoot": "/Users/nahuelavalos/Repo/NewSecGap",
+  "assessmentScriptsDir": "scripts/assessment/",
+
+  "readFirst": [
+    { "order": 1, "path": "CLAUDE.md",                                          "why": "Phase log, constraints, scope gates" },
+    { "order": 2, "path": "ado/activity.log",                                   "why": "Tail — confirm Phase 60 + ADO import fix complete" },
+    { "order": 3, "path": "data/outputs/context.md",                            "why": "Assessment scripts status table (section 8)" },
+    { "order": 4, "path": "scripts/assessment/appgateway/ns_appgateway.py",     "why": "NS check pattern to mirror" },
+    { "order": 5, "path": "scripts/assessment/appgateway/im_appgateway.py",     "why": "IM check pattern to mirror" },
+    { "order": 6, "path": "scripts/assessment/appgateway/run_appgateway_assessment.py", "why": "Registry + runner pattern" },
+    { "order": 7, "path": "data/outputs/ns/appservice.final.csv",               "why": "appservice: identify non-NA rows → check targets" },
+    { "order": 8, "path": "data/outputs/ns/virtualnetwork.final.csv",           "why": "virtualnetwork: identify non-NA rows → check targets" },
+    { "order": 9, "path": "data/outputs/ns/eventhubs.final.csv",                "why": "eventhubs: identify non-NA rows → check targets" },
+    { "order": 10, "path": "data/outputs/ns/functions.final.csv",               "why": "functions: identify non-NA rows → check targets" },
+    { "order": 11, "path": "data/outputs/ns/eventgrid.final.csv",               "why": "eventgrid: identify non-NA rows → check targets" }
+  ],
+
+  "batch1Services": [
+    {
+      "slug": "appservice",
+      "displayName": "Azure App Service",
+      "finalCsv": "data/outputs/ns/appservice.final.csv",
+      "azureSdkClient": "azure.mgmt.web.WebSiteManagementClient",
+      "resourceType": "Microsoft.Web/sites",
+      "keyNsControls": ["NS-1 WAF (via Front Door/App Gateway)", "NS-2 private endpoint", "NS-3 TLS inspection"],
+      "keyImControls": ["IM-1 AAD auth (EasyAuth)", "IM-3 managed identity", "IM-8 app settings secrets in KV"],
+      "scriptDir": "scripts/assessment/appservice/"
+    },
+    {
+      "slug": "virtualnetwork",
+      "displayName": "Azure Virtual Network",
+      "finalCsv": "data/outputs/ns/virtualnetwork.final.csv",
+      "azureSdkClient": "azure.mgmt.network.NetworkManagementClient",
+      "resourceType": "Microsoft.Network/virtualNetworks",
+      "keyNsControls": ["NS-1 NSG on subnets", "NS-2 private link/service endpoint", "NS-6 DDoS standard", "NS-7 Network inspection"],
+      "keyImControls": ["IM-3 managed identity N/A (VNet is infra)"],
+      "scriptDir": "scripts/assessment/virtualnetwork/"
+    },
+    {
+      "slug": "eventhubs",
+      "displayName": "Azure Event Hubs",
+      "finalCsv": "data/outputs/ns/eventhubs.final.csv",
+      "azureSdkClient": "azure.mgmt.eventhub.EventHubManagementClient",
+      "resourceType": "Microsoft.EventHub/namespaces",
+      "keyNsControls": ["NS-2 private endpoint", "NS-2 public network access disabled"],
+      "keyImControls": ["IM-1 local auth disabled (SAS keys)", "IM-3 managed identity"],
+      "scriptDir": "scripts/assessment/eventhubs/"
+    },
+    {
+      "slug": "functions",
+      "displayName": "Azure Functions",
+      "finalCsv": "data/outputs/ns/functions.final.csv",
+      "azureSdkClient": "azure.mgmt.web.WebSiteManagementClient",
+      "resourceType": "Microsoft.Web/sites (kind=functionapp)",
+      "keyNsControls": ["NS-1 WAF (via APIM/Front Door)", "NS-2 private endpoint", "NS-6 network policy"],
+      "keyImControls": ["IM-1 AAD auth", "IM-3 managed identity", "IM-8 KV references in app settings"],
+      "scriptDir": "scripts/assessment/functions/"
+    },
+    {
+      "slug": "eventgrid",
+      "displayName": "Azure Event Grid",
+      "finalCsv": "data/outputs/ns/eventgrid.final.csv",
+      "azureSdkClient": "azure.mgmt.eventgrid.EventGridManagementClient",
+      "resourceType": "Microsoft.EventGrid/topics",
+      "keyNsControls": ["NS-2 private endpoint", "NS-2 public access disabled (inboundIpRules)"],
+      "keyImControls": ["IM-1 local auth disabled (SAS keys)", "IM-3 managed identity"],
+      "scriptDir": "scripts/assessment/eventgrid/"
+    }
+  ],
+
+  "checkSignature": {
+    "parameters": ["credential", "subscription_id: str", "resource_group: str | None", "resource_name: str | None"],
+    "returns": {
+      "resource": "str — ARM resource ID or display name",
+      "control_id": "str — e.g. NS-2",
+      "feature": "str — feature_name from final.csv",
+      "status": "PASS | FAIL | UNKNOWN | NOT_APPLICABLE | ERROR",
+      "actual_value": "str — what ARM API returned",
+      "expected_value": "str — what MCSB requires",
+      "evidence_url": "str — MCSB or docs URL"
+    },
+    "authRule": "DefaultAzureCredential only — no hardcoded credentials",
+    "writeRule": "Read-only. Zero ARM mutations. Zero resource creation/deletion."
+  },
+
+  "executionSteps": [
+    { "order": 1,  "action": "Read all readFirst files (parallel: 5 final CSVs + 3 appgateway scripts)" },
+    { "order": 2,  "action": "For each service: parse final.csv, filter non-NA rows, list (control_id, feature_name, azure_api_property) tuples → check function requirements" },
+    { "order": 3,  "action": "Write scripts/assessment/appservice/ — 9 domain files + runner" },
+    { "order": 4,  "action": "AST validate + dry import test: python3 -c 'import run_appservice_assessment; print(len(run_appservice_assessment.CHECK_REGISTRY))'" },
+    { "order": 5,  "action": "git add -f scripts/assessment/appservice/ && git commit -m 'feat: Phase 61 assessment scripts — appservice'" },
+    { "order": 6,  "action": "Write scripts/assessment/virtualnetwork/ — 9 domain files + runner" },
+    { "order": 7,  "action": "AST + dry import test, commit" },
+    { "order": 8,  "action": "Write scripts/assessment/eventhubs/ — 9 domain files + runner" },
+    { "order": 9,  "action": "AST + dry import test, commit" },
+    { "order": 10, "action": "Write scripts/assessment/functions/ — 9 domain files + runner" },
+    { "order": 11, "action": "AST + dry import test, commit" },
+    { "order": 12, "action": "Write scripts/assessment/eventgrid/ — 9 domain files + runner" },
+    { "order": 13, "action": "AST + dry import test, commit" },
+    { "order": 14, "action": "Update CLAUDE.md — Phase 61 one-liner + current state" },
+    { "order": 15, "action": "Update ado/activity.log — Phase 61 entry" },
+    { "order": 16, "action": "git commit + push" },
+    { "order": 17, "action": "STOP — do not start Batch 2 or Phase 62 without user confirmation" }
+  ],
+
+  "qualityGate": {
+    "perService": [
+      "9 domain files + 1 runner exist in scripts/assessment/{slug}/",
+      "CHECK_REGISTRY entries >= non-NA row count in final.csv",
+      "AST parse clean for all 10 files",
+      "Dry import prints check count (no ImportError)",
+      "No hardcoded subscription IDs, resource groups, credentials"
+    ],
+    "batchPass": "5/5 services pass all per-service checks"
+  },
+
+  "constraints": [
+    "Read-only: zero ARM writes, zero resource mutations",
+    "DefaultAzureCredential only",
+    "Missing ARM support for a check → return UNKNOWN, never fabricate PASS",
+    "keyvault: do NOT touch scripts/assessment/keyvault/ (v1); v2 at scripts/assessment/keyvault/v2/ is canonical",
+    "appservice and functions share WebSiteManagementClient — factor carefully to avoid cross-import",
+    "assessment scripts run AFTER ADO import (Phase 60) — they produce live evidence, not ADO tasks"
+  ],
+
+  "futurePhases": {
+    "batch2": ["azurecdn", "cognitivesearch", "cognitiveservices", "databasemigration", "databricks"],
+    "batch3": ["datafactory", "filesync", "loadbalancer", "logicapps", "natgateway"],
+    "batch4": ["notificationhubs", "peeringservice", "trafficmanager", "virtualdesktop", "virtualwan"],
+    "phase62": "IM domain assessment scripts (9 services, 74 non-NA rows)",
+    "phase63": "BR domain assessment scripts (2 services, 26 non-NA rows)"
+  },
+
+  "adoImportReadiness": {
+    "status": "COMPLETE — 45 services / ~1566 tasks imported (Phase 60 + ADO fix 2026-06-25)",
+    "importScript": "scripts/import_assessment_tasks_to_ado.py",
+    "knownFix": "Removed AcceptanceCriteria (invalid on Task type) + State field. Commit c1723dd.",
+    "debugTool": "scripts/ado_mvp_test.py"
+  }
+}
