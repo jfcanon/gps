@@ -136,10 +136,12 @@ All 12 Features: **COMPLETE** — Phase 12 finished 2026-06-13
 
 **Phase 61**: Assessment scripts NS Batch 1 — 5 services created (appservice 29 checks QG PASS, virtualnetwork 19 checks QG PASS, eventhubs 26 checks QG PASS, functions 29 checks QG PASS, eventgrid 22 checks QG PASS). 125 total checks. All: 10 files each, DefaultAzureCredential, zero ARM writes, AST clean, dry import clean. Commits: 275f6fe, 2f6d25c, 854aea7, aa8e68d, 8126a35. (2026-06-26)
 
-**Current state (Phase 61 complete)**:
+**Phase 62**: Assessment scripts NS Batch 2 — 5 services created (azurecdn 18 checks QG PASS, cognitivesearch 23 checks QG PASS, cognitiveservices 26 checks QG PASS, datafactory 28 checks QG PASS, databricks 25 checks QG PASS). 120 total checks. All: 10 files each, DefaultAzureCredential, zero ARM writes, AST clean, dry import clean. Commits: b29f271, d75130a, c3d8385, b9039f9, d8b8f26. (2026-06-26)
+
+**Current state (Phase 62 complete)**:
 - `data/outputs/ns/` — 34 enriched NS CSVs. QG PASS all 34. ~95%+ confidence. NS domain COMPLETE.
 - `data/outputs/im/` — 9 enriched IM CSVs. QG PASS all 9. ~85%+ confidence. IM domain COMPLETE.
 - `data/outputs/br/` — 2 enriched BR CSVs. QG PASS all 2. ~85%+ confidence. BR domain COMPLETE.
 - ADO import: 45 services / ~1566 tasks — IMPORTED.
-- Assessment scripts: 20/45 NS services complete. 25 missing (15 NS + 9 IM + 2 BR). 448 non-NA rows need live verification.
-- Next: Phase 62 assessment scripts Batch 2 — requires user confirmation before starting.
+- Assessment scripts: 25/45 NS services complete. 20 missing (10 NS + 9 IM + 2 BR). Non-NA rows need live verification.
+- Next: Phase 63 assessment scripts Batch 3 — requires user confirmation before starting.

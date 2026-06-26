@@ -888,3 +888,43 @@ All 14 CSVs: **PASS**
 - Remaining: 25 missing (15 NS + 9 IM + 2 BR)
 - Next batch (Batch 2): azurecdn, cognitivesearch, containerregistry, cosmosdb, keyvault (v2 only)
 - STOP — do not start Batch 2 without user confirmation
+
+## 2026-06-26 (Phase 62)
+
+### Phase 62 — Assessment Scripts NS Batch 2 (5 services)
+
+| Service | Checks | Non-NA target | QG |
+|---|---|---|---|
+| azurecdn | 18 | ≥2 | PASS |
+| cognitivesearch | 23 | ≥14 | PASS |
+| cognitiveservices | 26 | ≥17 | PASS |
+| datafactory | 28 | ≥21 | PASS |
+| databricks | 25 | ≥17 | PASS |
+| **Total** | **120** | **≥71** | **5/5 PASS** |
+
+### Per-Service QG Details
+
+- All 5 services: 10 files each (9 domain + 1 runner), AST clean, dry import clean
+- DefaultAzureCredential only. Zero ARM writes. Zero hardcoded creds.
+- azurecdn: CdnManagementClient, AFD Premium PE via sharedPrivateLinkResource on origins
+- cognitivesearch: SearchManagementClient, PA-7/PA-8 checks co-located in im_ file
+- cognitiveservices: CognitiveServicesManagementClient, disable_local_auth, encryption.key_source
+- datafactory: DataFactoryManagementClient, integration runtime VNet check + PE list
+- databricks: AzureDatabricksManagementClient, enableNoPublicIp + customVirtualNetworkId + CMK encryption.entities
+
+### Commits
+
+| Commit | Service |
+|---|---|
+| b29f271 | azurecdn (18 checks, QG PASS) |
+| d75130a | cognitivesearch (23 checks, QG PASS) |
+| c3d8385 | cognitiveservices (26 checks, QG PASS) |
+| b9039f9 | datafactory (28 checks, QG PASS) |
+| d8b8f26 | databricks (25 checks, QG PASS) |
+
+### Assessment Script Status After Phase 62
+
+- Total: 25/45 services complete
+- Remaining: 20 missing (10 NS + 9 IM + 2 BR)
+- Next batch (Batch 3): 5 more NS services TBD by user
+- STOP — do not start Batch 3 without user confirmation
