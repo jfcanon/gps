@@ -849,3 +849,42 @@ All 14 CSVs: **PASS**
 
 ### Next
 - Phase 61: Assessment script creation for 20 missing NS services (30 total missing: 20 NS + 9 IM + 2 BR)
+
+## Phase 61 — Assessment Scripts NS Batch 1 — 2026-06-26
+
+### Services Created
+
+| Service | Checks | Non-NA Target | QG |
+|---|---|---|---|
+| appservice | 29 | ≥19 | PASS |
+| virtualnetwork | 19 | ≥4 | PASS |
+| eventhubs | 26 | ≥17 | PASS |
+| functions | 29 | ≥21 | PASS |
+| eventgrid | 22 | ≥13 | PASS |
+| **Total** | **125** | **≥74** | **5/5 PASS** |
+
+### Per-Service QG Details
+
+- All 5 services: 10 files each (9 domain + 1 runner), AST clean, dry import clean
+- DefaultAzureCredential only. Zero ARM writes. Zero hardcoded creds.
+- appservice/functions: WebSiteManagementClient, kind=functionapp filter, fully self-contained
+- virtualnetwork: NetworkManagementClient + NS-2-SUPPLEMENT defaultOutboundAccess check
+- eventhubs: EventHubManagementClient, disable_local_auth + minimum_tls_version + encryption.key_source
+- eventgrid: EventGridManagementClient topics + NS-2-SUPPLEMENT-EVENTGRID MQTT namespaces
+
+### Commits
+
+| Commit | Service |
+|---|---|
+| 275f6fe | appservice (29 checks, QG PASS) |
+| 2f6d25c | virtualnetwork (19 checks, QG PASS) |
+| 854aea7 | eventhubs (26 checks, QG PASS) |
+| aa8e68d | functions (29 checks, QG PASS) |
+| 8126a35 | eventgrid (22 checks, QG PASS) |
+
+### Assessment Script Status After Phase 61
+
+- Total: 20/45 services complete
+- Remaining: 25 missing (15 NS + 9 IM + 2 BR)
+- Next batch (Batch 2): azurecdn, cognitivesearch, containerregistry, cosmosdb, keyvault (v2 only)
+- STOP — do not start Batch 2 without user confirmation
