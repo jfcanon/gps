@@ -928,3 +928,26 @@ All 14 CSVs: **PASS**
 - Remaining: 20 missing (10 NS + 9 IM + 2 BR)
 - Next batch (Batch 3): 5 more NS services TBD by user
 - STOP — do not start Batch 3 without user confirmation
+
+## Phase 63 — Assessment Scripts NS Batch 3 (2026-06-26)
+
+### Services created
+
+| Service | Checks | Non-NA Required | QG | Commit | Key live checks |
+|---|---|---|---|---|---|
+| virtualdesktop | 22 | 22 | PASS | 8cbc25b | NS-2 PE, IM-3 MI, LT-4 diag |
+| logicapps | 25 | 18 | PASS | 431197c | IM-1/IM-3 identity, NS-2 access_control.triggers, LT-4 diag |
+| virtualwan | 14 | 6 | PASS | 0479de5 | NS-7 SUPPLEMENT, LT-4 diag, AM-2 tags |
+| filesync | 15 | 6 | PASS | 3a093e3 | NS-2 PE + incomingTrafficPolicy, LT-4 diag, AM-2 tags |
+| databasemigration | 16 | 6 | PASS | e9e47b9 | NS-1 virtualSubnetId, IM-1 PASS, PA-7 PASS, LT-4 diag |
+
+### SDK additions
+- `azure-mgmt-logic` (LogicManagementClient) — requires `six>=1.16.0` (added to requirements.txt)
+- `azure-mgmt-storagesync` (MicrosoftStorageSync)
+- `azure-mgmt-datamigration` (DataMigrationManagementClient)
+- `azure-mgmt-desktopvirtualization` (DesktopVirtualizationMgmtClient) — committed in virtualdesktop batch
+
+### Totals
+- Phase 63: 92 checks across 5 services
+- Cumulative (Phases 61–63): 337 checks across 15 services
+- Assessment scripts: 30/45 NS services complete
